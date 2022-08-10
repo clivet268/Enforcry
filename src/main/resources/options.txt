@@ -1,0 +1,5 @@
+o - display options
+fek - Encrypt a file
+fekin - Encrypt given file through path
+fdk - Decrypt a file
+fdkin - Decrypt given file through path
