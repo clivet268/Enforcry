@@ -11,7 +11,7 @@ public abstract class ExacutableCommand implements Runnable{
     boolean closeflag =true;
 
     public void init(){
-        Enforcry.SLcommands.put(getName(), this);
+        Enforcry.SLcommands.put(getName().toLowerCase(), this);
     }
 
     public boolean getCloseflag() {
@@ -25,6 +25,10 @@ public abstract class ExacutableCommand implements Runnable{
     @Override
     public void run() {
 
+    }
+
+    public byte outbytecode(){
+        return -1;
     }
 
     public ArrayList<String> getOutput(){

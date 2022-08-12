@@ -41,7 +41,7 @@ public class SecureLineReciver {
                 //Connection established
 
 
-                ca(out,"Enter Command");
+                camsg(out,"Enter Command", "Awaiting Command");
                 this.closeflag = carprun(in, out, "Zero");
                 System.out.println("Closing connection");
                 socket.close();
@@ -58,6 +58,7 @@ public class SecureLineReciver {
     }
 
     public static void main(String args[]) throws IOException {
+        Enforcry.initSLcommands();
         SecureLineReciver server = new SecureLineReciver(555);
     }
 

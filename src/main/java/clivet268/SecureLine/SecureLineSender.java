@@ -1,5 +1,7 @@
 package clivet268.SecureLine;
 
+import clivet268.Enforcry;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class SecureLineSender {
             System.out.println(u + "20");
         }
         if (!(socket == null)) {
+            int exitcode = -1;
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
 
@@ -37,7 +40,7 @@ public class SecureLineSender {
             //Connected
 
             specificrpverbose(in, "Enter Command");
-            specificcarpverbose(in, "Sending Output", out,scanner.next());
+            exitcode = specificrpcacontinuousinverboseexitcode(in, "Command Accepted", out);
             carpoutputverbose(in, out, "Zero");
 
             try {
@@ -62,6 +65,7 @@ public class SecureLineSender {
 
 
     public static void main(String args[]) throws IOException {
+        Enforcry.initSLcommands();
         SecureLineSender client = new SecureLineSender("127.0.0.1", 100);
     }
 
