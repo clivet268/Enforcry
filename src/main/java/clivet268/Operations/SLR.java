@@ -1,12 +1,11 @@
-package clivet268.temp;
+package clivet268.Operations;
 
-import clivet268.Operations.Operation;
 import clivet268.SecureLine.SecureLineReciver;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class SLS extends Operation {
+public class SLR extends Operation {
     @Override
     public void run() {
         Scanner s = new Scanner(System.in);
@@ -22,14 +21,14 @@ public class SLS extends Operation {
             }
             case ("h"):{
                 System.out.println("Enter hours");
-                e = s.nextInt() * 360;
-                System.out.println("TO " + (e / 360) + " hours");
+                e = s.nextInt() * 3600;
+                System.out.println("TO " + (e / 3600) + " hours");
                 break;
             }
             case ("d"):{
                 System.out.println("Enter days");
                 e = s.nextInt() * 86400;
-                System.out.println("TO " + (e / 360) + " days");
+                System.out.println("TO " + (e / 86400) + " days");
                 break;
             }
             default:{
@@ -45,7 +44,7 @@ public class SLS extends Operation {
     }
 
     public static void main(String[] args) {
-        SLS slr = new SLS();
+        SLR slr = new SLR();
         slr.run();
     }
 

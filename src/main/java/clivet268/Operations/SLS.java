@@ -1,15 +1,18 @@
-package clivet268.temp;
+package clivet268.Operations;
 
-import clivet268.Operations.Operation;
 import clivet268.SecureLine.SecureLineReciver;
+import clivet268.SecureLine.SecureLineSender;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class SLR extends Operation {
+public class SLS extends Operation {
     @Override
     public void run() {
+
         Scanner s = new Scanner(System.in);
+        System.out.println("Enter IP address");
+        String ipad = s.next();
         int e = -1;
         System.out.println("Enter timeout minutes(m), hours(h), days(d) or -1 for none");
         String se = s.next();
@@ -22,14 +25,14 @@ public class SLR extends Operation {
             }
             case ("h"):{
                 System.out.println("Enter hours");
-                e = s.nextInt() * 3600;
-                System.out.println("TO " + (e / 3600) + " hours");
+                e = s.nextInt() * 360;
+                System.out.println("TO " + (e / 360) + " hours");
                 break;
             }
             case ("d"):{
                 System.out.println("Enter days");
                 e = s.nextInt() * 86400;
-                System.out.println("TO " + (e / 86400) + " days");
+                System.out.println("TO " + (e / 360) + " days");
                 break;
             }
             default:{
@@ -37,7 +40,7 @@ public class SLR extends Operation {
             }
         }
         try {
-            SecureLineReciver server = new SecureLineReciver(e);
+            SecureLineSender client = new SecureLineSender(ipad, e);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -45,7 +48,7 @@ public class SLR extends Operation {
     }
 
     public static void main(String[] args) {
-        SLR slr = new SLR();
+        SLS slr = new SLS();
         slr.run();
     }
 

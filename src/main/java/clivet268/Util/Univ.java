@@ -1,4 +1,4 @@
-package clivet268;
+package clivet268.Util;
 
 import javax.swing.*;
 import java.io.File;

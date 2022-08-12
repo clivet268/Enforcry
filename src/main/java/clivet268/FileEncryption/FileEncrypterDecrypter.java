@@ -1,4 +1,6 @@
-package clivet268;
+package clivet268.FileEncryption;
+
+import clivet268.Util.Univ;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
