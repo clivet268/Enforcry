@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncrypterDecrypter;
+import clivet268.FileEncryption.FileEncrypterDecrypter;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,5 +21,9 @@ public class FDKIN extends Operation{
             throw new RuntimeException(e);
         }
         System.out.println("File Decrypted");
+    }
+    @Override
+    public String infoForOp(){
+        return "Decrypts a file given the absolute path to the file";
     }
 }

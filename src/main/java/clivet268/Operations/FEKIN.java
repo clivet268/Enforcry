@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncrypterDecrypter;
+import clivet268.FileEncryption.FileEncrypterDecrypter;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,5 +20,9 @@ public class FEKIN extends Operation{
             throw new RuntimeException(e);
         }
         System.out.println("File Encrypted");
+    }
+    @Override
+    public String infoForOp(){
+        return "Encrypts a file given the absolute path to the file";
     }
 }

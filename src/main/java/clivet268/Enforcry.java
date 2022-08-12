@@ -24,7 +24,7 @@ public class Enforcry {
         boolean b = true;
         while(b) {
             System.out.println("What would you like to do? (o for options)");
-            Operation temp = operations.get(s.next());
+            Operation temp = operations.get(s.next().toLowerCase());
             if(temp != null) {
                 temp.run();
                 b = temp.getExitflag();
@@ -46,6 +46,7 @@ public class Enforcry {
                 throw new RuntimeException(ex);
             }
         });
+        System.out.println("---\nOperations init complete\n---");
     }
 
     public static void initSLcommands(){

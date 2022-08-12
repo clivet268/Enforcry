@@ -14,12 +14,17 @@ public abstract class Operation implements Runnable{
 
     public void init(){
         System.out.println(name);
-        Enforcry.operations.put(getName(), this);
+        Enforcry.operations.put(getName().toLowerCase(), this);
     }
 
     public boolean getExitflag() {
         return exitflag;
     }
+
+    public String infoForOp(){
+        return "Base operation class";
+    }
+
 
     @Override
     public void run() {

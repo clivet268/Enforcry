@@ -1,7 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncrypterDecrypter;
-import clivet268.Operations.Operation;
+import clivet268.FileEncryption.FileEncrypterDecrypter;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -19,5 +18,9 @@ public class FDK extends Operation {
             throw new RuntimeException(e);
         }
         System.out.println("File Decrypted");
+    }
+    @Override
+    public String infoForOp(){
+        return "Decrypts a file from the file selection GUI";
     }
 }
