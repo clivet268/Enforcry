@@ -40,7 +40,9 @@ public class SecureLineSender {
             //Connected
 
             specificrpverbose(in, "Enter Command");
+
             exitcode = specificrpcacontinuousinverboseexitcode(in, "Command Accepted", out);
+            rpcainputwhileverbose(in, out, "End of Inputs");
             carpoutputverbose(in, out, "Zero");
 
             try {

@@ -44,12 +44,12 @@ public class SecureLineTP {
         System.out.println(check);
     }
     public static void specificrpverbosepremsg(DataInputStream in, String check, String msg) throws IOException {
-        System.out.println(msg);
         String temp = in.readUTF();
         while(!temp.equals(check)){
+            System.out.println("Wrong temp " + temp);
             temp = in.readUTF();
         }
-        System.out.println(check);
+        System.out.println(msg);
     }
     public static void ca(DataOutputStream out, String send) throws IOException {
         out.writeUTF(send);
@@ -78,6 +78,14 @@ public class SecureLineTP {
         out.flush();
     }
 
+    public static void carpverbose(DataInputStream in, DataOutputStream out, String send) throws IOException {
+        String temp = in.readUTF();
+        temp = in.readUTF();
+        System.out.println(temp);
+        out.writeUTF(send);
+        out.flush();
+    }
+
     public static void specificrpcaverbose(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
         out.writeUTF(send);
         out.flush();
@@ -89,20 +97,49 @@ public class SecureLineTP {
         System.out.println(temp);
     }
 
+    public static String outputinputrpcaverbose(DataInputStream in, DataOutputStream out, String send) throws IOException {
+        out.writeUTF(send);
+        out.flush();
+        String temp = in.readUTF();
+        System.out.println(temp);
+        return temp;
+    }
+
     public static void carpoutputverbose(DataInputStream in, DataOutputStream out, String endoftransmition) throws IOException {
-            String temp = "";
+            String temp = in.readUTF();
             String collection = "";
             int pkgnum = 1;
             while(!temp.equals(endoftransmition)){
                 caverbose(out, ("Recived Package Number: " + pkgnum));
                 pkgnum++;
-                temp = in.readUTF();
                 System.out.println(temp);
                 collection += temp;
+                temp = in.readUTF();
             }
             System.out.println("End of Transmition");
 
         System.out.println("Data: " + collection);
+    }
+    public static void rpcainputwhileverbose(DataInputStream in, DataOutputStream out, String endoftransmition) throws IOException {
+        String temp = in.readUTF();
+        boolean dumbfirstcheck = false;
+        Scanner s = new Scanner(System.in);
+        if(temp.equals(endoftransmition)) {
+            System.out.println(temp);
+        }
+        while(!temp.equals(endoftransmition)){
+            if(dumbfirstcheck){
+                temp = in.readUTF();
+            }
+            else {
+                dumbfirstcheck = true;
+            }
+            System.out.println(temp);
+            if(!temp.equals(endoftransmition)) {
+                ca(out, s.nextLine());
+            }
+        }
+
     }
 
     public static int specificrpcacontinuousinverboseexitcode(DataInputStream in, String check, DataOutputStream out) throws IOException {
@@ -124,19 +161,24 @@ public class SecureLineTP {
         String temp = in.readUTF();
         System.out.println(temp);
         while(!Enforcry.SLcommands.containsKey(temp.toLowerCase())){
-            System.out.println("Unknown Command");
-            out.writeUTF("Unknown Command");
-            out.flush();
+            caverbose(out,"Unknown Command");
             temp = in.readUTF();
         }
-        System.out.println("Command Accepted");
-        out.writeUTF("Command Accepted");
-        out.flush();
+        caverbose(out,"Command Accepted");
 
         AtomicInteger pkgnum = new AtomicInteger(1);
 
         ExacutableCommand command = Enforcry.SLcommands.get(temp);
+        command.commandPrompts().forEach((string) ->{
+            try {
+                command.input.add(outputinputrpcaverbose(in,out,string));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        caverbose(out,"End of Inputs");
         command.run();
+        ca(out,"");
         command.getOutput().forEach((e) -> {
             try {
                 specificrpverbosepremsg(in,("Recived Package Number: " + pkgnum), ("Sent Package Number: " + pkgnum));
@@ -147,7 +189,6 @@ public class SecureLineTP {
                 throw new RuntimeException(ex);
             }
         });
-        System.out.println("await out");
         caverbose(out, endoftransmition);
         System.out.println("End of Transmition");
         System.out.println("Command " + command.getName() + " executed");

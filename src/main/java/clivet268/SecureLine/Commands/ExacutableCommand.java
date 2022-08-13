@@ -6,8 +6,17 @@ import java.util.ArrayList;
 
 public abstract class ExacutableCommand implements Runnable{
     String name = this.getClass().getSimpleName();
-    ArrayList<String> output = new ArrayList<>();
+    public ArrayList<String> output = new ArrayList<>();
+    public ArrayList<String> input = new ArrayList<>();
 
+    public int noinputs(){
+        return 0;
+    }
+
+    public ArrayList<String> commandPrompts(){
+            ArrayList<String> ps = new ArrayList<>();
+        return  ps;
+    }
     boolean closeflag =true;
 
     public void init(){
