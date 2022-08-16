@@ -43,7 +43,9 @@ public class SecureLineSender {
 
             exitcode = specificrpcacontinuousinverboseexitcode(in, "Command Accepted", out);
             rpcainputwhileverbose(in, out, "End of Inputs");
-            carpoutputverbose(in, out, "Zero");
+            carpoutput(in, out, "Zero");
+            caverbose(out, "Done");
+            System.out.println("Closing Connection");
 
             try {
                 in.close();

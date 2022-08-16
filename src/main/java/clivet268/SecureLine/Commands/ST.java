@@ -6,5 +6,8 @@ public class ST extends ExacutableCommand {
     public void run() {
         output.add("Test");
     }
-
+    @Override
+    public int outbytecode(){
+        return 1;
+    }
 }

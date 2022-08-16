@@ -8,12 +8,12 @@ public class CLOSE extends ExacutableCommand {
     @Override
     public void run() {
         this.closeflag = false;
-        this.output.add("0");
+        this.output.add("CLOSEd");
     }
 
     @Override
-    public byte outbytecode(){
-        return 0;
+    public int outbytecode(){
+        return 1;
     }
 
 }

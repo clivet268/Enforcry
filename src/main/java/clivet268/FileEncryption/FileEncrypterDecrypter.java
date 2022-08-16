@@ -70,7 +70,7 @@ public class FileEncrypterDecrypter{
 
     public static void fek() throws IOException, NoSuchAlgorithmException {
         File file = Univ.filechooser();
-        Path of = Path.of(Univ.enforceybasepath);
+        Path of = Path.of(Univ.enforcrybasepath);
         if(!Files.exists(of)) {
             Files.createDirectory(of);
         }
@@ -81,14 +81,14 @@ public class FileEncrypterDecrypter{
         String out = encrypt(s, kii);
 
         byte[] decode = Base64.getDecoder().decode(out.getBytes());
-        Path pathout = Paths.get(Univ.enforceybasepath + file.hashCode());
+        Path pathout = Paths.get(Univ.enforcrybasepath + file.hashCode());
         Files.write(pathout, decode);
         System.out.println("Key saved, make sure you get all of it\n_\n\n");
-        Files.write(Path.of(Univ.enforceybasepath + "." + file.hashCode() + "key"),kii.getBytes());
+        Files.write(Path.of(Univ.enforcrybasepath + "." + file.hashCode() + "key"),kii.getBytes());
     }
 
     public static void fek(File file) throws IOException, NoSuchAlgorithmException {
-        Path of = Path.of(Univ.enforceybasepath);
+        Path of = Path.of(Univ.enforcrybasepath);
         if(!Files.exists(of)) {
             Files.createDirectory(of);
         }
@@ -99,14 +99,14 @@ public class FileEncrypterDecrypter{
         String out = encrypt(s, kii);
 
         byte[] decode = Base64.getDecoder().decode(out.getBytes());
-        Path pathout = Paths.get(Univ.enforceybasepath + file.hashCode());
+        Path pathout = Paths.get(Univ.enforcrybasepath + file.hashCode());
         Files.write(pathout, decode);
         System.out.println("Key saved, make sure you get all of it\n_\n\n");
-        Files.write(Path.of(Univ.enforceybasepath + "." + file.hashCode() + "key"),kii.getBytes());
+        Files.write(Path.of(Univ.enforcrybasepath + "." + file.hashCode() + "key"),kii.getBytes());
     }
 
     public static void fdk(File file, String kii) throws IOException, NoSuchAlgorithmException {
-        Path of = Path.of(Univ.enforceybasepath);
+        Path of = Path.of(Univ.enforcrybasepath);
         if(!Files.exists(of)) {
             Files.createDirectory(of);
         }
@@ -118,13 +118,13 @@ public class FileEncrypterDecrypter{
         String outt = decrypt(ss, kii);
 
         byte[] decodee = Base64.getDecoder().decode(outt.getBytes());
-        Files.write(Paths.get(Univ.enforceybasepath + Arrays.hashCode(decodee)), decodee);
+        Files.write(Paths.get(Univ.enforcrybasepath + Arrays.hashCode(decodee)), decodee);
     }
 
     public static void fdk(String kii) throws IOException, NoSuchAlgorithmException {
         File file = Univ.filechooser();
 
-        Path of = Path.of(Univ.enforceybasepath);
+        Path of = Path.of(Univ.enforcrybasepath);
         if(!Files.exists(of)) {
             Files.createDirectory(of);
         }
@@ -136,7 +136,7 @@ public class FileEncrypterDecrypter{
         String outt = decrypt(ss, kii);
 
         byte[] decodee = Base64.getDecoder().decode(outt.getBytes());
-        Files.write(Paths.get(Univ.enforceybasepath + Arrays.hashCode(decodee)), decodee);
+        Files.write(Paths.get(Univ.enforcrybasepath + Arrays.hashCode(decodee)), decodee);
 
     }
 

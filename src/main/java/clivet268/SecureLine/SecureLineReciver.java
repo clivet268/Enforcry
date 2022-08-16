@@ -43,6 +43,7 @@ public class SecureLineReciver {
 
                 camsg(out,"Enter Command", "Awaiting Command");
                 this.closeflag = carprun(in, out, "Zero");
+                specificrpverbose(in, "Done");
                 System.out.println("Closing connection");
                 socket.close();
                 in.close();

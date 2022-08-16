@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public abstract class ExacutableCommand implements Runnable{
     String name = this.getClass().getSimpleName();
-    public ArrayList<String> output = new ArrayList<>();
+    public ArrayList<? super Object> output = new ArrayList<>();
     public ArrayList<String> input = new ArrayList<>();
 
     public int noinputs(){
@@ -33,14 +33,14 @@ public abstract class ExacutableCommand implements Runnable{
 
     @Override
     public void run() {
-
+        this.output.add("0");
     }
 
-    public byte outbytecode(){
+    public int outbytecode(){
         return -1;
     }
 
-    public ArrayList<String> getOutput(){
+    public ArrayList<? super Object> getOutput(){
         return output;
     }
 }
