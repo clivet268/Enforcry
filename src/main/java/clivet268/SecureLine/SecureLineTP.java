@@ -2,8 +2,11 @@ package clivet268.SecureLine;
 
 import clivet268.Enforcry;
 import clivet268.SecureLine.Commands.ExacutableCommand;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -152,26 +155,22 @@ public class SecureLineTP {
                 while (!temp.equals(eot)) {
                     if (outputinputrpcaverbose(in, out, ("Recived Package Number: " + pkgnum)).equals("Sending Package Number: " + pkgnum)) {
                         pkgnum++;
-                        byte[] bytes = new byte[16 * 1024];
+                        byte[] bytes = new byte[8192];
                         String fpath = enforcrytestpath + getrandname();
                         Path of = Path.of(fpath);
                         Files.createFile(of);
-                        int count = 1;
+                        int count = 8192;
+                        Byte[] sum = new Byte[0];
                         System.out.println("ready to read");
-                        while (count > 0) {
+                        while (count == 8192) {
                             System.out.println(count = in.read(bytes));
-                            String s = Base64.getEncoder().encodeToString(bytes);
-                            System.out.println(s);
-                            if(s.equals("File Done")){
-                                break;
-                            }
+                            sum = concatWithCollection(sum, ArrayUtils.toObject(bytes));
                             System.out.println("readed");
-                            Files.write(of, bytes);
-                            System.out.println(" uhhh");
                         }
                         System.out.println("read it ALL");
-
+                        Files.write(of, ArrayUtils.toPrimitive(sum));
                     } else {
+                        System.out.println("Done reading this one");
                         break;
                     }
                 }
@@ -276,9 +275,7 @@ public class SecureLineTP {
                 out.flush();
                 System.out.println("uhhhh");
             }
-            byte[] re = new byte[0];
-            out.write(re);
-
+            out.write("File Done".getBytes());
             System.out.println("free bird");
 
         }
