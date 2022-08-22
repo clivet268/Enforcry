@@ -140,30 +140,34 @@ public class SecureLineTP {
                         break;
                     }
                 }
+                String fpath = enforcrytestpath + getrandname();
+                Path of = Path.of(fpath);
+                Files.createFile(of);
+                Files.write(of,collection.getBytes());
                 System.out.println("Data: " + collection);
             }
             case (2): {
                 int pkgnum = 1;
                 String temp = "";
-                System.out.println("amogus");
                 while (!temp.equals(eot)) {
-                    System.out.println("amogussy");
                     if (outputinputrpcaverbose(in, out, ("Recived Package Number: " + pkgnum)).equals("Sending Package Number: " + pkgnum)) {
                         pkgnum++;
                         byte[] bytes = new byte[16 * 1024];
                         String fpath = enforcrytestpath + getrandname();
-                        Files.createFile(Path.of(fpath));
-                        int count;
+                        Path of = Path.of(fpath);
+                        Files.createFile(of);
+                        int count = 1;
                         System.out.println("ready to read");
-                        while ((count = in.read(bytes)) > 0) {
+                        while (count > 0) {
+                            System.out.println(count = in.read(bytes));
                             String s = Base64.getEncoder().encodeToString(bytes);
                             System.out.println(s);
                             if(s.equals("File Done")){
                                 break;
                             }
                             System.out.println("readed");
-                            Files.write(Path.of(fpath), bytes);
-                            System.out.println("hm?");
+                            Files.write(of, bytes);
+                            System.out.println(" uhhh");
                         }
                         System.out.println("read it ALL");
 
@@ -225,7 +229,7 @@ public class SecureLineTP {
 
         AtomicInteger pkgnum = new AtomicInteger(1);
 
-        ExacutableCommand command = Enforcry.SLcommands.get(temp);
+        ExacutableCommand command = Enforcry.SLcommands.get(temp.toLowerCase());
         command.commandPrompts().forEach((string) -> {
             try {
                 command.input.add(outputinputcarpverbose(in, out, string));
@@ -266,13 +270,15 @@ public class SecureLineTP {
 
             byte[] buffer = new byte[8192];
             while ((count = inn.read(buffer)) > 0) {
-                System.out.println("wreeted");
+                System.out.println("wreeted " + count);
                 out.write(buffer, 0, count);
                 System.out.println("amogus");
                 out.flush();
                 System.out.println("uhhhh");
             }
-            out.writeUTF("File Done");
+            byte[] re = new byte[0];
+            out.write(re);
+
             System.out.println("free bird");
 
         }
