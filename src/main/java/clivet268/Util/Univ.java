@@ -49,16 +49,27 @@ public class Univ {
         return nam;
     }
     public static byte[] trimTrailingZeros(byte[] bytes){
+        String e = "";
+        for (byte b: bytes) {
+            e += Byte.toString(b);
+        }
+        System.out.println(e);
         ArrayUtils.reverse(bytes);
+        e ="";
         int i  = 0;
         while (bytes[i] == 0){
             i++;
+            if (i >= bytes.length){
+                return new byte[0];
+            }
         }
         ArrayUtils.reverse(bytes);
-        byte[] nbytes =new byte[bytes.length - 1 - i];
-        for (int j = nbytes.length; j >= 0; j--) {
-            nbytes[j] = bytes[i];
+        for (byte b: bytes) {
+            e += Byte.toString(b);
         }
+        System.out.println(e);
+        byte[] nbytes =new byte[bytes.length - i];
+        System.arraycopy(bytes, 0, nbytes, 0, bytes.length - i);
         return nbytes;
     }
 
