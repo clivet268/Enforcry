@@ -47,8 +47,15 @@ public class AISURL_SRC {
     public boolean trydecodeb64(String str){
         if(str.startsWith("data")) {
             str = str.trim().replaceFirst("data[:]image[/]([a-z])+;base64,", "");
-            output.add(Base64.getDecoder().decode(str));
-            System.out.println("Decoded 64");
+            try {
+                output.add(Base64.getDecoder().decode(str));
+                System.out.println("Decoded 64");
+            }
+            catch(IllegalArgumentException e){
+                System.out.println(e.getLocalizedMessage());
+                System.out.println("Skipping");
+            }
+
             return true;
         }
         return false;
