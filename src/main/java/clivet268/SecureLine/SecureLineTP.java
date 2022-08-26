@@ -5,11 +5,13 @@ import clivet268.SecureLine.Commands.ExacutableCommand;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.*;
+import java.nio.Buffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -93,6 +95,15 @@ public class SecureLineTP {
         out.writeUTF(send);
         out.flush();
     }
+    public static void specificcarpsendverbose(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
+        String temp = in.readUTF();
+        while (!temp.equals(check)) {
+            temp = in.readUTF();
+        }
+        out.writeUTF(send);
+        out.flush();
+        System.out.println(send);
+    }
 
     public static void carpverbose(DataInputStream in, DataOutputStream out, String send) throws IOException {
         String temp = in.readUTF();
@@ -120,7 +131,7 @@ public class SecureLineTP {
 
     public static void carpoutput(DataInputStream in, DataOutputStream out, String endoftransmition) throws IOException {
         //System.out.println(in.skipBytes(14));
-        int readmode = Integer.valueOf(in.readUTF());
+        int readmode = Integer.parseInt(in.readUTF());
         System.out.println(readmode);
         handleReadModes(in, out, readmode, endoftransmition);
         System.out.println("End of Transmition");
@@ -164,8 +175,11 @@ public class SecureLineTP {
                         System.out.println("ready to read");
                         while (count == 8192) {
                             System.out.println(count = in.read(bytes));
+                            bytes = trimTrailingZeros(bytes);
+                            if (Arrays.equals(bytes, new byte[0])){
+                                break;
+                            }
                             sum = concatWithCollection(sum, ArrayUtils.toObject(bytes));
-                            System.out.println("readed");
                         }
                         System.out.println("read it ALL");
                         Files.write(of, ArrayUtils.toPrimitive(sum));
@@ -173,7 +187,13 @@ public class SecureLineTP {
                         System.out.println("Done reading this one");
                         break;
                     }
+                    System.out.println("a");
+                    caverbose(out, "Ticky");
+                    temp = in.readUTF();
+                    System.out.println("b");
                 }
+
+                System.out.println("All Inputs Done");
             }
             case (3): {
 
@@ -242,40 +262,46 @@ public class SecureLineTP {
         command.getOutput().forEach((e) -> {
             try {
                 caverbose(out, ("Sending Package Number: " + pkgnum));
-                pkgnum.getAndIncrement();
                 handleWriteModes(in, out, command.outbytecode(), e);
                 System.out.println("Sent Package Number: " + pkgnum);
+                pkgnum.getAndIncrement();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
-        caverbose(out, endoftransmition);
+        specificcarpsendverbose(in, "Ticky", out, endoftransmition);
         System.out.println("End of Transmition");
         System.out.println("Command " + command.getName() + " executed");
         return command.getCloseflag();
 
     }
 
+    static int hwmclock = 0;
     public static void handleWriteModes(DataInputStream in, DataOutputStream out, int wm, Object e) throws IOException {
         if (wm == 1) {
             out.writeUTF((String) e);
             out.flush();
         } else if (wm == 2) {
             int count;
-            InputStream is = null;
-            DataInputStream inn = null;
-            is = new ByteArrayInputStream((byte[]) e);
-            inn = new DataInputStream(is);
-
+            if(hwmclock == 1){
+                ca(out, "Oneotherun");
+            }
+            else {
+                hwmclock = 1;
+            }
+            InputStream is = new ByteArrayInputStream((byte[]) e);
+            DataInputStream inn = new DataInputStream(is);
             byte[] buffer = new byte[8192];
             while ((count = inn.read(buffer)) > 0) {
+                System.out.println(buffer.length);
                 System.out.println("wreeted " + count);
                 out.write(buffer, 0, count);
-                System.out.println("amogus");
                 out.flush();
-                System.out.println("uhhhh");
             }
-            out.write("File Done".getBytes());
+            byte [] endpty = new byte[8191];
+            out.write(endpty);
+            out.flush();
+
             System.out.println("free bird");
 
         }
