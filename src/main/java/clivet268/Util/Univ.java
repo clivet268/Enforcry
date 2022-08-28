@@ -67,7 +67,10 @@ public class Univ {
         for (byte b: bytes) {
             e += Byte.toString(b);
         }
+        System.out.println( "i " + i);
         System.out.println(e);
+        System.out.println("bytes " + bytes.length);
+
         byte[] nbytes =new byte[bytes.length - i];
         System.arraycopy(bytes, 0, nbytes, 0, bytes.length - i);
         return nbytes;
