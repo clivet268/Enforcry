@@ -114,11 +114,13 @@ public class SecureLineTP {
         out.flush();
     }
 
-    public static void specificrpcasendverbose(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
+    public static void specificrpcasendverboseverbose(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
         String temp = in.readUTF();
         while (!temp.equals(check)) {
             temp = in.readUTF();
+            System.out.println(temp);
         }
+        System.out.println(temp);
         out.writeUTF(send);
         out.flush();
         System.out.println(send);
@@ -218,10 +220,14 @@ public class SecureLineTP {
                     sum = trimLeadingZeros(sum);
                     System.out.println("read it ALL");
                     Files.write(of, sum);
-                    temp = outputinputcarp(in,out, "Ticky");
+                    temp = "";
+                    while (temp.equals("")){
+                        System.out.println("Blanco");
+                        temp = outputinputcarp(in,out, "Ticky");
+                    }
                     System.out.println(temp);
                 }
-                System.out.println("All Inputs Done");
+                System.out.println("All Transfers Done");
             }
             case (3): {
 
@@ -287,17 +293,17 @@ public class SecureLineTP {
         caverbose(out, "End of Inputs");
         command.run();
         ca(out, "" + command.outbytecode());
-        specificrpcasendverbose(in, "Ticky", out, "Begin Loop");
+        specificrpcasendverboseverbose(in, "Ticky", out, "Begin Loop");
         command.getOutput().forEach((e) -> {
             try {
-                specificrpcasendverbose(in, "Ticky", out, "Continue");
+                specificrpcasendverboseverbose(in, "Ticky", out, "Continue");
                 handleWriteModes(in, out, command.outbytecode(), e);
                 pkgnum.getAndIncrement();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
-        specificrpcasendverbose(in, "Ticky", out, endoftransmition);
+        specificrpcasendverboseverbose(in, "Ticky", out, endoftransmition);
         System.out.println("End of Transmition");
         System.out.println("Command " + command.getName() + " executed");
         return command.getCloseflag();
@@ -311,19 +317,17 @@ public class SecureLineTP {
             int count;
             InputStream is = new ByteArrayInputStream((byte[]) e);
             DataInputStream inn = new DataInputStream(is);
+            //TODO buffer size is tooooooo smallll
             byte[] buffer = new byte[8192];
+            int lastcount  = 0;
             while ((count = inn.read(buffer)) > 0) {
                 System.out.println(buffer.length);
                 System.out.println("wreeted " + count);
                 out.write(buffer, 0, count);
                 out.flush();
+                lastcount = count;
             }
-            byte [] cleaner = new byte[8192 - count];
-            out.write(cleaner);
-            out.flush();
-            byte [] endpty = new byte[8192];
-            out.write(endpty);
-            out.flush();
+
 
             System.out.println("free bird");
 

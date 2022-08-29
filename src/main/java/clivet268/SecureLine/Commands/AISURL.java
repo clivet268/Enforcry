@@ -23,7 +23,9 @@ public class AISURL extends ExacutableCommand {
         try {
             this.output = (ArrayList<Object>)AISURL_SRC.get(this.input.get(0)).clone();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            String ee = e.getLocalizedMessage();
+            System.out.println(ee);
+            this.output.add(ee.getBytes());
         }
     }
 
