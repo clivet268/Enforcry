@@ -67,15 +67,29 @@ public class Univ {
         for (byte b: bytes) {
             e += Byte.toString(b);
         }
-        System.out.println( "i " + i);
-        System.out.println(e);
-        System.out.println("bytes " + bytes.length);
+        //TODO Cleanup unneaded verbosity/make it optional
+        //System.out.println( "i " + i);
+        //System.out.println(e);
+        //System.out.println("bytes " + bytes.length);
 
         byte[] nbytes =new byte[bytes.length - i];
         System.arraycopy(bytes, 0, nbytes, 0, bytes.length - i);
         return nbytes;
     }
 
+    public static byte[] trimLeadingZeros(byte[] bytes){
+        int i  = 0;
+        while (bytes[i] == 0){
+            i++;
+            if (i >= bytes.length){
+                return new byte[0];
+            }
+        }
+
+        byte[] nbytes =new byte[bytes.length - i];
+        System.arraycopy(bytes, i, nbytes, 0, bytes.length - i);
+        return nbytes;
+    }
     public static <T> T[] concatWithCollection(T[] array1, T[] array2) {
         List<T> resultList = new ArrayList<>(array1.length + array2.length);
         Collections.addAll(resultList, array1);

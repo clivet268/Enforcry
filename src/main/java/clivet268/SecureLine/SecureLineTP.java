@@ -200,27 +200,26 @@ public class SecureLineTP {
                 }
                 while (temp.equals("Continue")) {
                     byte[] bytes = new byte[8192];
-                        String fpath = enforcrytestpath + getrandname();
-                        Path of = Path.of(fpath);
-                        Files.createFile(of);
-                        int count = 8192;
-                        byte[] sum = new byte[8192];
-                        System.out.println("ready to read");
-                        while (count == 8192) {
-                            count = in.read(bytes);
-                            bytes = trimTrailingZeros(bytes);
-                            if (Arrays.equals(bytes, new byte[0])){
-                                System.out.println("Broke");
-                                break;
-                            }
-                            sum = ArrayUtils.addAll(sum, bytes);
+                    String fpath = enforcrytestpath + getrandname();
+                    Path of = Path.of(fpath);
+                    Files.createFile(of);
+                    int count = 8192;
+                    byte[] sum = new byte[8192];
+                    System.out.println("ready to read");
+                    while (count == 8192) {
+                        count = in.read(bytes);
+                        bytes = trimTrailingZeros(bytes);
+                        if (Arrays.equals(bytes, new byte[0])){
+                            System.out.println("Broke");
+                            break;
                         }
-                        System.out.println("read it ALL");
-                        Files.write(of, sum);
-                    System.out.println("a");
+                        sum = ArrayUtils.addAll(sum, bytes);
+                    }
+                    sum = trimLeadingZeros(sum);
+                    System.out.println("read it ALL");
+                    Files.write(of, sum);
                     temp = outputinputcarp(in,out, "Ticky");
                     System.out.println(temp);
-                    System.out.println("b");
                 }
                 System.out.println("All Inputs Done");
             }

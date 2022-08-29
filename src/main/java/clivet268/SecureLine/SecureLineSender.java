@@ -45,7 +45,6 @@ public class SecureLineSender {
             rpcainputwhileverbose(in, out, "End of Inputs");
             carpoutput(in, out, "Zero");
             caverbose(out, "Done");
-            specificrpverbose(in, "Affirmative");
             System.out.println("Closing Connection");
 
             try {

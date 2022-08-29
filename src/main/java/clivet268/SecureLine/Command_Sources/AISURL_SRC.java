@@ -20,7 +20,7 @@ public class AISURL_SRC {
     ArrayList<byte[]> output = new ArrayList<>();
     public AISURL_SRC(String url) throws IOException {
         try {
-            Document doc = Jsoup.connect(url).userAgent("EFCMozilla/5.0").get();
+            Document doc = Jsoup.connect(url).ignoreContentType(true).cookie("Accept-Language", "en-US;q=0.7,en;q=0.3").userAgent("EFCMozilla/5.0").get();
             System.out.println("Getting from - " + doc.title());
             Elements images = doc.select("img");
             for (Element el : images) {
