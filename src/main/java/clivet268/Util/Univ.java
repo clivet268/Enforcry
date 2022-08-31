@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 
 public class Univ {
+
+    public static final int BTC =  65536;
     public static String enforcrybasepath = System.getProperty("user.home") + File.separator + "Enforcry/";
     public static String enforcrytestpath = System.getProperty("user.home") + File.separator + "Enforcry/test/";
     public static File filechooser(){
@@ -67,10 +69,42 @@ public class Univ {
         for (byte b: bytes) {
             e += Byte.toString(b);
         }
-        //TODO Cleanup unneaded verbosity/make it optional
-        //System.out.println( "i " + i);
-        //System.out.println(e);
-        //System.out.println("bytes " + bytes.length);
+
+        byte[] nbytes =new byte[bytes.length - i];
+        System.arraycopy(bytes, 0, nbytes, 0, bytes.length - i);
+        return nbytes;
+    }
+
+    public static byte[] zchecker(byte[] bytes){
+        int i  = 0;
+        while (bytes[i] == 0){
+            i++;
+            if (i >= bytes.length){
+                return new byte[0];
+            }
+        }
+        return bytes;
+    }
+
+    public static byte[] trimTrailingBytes(byte[] bytes, byte trimmings){
+        String e = "";
+        for (byte b: bytes) {
+            e += Byte.toString(b);
+        }
+        System.out.println(e);
+        ArrayUtils.reverse(bytes);
+        e ="";
+        int i  = 0;
+        while (bytes[i] == trimmings){
+            i++;
+            if (i >= bytes.length){
+                return new byte[0];
+            }
+        }
+        ArrayUtils.reverse(bytes);
+        for (byte b: bytes) {
+            e += Byte.toString(b);
+        }
 
         byte[] nbytes =new byte[bytes.length - i];
         System.arraycopy(bytes, 0, nbytes, 0, bytes.length - i);
@@ -87,7 +121,7 @@ public class Univ {
         }
 
         byte[] nbytes =new byte[bytes.length - i];
-        System.arraycopy(bytes, i, nbytes, 0, bytes.length - i);
+        System.arraycopy(bytes, 0, nbytes, 0, bytes.length - i);
         return nbytes;
     }
     public static <T> T[] concatWithCollection(T[] array1, T[] array2) {

@@ -8,7 +8,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static clivet268.Util.Univ.*;
@@ -197,37 +199,57 @@ public class SecureLineTP {
                 int pkgnum = 1;
                 String temp = "Continue";
                 String zstcheck = outputinputrp(in);
-                if(zstcheck.equals("Zero")){
+                if (zstcheck.equals("Zero")) {
                     temp = "Zero";
                 }
+
+                Date date = new Date();
                 while (temp.equals("Continue")) {
-                    byte[] bytes = new byte[8192];
+                    byte[] bytes = new byte[BTC];
                     String fpath = enforcrytestpath + getrandname();
                     Path of = Path.of(fpath);
                     Files.createFile(of);
-                    int count = 8192;
-                    byte[] sum = new byte[8192];
+                    int count = BTC;
+                    byte[] sum = new byte[0];
                     System.out.println("ready to read");
-                    while (count == 8192) {
+                    
+                    while (count > 0) {
                         count = in.read(bytes);
-                        bytes = trimTrailingZeros(bytes);
-                        if (Arrays.equals(bytes, new byte[0])){
+                        bytes = zchecker(bytes);
+
+                        if (Arrays.equals(bytes, new byte[0])) {
                             System.out.println("Broke");
                             break;
                         }
                         sum = ArrayUtils.addAll(sum, bytes);
                     }
-                    sum = trimLeadingZeros(sum);
+                    //sum = trimLeadingZeros(sum);
                     System.out.println("read it ALL");
                     Files.write(of, sum);
                     temp = "";
-                    while (temp.equals("")){
-                        System.out.println("Blanco");
-                        temp = outputinputcarp(in,out, "Ticky");
+                    while (temp.equals("")) {
+                        //System.out.println("Blanco");
+                        temp = outputinputcarp(in, out, "Ticky");
                     }
                     System.out.println(temp);
                 }
                 System.out.println("All Transfers Done");
+
+                //credit mkyong https://mkyong.com/java/java-time-elapsed-in-days-hours-minutes-seconds/
+                Date enddate = new Date();
+                long secondsInMilli = 1000;
+                long minutesInMilli = secondsInMilli * 60;
+                long hoursInMilli = minutesInMilli * 60;
+                long different = enddate.getTime() - date.getTime();
+                long elapsedHours = different / hoursInMilli;
+                different = different % hoursInMilli;
+                long elapsedMinutes = different / minutesInMilli;
+                different = different % minutesInMilli;
+                long elapsedSeconds = different / secondsInMilli;
+                different = different % secondsInMilli;
+                long elapsedDeciSeconds = different / 10;
+                System.out.printf("Time elapsed: %d:%d:%d:%d%n", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedDeciSeconds);
+
             }
             case (3): {
 
@@ -317,17 +339,20 @@ public class SecureLineTP {
             int count;
             InputStream is = new ByteArrayInputStream((byte[]) e);
             DataInputStream inn = new DataInputStream(is);
-            //TODO buffer size is tooooooo smallll
-            byte[] buffer = new byte[8192];
+            byte[] buffer = new byte[BTC];
             int lastcount  = 0;
             while ((count = inn.read(buffer)) > 0) {
-                System.out.println(buffer.length);
-                System.out.println("wreeted " + count);
-                out.write(buffer, 0, count);
+                //System.out.println("wreeted " + count);
+
+
+                out.write(buffer, 0, BTC);
                 out.flush();
-                lastcount = count;
             }
 
+            byte [] endpty = new byte[BTC];
+            Arrays.fill(endpty, (byte) 0);
+            out.write(endpty, 0, BTC);
+            out.flush();
 
             System.out.println("free bird");
 
