@@ -44,6 +44,7 @@ public class FileEncrypterDecrypter{
         }
         return null;
     }
+
     public static String gen2048() throws NoSuchAlgorithmException {
         String beegkee = "";
         for(int i = 0; i < 8; i ++) {
@@ -57,7 +58,7 @@ public class FileEncrypterDecrypter{
         try {
             setKey(secret);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
-            //TODO CBC
+            //TODO CBC mode
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return new String(cipher.doFinal(Base64.getDecoder()
                     .decode(strToDecrypt)));
@@ -105,6 +106,23 @@ public class FileEncrypterDecrypter{
         Files.write(Path.of(Univ.enforcrybasepath + "." + file.hashCode() + "key"),kii.getBytes());
     }
 
+    public static void fekpass(File file, String p) throws IOException, NoSuchAlgorithmException {
+        Path of = Path.of(Univ.enforcrybasepath);
+        if(!Files.exists(of)) {
+            Files.createDirectory(of);
+        }
+        String kii = gen2048();
+        assert file != null;
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        String s = Base64.getEncoder().encodeToString(bytes);
+        String out = encrypt(s, kii);
+
+        byte[] decode = Base64.getDecoder().decode(out.getBytes());
+        Path pathout = Paths.get(Univ.enforcrybasepath + file.hashCode());
+        Files.write(pathout, decode);
+        System.out.println("Key saved, make sure you get all of it\n_\n\n");
+        Files.write(Path.of(Univ.enforcrybasepath + "." + file.hashCode() + "key"),kii.getBytes());
+    }
     public static void fdk(File file, String kii) throws IOException, NoSuchAlgorithmException {
         Path of = Path.of(Univ.enforcrybasepath);
         if(!Files.exists(of)) {
@@ -140,6 +158,14 @@ public class FileEncrypterDecrypter{
 
     }
 
+    //Non-command FEKing and DEKing
+    public static byte[] fdktostream(File file, String kii) throws IOException, NoSuchAlgorithmException {
+        byte[] bytess = Files.readAllBytes(file.toPath());
+        String ss = Base64.getEncoder().encodeToString(bytess);
+        String outt = decrypt(ss, kii);
+
+        return Base64.getDecoder().decode(outt.getBytes());
+    }
 
 
 }
