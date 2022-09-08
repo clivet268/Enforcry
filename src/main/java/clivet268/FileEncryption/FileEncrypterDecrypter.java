@@ -67,7 +67,8 @@ public class FileEncrypterDecrypter{
             return new String(cipher.doFinal(Base64.getDecoder()
                     .decode(strToDecrypt)));
         } catch (Exception e) {
-            System.out.println("Error while decrypting: " + e);
+            System.out.println("Error while decrypting: \n");
+            e.printStackTrace();
         }
         return null;
     }
@@ -151,19 +152,22 @@ public class FileEncrypterDecrypter{
         Path pathout = Paths.get(filein.getAbsolutePath() + file.hashCode());
         Files.write(pathout, decode);
     }
-    public static void fek(File file, String filein, String p, String of) throws IOException, NoSuchAlgorithmException {
+    public static File fek(File file, String filein, String p, String of) throws IOException, NoSuchAlgorithmException {
         byte[] bytes = Files.readAllBytes(file.toPath());
         String s = Base64.getEncoder().encodeToString(bytes);
+        System.out.println("the s" +s);
         String out = encrypt(s, p);
+        System.out.println("THE OUT " + out);
 
         byte[] decode = Base64.getDecoder().decode(out.getBytes());
         System.out.println("Shaka boom?");
-        String pathout = filein + File.separator + getrandname() + "." + of;
+        String pathout = filein + "." + of;
         System.out.println("Shaka boom");
         Path of1 = Path.of(pathout);
         Files.createFile(of1);
         Files.write(of1, decode);
         System.out.println("Sucka boom");
+        return of1.toFile();
     }
     public static void fdk(File file, String kii) throws IOException, NoSuchAlgorithmException {
         Path of = Path.of(Univ.enforcrybasepath);
@@ -203,10 +207,13 @@ public class FileEncrypterDecrypter{
     //Non-command FEKing and DEKing
     public static byte[] fdktostream(File file, String kii) throws IOException, NoSuchAlgorithmException {
         byte[] bytess = Files.readAllBytes(file.toPath());
+        System.out.println();
         String ss = Base64.getEncoder().encodeToString(bytess);
+        System.out.println("SSe" + ss);
         String outt = decrypt(ss, kii);
+        System.out.println(outt);
 
-        return Base64.getDecoder().decode(outt.getBytes());
+        return outt.getBytes();
     }
 
 

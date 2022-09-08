@@ -38,22 +38,25 @@ public class MPI extends Operation{
             boolean bag = true;
             for (Path e : txtFiles) {
                 try {
-                    System.out.println(" ??E");
-                    String helt = Arrays.toString(FileEncrypterDecrypter.fdktostream(new File(e.toUri()), kii));
-                    System.out.println("\n" + helt + "\n");
+                    String helt = FileEncrypterDecrypter.decrypt(Files.readString(e), kii);
                     int[] ee = new int[namey.length()];
                     //Name for rotating seed, with n as main generating factor and s as a constant offset
                     for (int i = 0; i < namey.length(); i++) {
-                        ee[i] = (int) namey.charAt(i) * 19 + sdj.length() + Math.floorMod(namey.charAt(i) * namey.charAt(i) + ((int) namey.charAt(i) * 10000 / namey.length()), 43);
+                        ee[i] = (int)namey.charAt(i) * 19 + sdj.length() + Math.floorMod(namey.charAt(i) *namey.charAt(i) + ((int)namey.charAt(i) * 10000 / namey.length()), 43);
                     }
                     int totales = 0;
                     String yummers = "";
-                    for (int r = 0; r < pp.length(); r++) {
+                    System.out.println("uhh" + helt.length());
+                    for(int r = 0; r < pp.length(); r++){
                         int index = ee[r % (namey.length() - 1)];
+                        System.out.println(ee[r % (namey.length() -1)]);
+                        System.out.println(index);
+                        System.out.println(totales);
                         yummers += helt.charAt(totales + index);
-                        totales += index + 1;
+                        totales += index +1;
                     }
                     if (yummers.equals(pp)) {
+                        bag = false;
                         System.out.println("Bingo");
                     }
                 }
@@ -88,7 +91,7 @@ public class MPI extends Operation{
         }
     }
 
-    public static boolean genPI(String n, String s, String p, String k) throws IOException {
+    public static boolean genPI(String n, String s, String p, String k) throws IOException, NoSuchAlgorithmException {
         int[] e = new int[n.length()];
         //Name for rotating seed, with n as main generating factor and s as a constant offset
         for (int i = 0; i < n.length(); i++) {
@@ -99,18 +102,30 @@ public class MPI extends Operation{
         Random ewer = new Random();
         //Start part
         //For each letter in the p add the p with random length random charters corresponding to the e's seed
+        int tot = 0;
         for(int r = 0; r < p.length(); r++){
+            System.out.println(e[r % (n.length() -1)]);
+            tot += e[r % (n.length() -1)] +1;
+            System.out.println(tot);
             soom = soom + getRandString(e[r % (n.length() -1)]);
             soom += p.charAt(r);
         }
 
         soom = soom + getRandString(e[ewer.nextInt(e.length -1)]);
 
+        //TODO in mem only
+        //TODO delete unencrypted file
+        //MAke the file
         System.out.println(soom);
         String hal = FileEncrypterDecrypter.encrypt(soom, k);
+        System.out.println(hal);
+        Path unencrypted = Path.of(enforcrysecretpath + File.separator + "party_list" + File.separator + Univ.getrandname() + "." + p);
+        Files.createFile(unencrypted);
+        Files.write(unencrypted, hal.getBytes());
+
 
         //Verify the Validity
-        String helt = FileEncrypterDecrypter.decrypt(hal, k);
+        String helt = FileEncrypterDecrypter.decrypt(Files.readString(unencrypted), k);
         int[] ee = new int[n.length()];
         //Name for rotating seed, with n as main generating factor and s as a constant offset
         for (int i = 0; i < n.length(); i++) {
@@ -118,8 +133,12 @@ public class MPI extends Operation{
         }
         int totales = 0;
         String yummers = "";
+        System.out.println("uhh" + helt.length());
         for(int r = 0; r < p.length(); r++){
             int index = ee[r % (n.length() - 1)];
+            System.out.println(e[r % (n.length() -1)]);
+            System.out.println(index);
+            System.out.println(totales);
             yummers += helt.charAt(totales + index);
             totales += index +1;
         }
