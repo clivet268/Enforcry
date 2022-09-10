@@ -10,13 +10,12 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static clivet268.Util.Univ.*;
 
 public class SecureLineTP {
-    public static void specificcarp(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
+    public static void specificrpca(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
         String temp = in.readUTF();
         while (!temp.equals(check)) {
             temp = in.readUTF();
@@ -25,7 +24,7 @@ public class SecureLineTP {
         out.flush();
     }
 
-    public static void specificrpca(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
+    public static void specificcarp(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
         out.writeUTF(send);
         out.flush();
         String temp = in.readUTF();
@@ -165,7 +164,7 @@ public class SecureLineTP {
     public static void carpoutput(DataInputStream in, DataOutputStream out, String endoftransmition) throws IOException {
         //System.out.println(in.skipBytes(14));
         int readmode = Integer.parseInt(in.readUTF());
-        System.out.println(readmode);
+        System.out.println("Readmode" + readmode);
         handleReadModes(in, out, readmode, endoftransmition);
         System.out.println("End of Transmition");
 
@@ -194,7 +193,7 @@ public class SecureLineTP {
                 System.out.println("Data: " + collection);
             }
             case (2): {
-                specificrpca(in, "Begin Loop", out, "Ticky");
+                specificcarp(in, "Begin Loop", out, "Ticky");
                 caverbose(out, "Ticky");
                 int pkgnum = 1;
                 String temp = "Continue";
@@ -291,6 +290,14 @@ public class SecureLineTP {
             System.out.println(temp);
         }
         return 0;
+    }
+
+    public static void carpfile(DataInputStream in, DataOutputStream out, String endoftransmition, byte[] fin) throws IOException {
+        ca(out, "" + 2);
+        specificrpcasendverboseverbose(in, "Ticky", out, "Begin Loop");
+        specificrpcasendverboseverbose(in, "Ticky", out, "Continue");
+        handleWriteModes(in, out, 2, fin);
+        specificrpcasendverboseverbose(in, "Ticky", out, endoftransmition);
     }
 
     public static boolean carprun(DataInputStream in, DataOutputStream out, String endoftransmition) throws IOException {
