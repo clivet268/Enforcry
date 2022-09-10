@@ -1,21 +1,19 @@
 package clivet268.Operations;
 
-import clivet268.Enforcry;
 import clivet268.FileEncryption.FileEncrypterDecrypter;
 import clivet268.Util.Univ;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLOutput;
 import java.util.*;
 
+import static clivet268.FileEncryption.FileEncrypterDecrypter.gen2048;
 import static clivet268.Util.Univ.*;
 
-public class MPI extends Operation{
+public class MPIK extends Operation{
     @Override
     public void run() {
         Scanner s = new Scanner(System.in);
@@ -37,6 +35,9 @@ public class MPI extends Operation{
 
             boolean bag = true;
             for (Path e : txtFiles) {
+                if(!bag){
+                    break;
+                }
                 try {
                     String helt = FileEncrypterDecrypter.decrypt(Files.readString(e), kii);
                     int[] ee = new int[namey.length()];
@@ -61,7 +62,7 @@ public class MPI extends Operation{
                     }
                 }
                 catch (StringIndexOutOfBoundsException ignored){
-
+                    System.out.println("uhoh");
                 }
             }
                 if(bag){
@@ -112,6 +113,7 @@ public class MPI extends Operation{
         }
 
         soom = soom + getRandString(e[ewer.nextInt(e.length -1)]);
+        soom = soom + gen2048();
 
         //TODO in mem only
         //TODO delete unencrypted file
@@ -145,7 +147,6 @@ public class MPI extends Operation{
         if(yummers.equals(p)){
             System.out.println("created");
             assert hal != null;
-            Files.write(Files.createFile(Path.of(enforcrysecretpath + File.separator + "party_list" + File.separator + Univ.getrandname() + "." + p)), hal.getBytes());
             return true;
         }
         else

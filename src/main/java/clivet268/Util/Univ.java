@@ -25,7 +25,7 @@ public class Univ {
     public static String enforcrybasepath = System.getProperty("user.home") + File.separator + "Enforcry/";
     public static String enforcrytestpath = System.getProperty("user.home") + File.separator + "Enforcry/test/";
     public static String enforcrysecretpath = System.getProperty("user.home") + File.separator + "Enforcry/-/";
-    public static String enforcrypartypath = enforcrysecretpath + File.separator + "party_list";
+    public static String enforcrypartypath = enforcrysecretpath + File.separator + "sl"+ File.separator + "party_list";
     public static String enforcryfoutpath = System.getProperty("user.home") + File.separator + "Enforcry/fout/";
 
     public Univ(){
