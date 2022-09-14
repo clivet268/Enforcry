@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncryption.FileEncrypterDecrypter;
+import clivet268.FileEncryption.EncrypterDecrypter;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class FEKIN extends Operation{
             Scanner s = new Scanner(System.in);
             System.out.println("Enter Absolute path to file");
             File fin = new File(s.next());
-            FileEncrypterDecrypter.fek(fin);
+            EncrypterDecrypter.fek(fin);
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
