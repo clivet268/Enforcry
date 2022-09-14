@@ -1,23 +1,18 @@
 package clivet268.Util;
 
-import clivet268.Enforcry;
-import clivet268.FileEncryption.FileEncrypterDecrypter;
+import clivet268.FileEncryption.EncrypterDecrypter;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-import static clivet268.FileEncryption.FileEncrypterDecrypter.gen2048;
+import static clivet268.FileEncryption.EncrypterDecrypter.gen2048;
 
 public class Univ {
 
@@ -181,6 +176,200 @@ public class Univ {
         return resultList.toArray(resultArray);
     }
 
+    public static String[] getPrompts(){
+        Scanner s = new Scanner(System.in);
+        System.out.println(getRandString(100));
+        System.out.println("Enter your name: ");
+        String namey = s.nextLine();
+        System.out.println("Soup of the day?: ");
+        String sdj = s.nextLine();
+        System.out.println("What do you go by?: ");
+        String pp = s.nextLine();
+        //TODO file only/optional
+        System.out.println("oKay");
+        String kii = s.nextLine();
+        System.out.println("Do I Know You?");
+        String yn = s.nextLine();
+        return new String[]{namey, sdj, pp, kii, yn};
+    }
+
+    public static String[] getPromptsNoKey(String kii){
+        Scanner s = new Scanner(System.in);
+        System.out.println(getRandString(100));
+        System.out.println("Enter your name: ");
+        String namey = s.nextLine();
+        System.out.println("Soup of the day?: ");
+        String sdj = s.nextLine();
+        System.out.println("What do you go by?: ");
+        String pp = s.nextLine();
+        //TODO file only/optional
+        System.out.println("Do I Know You?");
+        String yn = s.nextLine();
+        return new String[]{namey, sdj, pp, kii, yn};
+    }
+
+    public static String getPIK() throws IOException {
+        Scanner s = new Scanner(System.in);
+        System.out.println(getRandString(100));
+        System.out.println("Enter your name: ");
+        String namey = s.nextLine();
+        System.out.println("Soup of the day?: ");
+        String sdj = s.nextLine();
+        System.out.println("What do you go by?: ");
+        String pp = s.nextLine();
+        //TODO file only/optional
+        System.out.println("oKay");
+        String kii = s.nextLine();
+        List<Path> txtFiles = null;
+        try {
+            txtFiles = Files.walk(Path.of(enforcrysecretpath + File.separator + "party_list"))
+                    //use to string here, otherwise checking for path segments
+                    .filter(p -> p.toString().contains("." + sdj)).toList();
+
+            boolean bag = true;
+            for (Path e : txtFiles) {
+                if(!bag){
+                    break;
+                }
+                    String helt = EncrypterDecrypter.decrypt(Files.readString(e), kii);
+                    int[] ee = new int[namey.length()];
+                    //Name for rotating seed, with n as main generating factor and s as a constant offset
+                    for (int i = 0; i < namey.length(); i++) {
+                        ee[i] = (int)namey.charAt(i) * 19 + sdj.length() + Math.floorMod(namey.charAt(i) *namey.charAt(i) + ((int)namey.charAt(i) * 10000 / namey.length()), 43);
+                    }
+                    int totales = 0;
+                    String yummers = "";
+                    System.out.println("uhh" + helt.length());
+                    for(int r = 0; r < pp.length(); r++){
+                        int index = ee[r % (namey.length() - 1)];
+                        yummers += helt.charAt(totales + index);
+                        totales += index +1;
+                    }
+                    if (yummers.equals(pp)) {
+                        bag = false;
+                        return helt.substring(helt.length() - 2048 -1, helt.length() -1);
+                    }
+                }
+            if(bag){
+                    System.out.println("Sorry Bub, You're Not On The List");
+                }
+
+            } catch (IOException | RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
+    }
+
+    public static String getprePIKandgen(String namey, String sdj, String pp, String kii, boolean yn) throws IOException {
+        List<Path> txtFiles = null;
+        try {
+            txtFiles = Files.walk(Path.of(enforcrysecretpath + File.separator + "party_list"))
+                    //use to string here, otherwise checking for path segments
+                    .filter(p -> p.toString().contains("." + sdj)).toList();
+
+            boolean bag = true;
+            for (Path e : txtFiles) {
+                String helt = EncrypterDecrypter.decrypt(Files.readString(e), kii);
+                int[] ee = new int[namey.length()];
+                //Name for rotating seed, with n as main generating factor and s as a constant offset
+                for (int i = 0; i < namey.length(); i++) {
+                    ee[i] = (int)namey.charAt(i) * 19 + sdj.length() + Math.floorMod(namey.charAt(i) *namey.charAt(i) + ((int)namey.charAt(i) * 10000 / namey.length()), 43);
+                }
+                int totales = 0;
+                String yummers = "";
+                System.out.println("uhh" + helt.length());
+                for(int r = 0; r < pp.length(); r++){
+                    int index = ee[r % (namey.length() - 1)];
+                    yummers += helt.charAt(totales + index);
+                    totales += index +1;
+                }
+                if (yummers.equals(pp)) {
+                    bag = false;
+                    return helt.substring(helt.length() - 2048 -1, helt.length() -1);
+                }
+            }
+
+            if(yn){
+                if(genPI(namey,sdj,pp ,kii)){
+                    System.out.println("Now I Do");
+                }
+                else {
+                    System.out.println("Sorry Bub, You're Not On The List");
+                }
+            }
+            else{
+                System.out.println("Sorry Bub, You're Not On The List");
+            }
+
+        } catch (IOException | RuntimeException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
+    }
+
+    public static boolean genPI(String n, String s, String p, String k) throws IOException, NoSuchAlgorithmException {
+        int[] e = new int[n.length()];
+        //Name for rotating seed, with n as main generating factor and s as a constant offset
+        for (int i = 0; i < n.length(); i++) {
+            e[i] = (int)n.charAt(i) * 19 + s.length() + Math.floorMod(n.charAt(i) *n.charAt(i) + ((int)n.charAt(i) * 10000 / n.length()), 43);
+        }
+
+        String soom = "";
+        Random ewer = new Random();
+        //Start part
+        //For each letter in the p add the p with random length random charters corresponding to the e's seed
+        int tot = 0;
+        for(int r = 0; r < p.length(); r++){
+            System.out.println(e[r % (n.length() -1)]);
+            tot += e[r % (n.length() -1)] +1;
+            System.out.println(tot);
+            soom = soom + getRandString(e[r % (n.length() -1)]);
+            soom += p.charAt(r);
+        }
+
+        soom = soom + getRandString(e[ewer.nextInt(e.length -1)]);
+        soom = soom + gen2048();
+
+        //TODO in mem only
+        //TODO delete unencrypted file
+        //MAke the file
+        System.out.println(soom);
+        String hal = EncrypterDecrypter.encrypt(soom, k);
+        System.out.println(hal);
+        Path unencrypted = Path.of(enforcrysecretpath + File.separator + "party_list" + File.separator + Univ.getrandname() + "." + p);
+        Files.createFile(unencrypted);
+        Files.write(unencrypted, hal.getBytes());
+
+
+        //Verify the Validity
+        String helt = EncrypterDecrypter.decrypt(Files.readString(unencrypted), k);
+        int[] ee = new int[n.length()];
+        //Name for rotating seed, with n as main generating factor and s as a constant offset
+        for (int i = 0; i < n.length(); i++) {
+            ee[i] = (int)n.charAt(i) * 19 + s.length() + Math.floorMod(n.charAt(i) *n.charAt(i) + ((int)n.charAt(i) * 10000 / n.length()), 43);
+        }
+        int totales = 0;
+        String yummers = "";
+        System.out.println("uhh" + helt.length());
+        for(int r = 0; r < p.length(); r++){
+            int index = ee[r % (n.length() - 1)];
+            System.out.println(e[r % (n.length() -1)]);
+            System.out.println(index);
+            System.out.println(totales);
+            yummers += helt.charAt(totales + index);
+            totales += index +1;
+        }
+        if(yummers.equals(p)){
+            System.out.println("created");
+            assert hal != null;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 
 }
 
