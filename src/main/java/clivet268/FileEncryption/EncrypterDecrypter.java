@@ -14,9 +14,8 @@ import java.util.Arrays;
 import java.util.Base64;
 
 import static clivet268.Util.Univ.getRandString;
-import static clivet268.Util.Univ.getrandname;
 
-public class FileEncrypterDecrypter{
+public class EncrypterDecrypter {
 
     private static SecretKeySpec secretKey;
     private static byte[] key;
