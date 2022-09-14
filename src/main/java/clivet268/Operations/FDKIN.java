@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncryption.FileEncrypterDecrypter;
+import clivet268.FileEncryption.EncrypterDecrypter;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class FDKIN extends Operation{
             File fin = new File(s.next());
             System.out.println("Enter key");
             String k = s.next();
-            FileEncrypterDecrypter.fdk(fin,k);
+            EncrypterDecrypter.fdk(fin,k);
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

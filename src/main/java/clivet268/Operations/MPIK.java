@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncryption.FileEncrypterDecrypter;
+import clivet268.FileEncryption.EncrypterDecrypter;
 import clivet268.Util.Univ;
 
 import java.io.File;
@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-import static clivet268.FileEncryption.FileEncrypterDecrypter.gen2048;
+import static clivet268.FileEncryption.EncrypterDecrypter.gen2048;
 import static clivet268.Util.Univ.*;
 
 public class MPIK extends Operation{
@@ -39,7 +39,7 @@ public class MPIK extends Operation{
                     break;
                 }
                 try {
-                    String helt = FileEncrypterDecrypter.decrypt(Files.readString(e), kii);
+                    String helt = EncrypterDecrypter.decrypt(Files.readString(e), kii);
                     int[] ee = new int[namey.length()];
                     //Name for rotating seed, with n as main generating factor and s as a constant offset
                     for (int i = 0; i < namey.length(); i++) {
@@ -92,7 +92,7 @@ public class MPIK extends Operation{
         }
     }
 
-    public static boolean genPI(String n, String s, String p, String k) throws IOException, NoSuchAlgorithmException {
+    /*public static boolean genPI(String n, String s, String p, String k) throws IOException, NoSuchAlgorithmException {
         int[] e = new int[n.length()];
         //Name for rotating seed, with n as main generating factor and s as a constant offset
         for (int i = 0; i < n.length(); i++) {
@@ -119,7 +119,7 @@ public class MPIK extends Operation{
         //TODO delete unencrypted file
         //MAke the file
         System.out.println(soom);
-        String hal = FileEncrypterDecrypter.encrypt(soom, k);
+        String hal = EncrypterDecrypter.encrypt(soom, k);
         System.out.println(hal);
         Path unencrypted = Path.of(enforcrysecretpath + File.separator + "party_list" + File.separator + Univ.getrandname() + "." + p);
         Files.createFile(unencrypted);
@@ -127,7 +127,7 @@ public class MPIK extends Operation{
 
 
         //Verify the Validity
-        String helt = FileEncrypterDecrypter.decrypt(Files.readString(unencrypted), k);
+        String helt = EncrypterDecrypter.decrypt(Files.readString(unencrypted), k);
         int[] ee = new int[n.length()];
         //Name for rotating seed, with n as main generating factor and s as a constant offset
         for (int i = 0; i < n.length(); i++) {
@@ -155,6 +155,8 @@ public class MPIK extends Operation{
         }
 
     }
+
+     */
 
 
                 /*

@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncryption.FileEncrypterDecrypter;
+import clivet268.FileEncryption.EncrypterDecrypter;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -13,7 +13,7 @@ public class FDK extends Operation {
             Scanner s = new Scanner(System.in);
             System.out.println("Enter key");
             String k = s.next();
-            FileEncrypterDecrypter.fdk(k);
+            EncrypterDecrypter.fdk(k);
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

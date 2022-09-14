@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncryption.FileEncrypterDecrypter;
+import clivet268.FileEncryption.EncrypterDecrypter;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -9,7 +9,7 @@ public class FEK extends Operation{
     @Override
     public void run() {
         try {
-            FileEncrypterDecrypter.fek();
+            EncrypterDecrypter.fek();
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

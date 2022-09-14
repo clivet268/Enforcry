@@ -1,6 +1,6 @@
 package clivet268.SecureLine.Commands;
 
-import clivet268.FileEncryption.FileEncrypterDecrypter;
+import clivet268.FileEncryption.EncrypterDecrypter;
 import clivet268.Util.Univ;
 
 import java.io.File;
@@ -10,11 +10,10 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-import static clivet268.FileEncryption.FileEncrypterDecrypter.gen2048;
-import static clivet268.Util.Univ.enforcrysecretpath;
-import static clivet268.Util.Univ.getRandString;
+import static clivet268.FileEncryption.EncrypterDecrypter.gen2048;
+import static clivet268.Util.Univ.*;
 
-public class MPIK_maybuz extends ExacutableCommand {
+public class MOGPIK extends ExacutableCommand {
 
     @Override
     public int noinputs(){
@@ -57,7 +56,7 @@ public class MPIK_maybuz extends ExacutableCommand {
                     break;
                 }
                 try {
-                    String helt = FileEncrypterDecrypter.decrypt(Files.readString(e), kii);
+                    String helt = EncrypterDecrypter.decrypt(Files.readString(e), kii);
                     int[] ee = new int[namey.length()];
                     //Name for rotating seed, with n as main generating factor and s as a constant offset
                     for (int i = 0; i < namey.length(); i++) {
@@ -76,7 +75,7 @@ public class MPIK_maybuz extends ExacutableCommand {
                     }
                     if (yummers.equals(pp)) {
                         bag = false;
-                        System.out.println("Bingo");
+                        output.add(helt.substring(helt.length() - 2048 -1 ));
                     }
                 }
                 catch (StringIndexOutOfBoundsException ignored){
@@ -104,69 +103,7 @@ public class MPIK_maybuz extends ExacutableCommand {
         }
     }
 
-    public static boolean genPI(String n, String s, String p, String k) throws IOException, NoSuchAlgorithmException {
-        int[] e = new int[n.length()];
-        //Name for rotating seed, with n as main generating factor and s as a constant offset
-        for (int i = 0; i < n.length(); i++) {
-            e[i] = (int)n.charAt(i) * 19 + s.length() + Math.floorMod(n.charAt(i) *n.charAt(i) + ((int)n.charAt(i) * 10000 / n.length()), 43);
-        }
 
-        String soom = "";
-        Random ewer = new Random();
-        //Start part
-        //For each letter in the p add the p with random length random charters corresponding to the e's seed
-        int tot = 0;
-        for(int r = 0; r < p.length(); r++){
-            System.out.println(e[r % (n.length() -1)]);
-            tot += e[r % (n.length() -1)] +1;
-            System.out.println(tot);
-            soom = soom + getRandString(e[r % (n.length() -1)]);
-            soom += p.charAt(r);
-        }
-
-        soom = soom + getRandString(e[ewer.nextInt(e.length -1)]);
-        soom = soom + gen2048();
-
-        //TODO in mem only
-        //TODO delete unencrypted file
-        //MAke the file
-        System.out.println(soom);
-        String hal = FileEncrypterDecrypter.encrypt(soom, k);
-        System.out.println(hal);
-        Path unencrypted = Path.of(enforcrysecretpath + File.separator + "party_list" + File.separator + Univ.getrandname() + "." + p);
-        Files.createFile(unencrypted);
-        Files.write(unencrypted, hal.getBytes());
-
-
-        //Verify the Validity
-        String helt = FileEncrypterDecrypter.decrypt(Files.readString(unencrypted), k);
-        int[] ee = new int[n.length()];
-        //Name for rotating seed, with n as main generating factor and s as a constant offset
-        for (int i = 0; i < n.length(); i++) {
-            ee[i] = (int)n.charAt(i) * 19 + s.length() + Math.floorMod(n.charAt(i) *n.charAt(i) + ((int)n.charAt(i) * 10000 / n.length()), 43);
-        }
-        int totales = 0;
-        String yummers = "";
-        System.out.println("uhh" + helt.length());
-        for(int r = 0; r < p.length(); r++){
-            int index = ee[r % (n.length() - 1)];
-            System.out.println(e[r % (n.length() -1)]);
-            System.out.println(index);
-            System.out.println(totales);
-            yummers += helt.charAt(totales + index);
-            totales += index +1;
-        }
-        if(yummers.equals(p)){
-            System.out.println("created");
-            assert hal != null;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
 
 
                 /*
