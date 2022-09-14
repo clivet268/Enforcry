@@ -5,21 +5,20 @@ import clivet268.Util.Univ;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Scanner;
 
 import static clivet268.SecureLine.SecureLineTP.*;
+import static clivet268.Util.Univ.getPromptsNoKey;
 
 public class EncryptedSecureLineSender {
     private Socket socket = null;
     private DataInputStream in = null;
     private DataOutputStream out = null;
     private Scanner scanner = new Scanner(System.in);
+    private String key = "";
 
     public EncryptedSecureLineSender(String address, int timeout) throws IOException {
         try {
@@ -53,19 +52,19 @@ public class EncryptedSecureLineSender {
                 out.close();
                 socket.close();
             }
-            //PIK transfer
+            //PIK gen
             System.out.println("Select the PIK");
-            File file = Univ.filechooser();
-            specificcarp(in, "K", out, "Sending PIK");
-            System.out.println("/?");
-            carpfile(in, out,  "Zero", Files.readAllBytes(file.toPath()));
+            key = Univ.getPIK();
+            String[] outs = getPromptsNoKey(key);
+            specificrpmsg(in, "K", "oKay");
+            rpcainputsetwhileverbose(in, out, outs,"End of Inputs");
+
 
 
             specificrpverbose(in, "Enter Command");
-
             exitcode = specificrpcacontinuousinverboseexitcode(in, "Command Accepted", out);
             rpcainputwhileverbose(in, out, "End of Inputs");
-            carpoutput(in, out, "Zero");
+            rpcafinaloutputs(in, out, "Zero",2048, key);
             caverbose(out, "Done");
             System.out.println("Closing Connection");
 

@@ -1,6 +1,7 @@
 package clivet268.SecureLine;
 
 import clivet268.Enforcry;
+import clivet268.Util.Univ;
 import org.jsoup.select.Evaluator;
 
 import java.io.*;
@@ -16,6 +17,7 @@ public class EncryptedSecureLineReciver {
     private DataInputStream in       =  null;
     private DataOutputStream out       =  null;
     private boolean closeflag = true;
+    private String key = "";
 
     public EncryptedSecureLineReciver(int timeout) throws IOException {
         while(closeflag) {
@@ -41,16 +43,14 @@ public class EncryptedSecureLineReciver {
 
                 //Encrypted?
                 specificcarp(in, "En",out,"En?");
-                System.out.println("wefijwf");
-                specificrpmsg(in, "Sending PIK", "Reciving PIK");
-                System.out.println("fwwef");
                 ca(out, "K");
-                System.out.println("ewf");
-                carpoutput(in, out, "Zero");
+                carprun(in, out, "Zero", "mogpik");
+                key = o3ut[0];
+                //Key recived
 
 
                 camsg(out,"Enter Command", "Awaiting Command");
-                this.closeflag = carprun(in, out, "Zero");
+                this.closeflag = carprun(in, out, "Zero", null);
                 specificrpverbose(in, "Done");
                 System.out.println("Closing connection");
                 socket.close();
