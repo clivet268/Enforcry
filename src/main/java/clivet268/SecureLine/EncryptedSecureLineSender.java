@@ -1,7 +1,6 @@
 package clivet268.SecureLine;
 
 import clivet268.Enforcry;
-import clivet268.Util.Univ;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +10,6 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import static clivet268.SecureLine.SecureLineTP.*;
-import static clivet268.Util.Univ.getPromptsNoKey;
 
 public class EncryptedSecureLineSender {
     private Socket socket = null;
@@ -53,12 +51,10 @@ public class EncryptedSecureLineSender {
                 socket.close();
             }
             //PIK gen
-            System.out.println("Select the PIK");
-            key = Univ.getPIK();
-            String[] outs = getPromptsNoKey(key);
-            specificrpmsg(in, "K", "oKay");
-            rpcainputsetwhileverbose(in, out, outs,"End of Inputs");
-
+            System.out.println("okay?" );
+            rpcainputwhileverbose(in, out, "End of Inputs");
+            rpcafinaloutputs(in, out, "Zero",null);
+            caverbose(out, "Done");
 
 
             specificrpverbose(in, "Enter Command");

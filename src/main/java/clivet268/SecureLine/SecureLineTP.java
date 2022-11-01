@@ -129,9 +129,12 @@ public class SecureLineTP {
         out.flush();
     }
 
-    public static void specificrpcasendverboseverbose(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
+    public static boolean specificrpcasendverboseverboseearlystop(DataInputStream in, String check, DataOutputStream out, String send, String earlystop) throws IOException {
         String temp = in.readUTF();
         while (!temp.equals(check)) {
+            if(temp.equals(earlystop)){
+                return false;
+            }
             temp = in.readUTF();
             System.out.println(temp);
         }
@@ -139,6 +142,7 @@ public class SecureLineTP {
         out.writeUTF(send);
         out.flush();
         System.out.println(send);
+        return true;
     }
 
     public static void carpverbose(DataInputStream in, DataOutputStream out, String send) throws IOException {
@@ -178,7 +182,7 @@ public class SecureLineTP {
     public static void rpcafinaloutputs(DataInputStream in, DataOutputStream out, String endoftransmition, @Nullable String k) throws IOException {
         //System.out.println(in.skipBytes(14));
         int readmode = Integer.parseInt(in.readUTF());
-        System.out.println("Readmode" + readmode);
+        System.out.println("Readmode " + readmode);
         handleReadModes(in, out, readmode, endoftransmition, 0, k);
         System.out.println("End of Transmition");
 
@@ -187,7 +191,7 @@ public class SecureLineTP {
 
     public static String rpcafinaloutputs(DataInputStream in, DataOutputStream out, String endoftransmition, int obg, @Nullable String k) throws IOException {
         int readmode = Integer.parseInt(in.readUTF());
-        System.out.println("Readmode" + readmode);
+        System.out.println("Readmode " + readmode);
         String huhu = handleReadModes(in, out, readmode, endoftransmition, obg, k);
         System.out.println("End of Transmition");
         return huhu;
@@ -281,12 +285,16 @@ public class SecureLineTP {
             case (3): {
 
             }
+            case(-1):{
+                caverbose(out, "Halt");
+            }
         }
         return "";
     }
 
     public static void rpcainputwhileverbose(DataInputStream in, DataOutputStream out, String endoftransmition) throws IOException {
         String temp = in.readUTF();
+        System.out.println("okaywdwd?" );
         boolean dumbfirstcheck = false;
         Scanner s = new Scanner(System.in);
         if (temp.equals(endoftransmition)) {
@@ -342,7 +350,7 @@ public class SecureLineTP {
         }
         return 0;
     }
-
+/*
     public static void carpfile(DataInputStream in, DataOutputStream out, String endoftransmition, byte[] fin, @Nullable String k) throws IOException {
         ca(out, "" + 2);
         specificrpcasendverboseverbose(in, "Ticky", out, "Begin Loop");
@@ -350,6 +358,8 @@ public class SecureLineTP {
         handleWriteModes(in, out, 2, fin, k);
         specificrpcasendverboseverbose(in, "Ticky", out, endoftransmition);
     }
+
+ */
 
     public static boolean carprun(DataInputStream in, DataOutputStream out, String endoftransmition, @Nullable String commandIn) throws IOException {
         String temp;
@@ -380,10 +390,17 @@ public class SecureLineTP {
         command.run();
         ca(out, "" + command.outbytecode());
         AtomicReference<String[]> ewe = new AtomicReference<>(new String[0]);
-        specificrpcasendverboseverbose(in, "Ticky", out, "Begin Loop");
-        command.getOutput().forEach((e) -> {
+        if(!specificrpcasendverboseverboseearlystop(in, "Ticky", out, "Begin Loop", "Halt")){
+            return command.getCloseflag();
+        }
+        command.getOutput().stream().takeWhile(e -> {
             try {
-                specificrpcasendverboseverbose(in, "Ticky", out, "Continue");
+                return specificrpcasendverboseverboseearlystop(in, "Ticky", out, "Continue", "Halt");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }).forEach((e) -> {
+            try {
                 ewe.set(handleWriteModes(in, out, command.outbytecode(), e, null));
                 pkgnum.getAndIncrement();
             } catch (IOException ex) {
@@ -393,7 +410,7 @@ public class SecureLineTP {
         if(command.outbytecode() == 3) {
             o3ut = ewe.get();
         }
-        specificrpcasendverboseverbose(in, "Ticky", out, endoftransmition);
+        specificrpcasendverboseverboseearlystop(in, "Ticky", out, endoftransmition, "Halt");
         System.out.println("End of Transmition");
         System.out.println("Command " + command.getName() + " executed");
         return command.getCloseflag();
