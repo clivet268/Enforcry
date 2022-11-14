@@ -1,6 +1,8 @@
 package clivet268.SecureLine;
 
 import clivet268.Enforcry;
+import clivet268.Util.Univ;
+import org.jsoup.select.Evaluator;
 
 import java.io.*;
 import java.net.BindException;
@@ -16,8 +18,6 @@ public class EncryptedSecureLineReciver {
     private DataOutputStream out       =  null;
     private boolean closeflag = true;
     private String key = "";
-    String[] chadtlawg = {};
-
 
     public EncryptedSecureLineReciver(int timeout) throws IOException {
         while(closeflag) {
@@ -65,7 +65,6 @@ public class EncryptedSecureLineReciver {
                     server.close();
                 }
                 i.printStackTrace();
-                System.exit(0);
             }
         }
     }

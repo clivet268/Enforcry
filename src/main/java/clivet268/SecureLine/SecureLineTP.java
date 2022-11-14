@@ -20,16 +20,18 @@ import static clivet268.Util.Univ.*;
 
 public class SecureLineTP {
 
-    public static String[] o3ut = new String[0];
+    static DataInputStream i;
+    static DataOutputStream o;
 
-    public static String keylayeri(String in, String k){
-        return EncrypterDecrypter.encrypt(in, k);
+
+    public SecureLineTP(DataInputStream in, DataOutputStream out){
+        this.i = in;
+        this.o = out;
     }
 
-    public static String keylayero(String in, String k){
-        return EncrypterDecrypter.decrypt(in, k);
-    }
-    public static void specificrpca(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
+
+    //TODO clear these
+    /*public static void specificrpca(DataInputStream in, String check, DataOutputStream out, String send) throws IOException {
         String temp = in.readUTF();
         while (!temp.equals(check)) {
             temp = in.readUTF();
@@ -314,7 +316,7 @@ public class SecureLineTP {
 
     }
 
-    public static void rpcainputsetwhileverbose(DataInputStream in, DataOutputStream out, String[] inputs, String endoftransmition) throws IOException {
+    public static void rpcainputsetwhileverboseSilent(DataInputStream in, DataOutputStream out, String[] inputs, String endoftransmition) throws IOException {
         String temp = in.readUTF();
         boolean dumbfirstcheck = false;
         if (temp.equals(endoftransmition)) {
@@ -327,12 +329,13 @@ public class SecureLineTP {
             } else {
                 dumbfirstcheck = true;
             }
-            System.out.println(temp);
+            //System.out.println(temp);
             if (!temp.equals(endoftransmition)) {
                 ca(out, inputs[i]);
                 i++;
             }
         }
+        System.out.println("Silent Done");
 
     }
 
@@ -360,7 +363,7 @@ public class SecureLineTP {
     }
 
  */
-
+    /*
     public static boolean carprun(DataInputStream in, DataOutputStream out, String endoftransmition, @Nullable String commandIn) throws IOException {
         String temp;
         if(commandIn == null) {
@@ -457,4 +460,50 @@ public class SecureLineTP {
         }
         return null;
     }
+
+     */
+    //TODO reget old efc files
+
+    public static void sedtbs(Pac pac) throws IOException {
+        o.writeInt(0);
+        if (i.readInt() !=1){
+            return;
+        }
+        o.writeInt(pac.pacLengthReal);
+        int count;
+        byte[] buffer = new byte[pac.pacLengthReal];
+        int lastcount  = 0;
+        InputStream is = new ByteArrayInputStream(pac.pacBody);
+        DataInputStream inn = new DataInputStream(is);
+        while ((count = inn.read(buffer)) > 0) {
+            o.write(buffer, 0, pac.pacLengthReal);
+            o.flush();
+        }
+
+
+    }
+
+    public static void redtbs() throws IOException {
+        o.writeInt(1);
+        if (i.readInt() !=0){
+            return;
+        }
+        byte[] ee = {};
+        int count;
+        int BC = i.readInt();
+        InputStream is = new ByteArrayInputStream((byte[]) ee);
+        DataInputStream inn = new DataInputStream(is);
+        byte[] buffer = new byte[BC];
+        int lastcount  = 0;
+        while ((count = inn.read(buffer)) > 0) {
+            o.write(buffer, 0, BC);
+            o.flush();
+        }
+    }
+
+    public static boolean genpac(byte tc, byte[] pacbody){
+
+    }
+
+
 }
