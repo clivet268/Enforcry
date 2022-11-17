@@ -9,8 +9,6 @@ import java.net.BindException;
 import java.net.Socket;
 import java.util.Scanner;
 
-import static clivet268.SecureLine.SecureLineTP.*;
-
 public class EncryptedSecureLineSender {
     private Socket socket = null;
     private DataInputStream in = null;

@@ -1,30 +1,14 @@
 package clivet268.SecureLine;
 
-import clivet268.Enforcry;
-import clivet268.FileEncryption.EncrypterDecrypter;
-import clivet268.SecureLine.Commands.ExacutableCommand;
-import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static clivet268.Util.Univ.*;
-
-public class SecureLineTP {
+public class EFCTP {
 
     static DataInputStream i;
     static DataOutputStream o;
 
 
-    public SecureLineTP(DataInputStream in, DataOutputStream out){
+    public EFCTP(DataInputStream in, DataOutputStream out){
         this.i = in;
         this.o = out;
     }

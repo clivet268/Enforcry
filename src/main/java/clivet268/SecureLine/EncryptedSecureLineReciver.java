@@ -1,15 +1,11 @@
 package clivet268.SecureLine;
 
 import clivet268.Enforcry;
-import clivet268.Util.Univ;
-import org.jsoup.select.Evaluator;
 
 import java.io.*;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import static clivet268.SecureLine.SecureLineTP.*;
 
 public class EncryptedSecureLineReciver {
     private Socket socket = null;
