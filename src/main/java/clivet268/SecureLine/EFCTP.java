@@ -1,5 +1,7 @@
 package clivet268.SecureLine;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.*;
 
 public class EFCTP {
@@ -214,7 +216,7 @@ public class EFCTP {
                 caverbose(out, "Ticky");
                 int pkgnum = 1;
                 String temp = "Continue";
-                String zstcheck = outputinputrp(in);
+                String zstcheck = outputinputrp(in);EF
                 if (zstcheck.equals("Zero")) {
                     temp = "Zero";
                 }
@@ -473,15 +475,13 @@ public class EFCTP {
             return;
         }
         byte[] ee = {};
-        int count;
         int BC = i.readInt();
-        InputStream is = new ByteArrayInputStream((byte[]) ee);
-        DataInputStream inn = new DataInputStream(is);
         byte[] buffer = new byte[BC];
         int lastcount  = 0;
-        while ((count = inn.read(buffer)) > 0) {
-            o.write(buffer, 0, BC);
-            o.flush();
+        int count = i.readAllBytes();
+        while (count > 0) {
+            buffer = ArrayUtils.addAll(buffer, bytes);
+            count = i.read(buffer);
         }
     }
 
