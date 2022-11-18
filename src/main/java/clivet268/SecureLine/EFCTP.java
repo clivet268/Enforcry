@@ -476,12 +476,18 @@ public class EFCTP {
         }
         byte[] ee = {};
         int BC = i.readInt();
+        byte[] bytes = new byte[BC];
         byte[] buffer = new byte[BC];
-        int lastcount  = 0;
-        int count = i.readAllBytes();
+        int count = i.read(buffer);
         while (count > 0) {
-            buffer = ArrayUtils.addAll(buffer, bytes);
-            count = i.read(buffer);
+            bytes = ArrayUtils.addAll(bytes, buffer);
+            try {
+                count = i.read(buffer);
+            }
+            //TODO handle to fully ignore or to eliminate EOF confusion (for some reason when count hits zero it is not handled properly)
+            catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
