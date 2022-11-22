@@ -1,5 +1,7 @@
 package clivet268.SecureLine.Commands;
 
+import clivet268.SecureLine.EncryptedSecureLineReciver;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -33,8 +35,10 @@ public class MOGPIK extends ExacutableCommand {
         boolean check = Boolean.parseBoolean(input.get(3));
             try {
                 if(PImatch(namey, sdj,pp,kii)){
+                    EncryptedSecureLineReciver.tskp = kii;
                     this.closeflag = true;
                 } else if (check) {
+                    EncryptedSecureLineReciver.tskp = kii;
                     this.closeflag = genPI(namey, sdj, pp, kii);
                 }
                 else {

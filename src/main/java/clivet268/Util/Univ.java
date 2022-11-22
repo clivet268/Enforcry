@@ -122,6 +122,22 @@ public class Univ {
         return false;
     }
 
+    public static boolean PIKget(String n, String s, String p, String k) throws IOException {
+
+        List<Path> txtFiles = null;
+        txtFiles = Files.walk(Path.of(enforcrypartypath))
+                //use to string here, otherwise checking for path segments
+                .filter(pp -> pp.toString().contains("." + p)).toList();
+        boolean bag = false;
+        for(Path sse : txtFiles){
+            String fc = Files.readAllLines(sse).get(0);
+            if (PIinTF(n,s,k,fc)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean PIinTF(String n, String s, String k, String fc){
         String check = "";
         char[] chrses = fc.toCharArray();
@@ -145,6 +161,21 @@ public class Univ {
         }
         System.out.println("out");
         return out;
+    }
+
+    public static void incrext(String toblink) throws InterruptedException {
+        int i = 0;
+        for (; i < toblink.length(); i++) {
+            System.out.print(toblink.charAt(i));
+            //TODO :(((
+            Thread.sleep(100);
+        }
+        for (; i > 0; i--) {
+            System.out.print("\b");
+            //TODO :(((
+            Thread.sleep(100);
+        }
+
     }
 
 }

@@ -23,10 +23,6 @@ public abstract class ExacutableCommand implements Runnable{
         Enforcry.SLcommands.put(getName().toLowerCase(), this);
     }
 
-    public boolean getCloseflag() {
-        return closeflag;
-    }
-
     public String getName() {
         return name;
     }
