@@ -1,4 +1,4 @@
-0 - ignore
+0 - end of transition
 1 - ready to read output
 2 - ready to send output
 3 - send another pac
@@ -6,9 +6,10 @@
 5 - sending another pac
 6 - ready to read command
 7 - ready to send command
-8 - send another command input
+8 - send command input
 9 -
 10 - command accepted
-11 - end of commands
-12 - sending another command input
+11 -
+12 - sending command input
 13 - error
+
