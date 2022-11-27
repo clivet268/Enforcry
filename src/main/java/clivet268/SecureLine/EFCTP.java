@@ -24,8 +24,10 @@ public class EFCTP {
     private static int promptNumber = 0;
     //Getting outputs
     private static int outNum = 0;
+    private static ArrayList<? super Object> inputObj;
     @SuppressWarnings("unused")
     private static ArrayList<String> inputedStrings;
+
     private static ExacutableCommand es;
     public static int BTC = 16384;
     private static InputStream is;
@@ -73,13 +75,15 @@ public class EFCTP {
             //TODO variable buffer size?
             case(3): {
                 //TODO optimal? (lol)
-                if (is == null)
                 is = new ByteArrayInputStream(ee);
                 DataInputStream inn = new DataInputStream(is);
                 byte[] buffer = new byte[BTC];
                 if ((inn.read(buffer)) > 0) {
                     o.write(buffer, 0, BTC);
                     o.flush();
+                }
+                else {
+                    is = null;
                 }
             }
             case(7): {

@@ -8,10 +8,6 @@ import java.util.ArrayList;
 public class AISURL extends ExacutableCommand {
 
     @Override
-    public int noinputs(){
-        return 1;
-    }
-    @Override
     public ArrayList<String> commandPrompts(){
         ArrayList<String> ps = new ArrayList<>(1);
         ps.add("Enter url");
@@ -21,7 +17,7 @@ public class AISURL extends ExacutableCommand {
     @Override
     public void run() {
         try {
-            this.output = (ArrayList<Object>)AISURL_SRC.get(this.input.get(0)).clone();
+            this.output = AISURL_SRC.get(this.input.get(0));
         } catch (IOException e) {
             String ee = e.getLocalizedMessage();
             System.out.println(ee);
