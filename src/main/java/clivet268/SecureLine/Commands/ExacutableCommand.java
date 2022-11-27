@@ -8,10 +8,17 @@ public abstract class ExacutableCommand implements Runnable{
     String name = this.getClass().getSimpleName();
     public ArrayList<? super Object> output = new ArrayList<>();
     public ArrayList<String> input = new ArrayList<>();
+    /**
+     * 0 - none
+     * 1 - text
+     */
+    private int tnt = 0;
 
-    //TODO needed with EFCTCP?
-    public int noinputs(){
-        return 0;
+    /**
+     * @return returns the output mode of this command (texting or not)
+     */
+    public int getTnt(){
+        return tnt;
     }
 
     /**

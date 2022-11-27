@@ -7,6 +7,7 @@ public class Pac {
     byte[] pacBody;
     String pacBody64;
     String plrs;
+    int alllahcream;
 
     public Pac(byte[] b){
         pacBody = b;

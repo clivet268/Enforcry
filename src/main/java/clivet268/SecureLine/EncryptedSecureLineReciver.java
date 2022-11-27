@@ -34,7 +34,7 @@ public class EncryptedSecureLineReciver {
                 out = new DataOutputStream(
                         new BufferedOutputStream(socket.getOutputStream()));
 
-                caverbose(out, "Handshake");
+                rcaverbose(out, "Handshake");
                 specificcarpmsg(in,"Handshake",out, "Bravo","Handshake complete");
                 //Connection established
 

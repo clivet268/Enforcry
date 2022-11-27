@@ -1,9 +1,9 @@
 0 - end of transition
 1 - ready to read output
 2 - ready to send output
-3 - send another pac
-4 - end of pacs
-5 - sending another pac
+3 - send another pacpart
+4 - end of pacpartss
+5 - sending another pacpart
 6 - ready to read command
 7 - ready to send command
 8 - send command input
@@ -11,5 +11,10 @@
 10 - command accepted
 11 -
 12 - sending command input
-13 - error
-
+13 - specific error
+14 - sending text
+15 - receiving text
+16 - init text
+17 -
+18 - end of a logical body
+19 -

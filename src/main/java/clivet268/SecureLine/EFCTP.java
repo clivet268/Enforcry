@@ -17,6 +17,7 @@ public class EFCTP {
     private static int promptNumber = 0;
     private static ArrayList<String> inputedStrings;
     private static ExacutableCommand es;
+    private
 
 
     public EFCTP(DataInputStream in, DataOutputStream out){
@@ -47,18 +48,18 @@ public class EFCTP {
     }
 
     //TODO command # spoofing prevent with prompt number? must be 0
+    //TODO Specifc error on code 13, use try catch and on recive get stacktrace string and print out (maybe)
     public static void switcherReciver(int ic) throws IOException {
 
         switch (ic){
             case(0):i0();
-            case(1):i1();
             case(2): {
                 o.writeInt(1);
             }
-            case(3):i3();
-            case(4):i4();
-            case(5):i5();
-            case(6):i6();
+            //TODO variable buffer size?
+            case(3): {
+
+            }
             case(7): {
                 //Ready for the input
                 o.writeInt(6);
@@ -76,21 +77,45 @@ public class EFCTP {
                     o.writeInt(8);
                 }
                 else {
+                    es.input = inputedStrings;
                     es.run();
                 }
                 if (es.getOutput().size() > 0){
                     o.writeInt(2);
                 }
+                if(es.getTnt() == 1){
+                    //TODO More formal text mode? GUI? this whole thing needs a GUI thats going to suck :(
+                    //TODO currently there is ping-pong-packet, maybe a ping-pong-packet-check is in need?
+                    // maybe even a ping-pong-packet-ding-dong? would be better suited if there were extra layers of
+                    // security involved such as a changing value used to encrypt again
+                    o.writeInt(16);
+                    System.out.println("Texting");
+                    o.writeUTF(scanner.nextLine());
+                }
                 else{
-                    o.writeInt();
+                    o.writeInt(0);
                 }
             }
-            case(8):i8();
-            case(9):i9();
-            case(10):i10();
-            case(11):i10();
             case(12):{
-
+                inputedStrings.add(i.readUTF());
+                promptNumber++;
+                if(promptNumber > es.commandPrompts().size()){
+                    es.input = inputedStrings;
+                    es.run();
+                    if (es.getOutput().size() > 0){
+                        o.writeInt(2);
+                    }
+                }
+                else{
+                   o.writeInt(8);
+                }
+            }
+            case(14):{
+                o.writeInt(15);
+                System.out.println(i.readUTF());
+            }
+            case(15):{
+                o.writeUTF(scanner.nextLine());
             }
         }
     }
@@ -99,12 +124,14 @@ public class EFCTP {
         switch (ic){
             case(0):o0();
             case(1): {
-                o.writeUTF(p.plrs);
+                o.writeInt(3);
             }
-            case(2):o2();
-            case(3):o3();
-            case(4):4();
-            case(5):i5();
+            case(4):{
+
+            }
+            case(5):{
+
+            }
             case(6): {
                 o.writeInt(12);
                 o.writeUTF(scanner.nextLine());
@@ -117,6 +144,17 @@ public class EFCTP {
             case(9):
             case(10):i10();
             case(11):i10();
+            case(14):{
+                o.writeInt(15);
+                System.out.println(i.readUTF());
+            }
+            case(15):{
+                o.writeUTF(scanner.nextLine());
+            }
+            case(16):{
+                System.out.println("Texting");
+                o.writeUTF(scanner.nextLine());
+            }
         }
     }
 
