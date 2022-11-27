@@ -2,22 +2,36 @@ package clivet268.SecureLine;
 
 import clivet268.Enforcry;
 import clivet268.SecureLine.Commands.ExacutableCommand;
+import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static clivet268.Util.Univ.enforcrytestpath;
+import static clivet268.Util.Univ.getrandname;
+
 public class EFCTP {
 
+    //Universal variables
     private static DataInputStream i;
     private static DataOutputStream o;
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+
+    //Receiving variables
     private static int promptNumber = 0;
+    //Getting outputs
+    private static int outNum = 0;
+    @SuppressWarnings("unused")
     private static ArrayList<String> inputedStrings;
     private static ExacutableCommand es;
-    private
+    public static int BTC = 16384;
+    private static InputStream is;
+    private static DataInputStream inn = new DataInputStream(is);
+
+
 
 
     public EFCTP(DataInputStream in, DataOutputStream out){
@@ -58,7 +72,15 @@ public class EFCTP {
             }
             //TODO variable buffer size?
             case(3): {
-
+                //TODO optimal? (lol)
+                if (is == null)
+                is = new ByteArrayInputStream(ee);
+                DataInputStream inn = new DataInputStream(is);
+                byte[] buffer = new byte[BTC];
+                if ((inn.read(buffer)) > 0) {
+                    o.write(buffer, 0, BTC);
+                    o.flush();
+                }
             }
             case(7): {
                 //Ready for the input
@@ -120,6 +142,11 @@ public class EFCTP {
         }
     }
 
+    //Sending variables
+    //TODO Base64 or byte[]??
+    private static ArrayList<byte[]> logicalBodies;
+    private static int currentLogicalBody = 0;
+
     public void switcherSender(int ic, Pac p) throws IOException {
         switch (ic){
             case(0):o0();
@@ -130,7 +157,17 @@ public class EFCTP {
 
             }
             case(5):{
-
+                byte[] bytes = new byte[BTC];
+                String fpath = enforcrytestpath + getrandname();
+                Path of = Path.of(fpath);
+                Files.createFile(of);
+                int count = BTC;
+                byte[] sum = new byte[0];
+                while (count > 0) {
+                    count = i.read(bytes);
+                    sum = ArrayUtils.addAll(sum, bytes);
+                }
+                Files.write(of, sum);
             }
             case(6): {
                 o.writeInt(12);
