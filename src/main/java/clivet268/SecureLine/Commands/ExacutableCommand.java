@@ -10,6 +10,7 @@ public abstract class ExacutableCommand implements Runnable{
      * stores after being populated by {@link #run()}
      */
     ArrayList<byte[]> output = new ArrayList<>();
+    //TODO setter getter?
     public ArrayList<String> input = new ArrayList<>();
     /**
      * 0 - none

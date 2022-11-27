@@ -14,11 +14,12 @@ public class EncryptedSecureLineReciver {
     private DataOutputStream out       =  null;
     private boolean closeflag = true;
     private String key = "";
+    private EFCTP efctp;
 
     public EncryptedSecureLineReciver(int timeout) throws IOException {
         while(closeflag) {
             try {
-
+                //Initialization
                 server = new ServerSocket(26817);
                 if (timeout > 0) {
                     long t = timeout;
@@ -27,32 +28,24 @@ public class EncryptedSecureLineReciver {
                 }
                 System.out.println("Server started");
                 System.out.println("Waiting for a client ...");
+                //Accept the client
                 socket = server.accept();
                 System.out.println("Client accepted");
                 in = new DataInputStream(
                         new BufferedInputStream(socket.getInputStream()));
                 out = new DataOutputStream(
                         new BufferedOutputStream(socket.getOutputStream()));
+                efctp = new EFCTP(in,out);
+                //TODO handshake?
 
-                rcaverbose(out, "Handshake");
-                specificcarpmsg(in,"Handshake",out, "Bravo","Handshake complete");
-                //Connection established
-
-                //Encrypted?
-                specificcarp(in, "En",out,"En?");
-
-                //Key recived
-                if (!carprun(in,out, "Zero", "mogpik")){
-                    socket.close();
-                    in.close();
-                    out.close();
+                //continue flag
+                boolean f = true;
+                while (f){
+                    //TODO conflicts with inner io interactions?
+                    f=efctp.switcherReciver(in.readInt());
                 }
-                specificrpverbose(in, "Done");
 
-                camsg(out,"Enter Command", "Awaiting Command");
-                this.closeflag = carprun(in, out, "Zero", null);
-                specificrpverbose(in, "Done");
-                System.out.println("Closing connection");
+                //Close
                 socket.close();
                 in.close();
                 out.close();

@@ -34,34 +34,6 @@ public class EncryptedSecureLineSender {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
 
-            specificcarpverbose(in,"Handshake",out, "Handshake");
-            specificrpmsg(in,"Bravo","Handshake complete");
-            //Connected
-
-            //Encrypted?
-            String enc = outputinputrp(in);
-            if(enc.equals("En?")){
-                ca(out,"En");
-            }
-            else {
-                in.close();
-                out.close();
-                socket.close();
-            }
-            //PIK gen
-            System.out.println("okay?" );
-            rpcainputwhileverbose(in, out, "End of Inputs");
-            rpcafinaloutputs(in, out, "Zero",null);
-            caverbose(out, "Done");
-
-
-            specificrpverbose(in, "Enter Command");
-            exitcode = specificrpcacontinuousinverboseexitcode(in, "Command Accepted", out);
-            rpcainputwhileverbose(in, out, "End of Inputs");
-            rpcafinaloutputs(in, out, "Zero",2048, key);
-            caverbose(out, "Done");
-            System.out.println("Closing Connection");
-
             try {
                 in.close();
                 out.close();

@@ -1,8 +1,5 @@
 package clivet268.Operations;
 
-import clivet268.SecureLine.SecureLineReciver;
-import clivet268.SecureLine.SecureLineSender;
-
 import java.io.IOException;
 import java.util.Scanner;
 

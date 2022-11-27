@@ -1,22 +1,21 @@
 package clivet268;
 
-import clivet268.Operations.*;
+import clivet268.Operations.Operation;
 import clivet268.SecureLine.Commands.ExacutableCommand;
 import clivet268.Util.Univ;
 import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.server.UnicastRemoteObject;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLOutput;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Enforcry {
+
+    //TODO use a username instead of all this PID buulsheit
     public static HashMap<String,Operation> operations = new HashMap<>();
     public static HashMap<String,ExacutableCommand> SLcommands = new HashMap<>();
     public static String stk = "";
