@@ -6,17 +6,21 @@ import java.io.*;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
 
-public class EncryptedSecureLineReciver {
-    private Socket socket = null;
-    private ServerSocket    server   = null;
-    private DataInputStream in       =  null;
-    private DataOutputStream out       =  null;
+import static clivet268.Enforcry.logger;
+
+public class EncryptedSecureLineServer {
+    private static Socket socket = null;
+    private static ServerSocket server = null;
+    static DataInputStream in = null;
+    static DataOutputStream out = null;
     private boolean closeflag = true;
+    //TODO key should be secret and exist
     private String key = "";
     private EFCTP efctp;
 
-    public EncryptedSecureLineReciver(int timeout) throws IOException {
+    public EncryptedSecureLineServer(int timeout) throws IOException {
         while(closeflag) {
             try {
                 //Initialization
@@ -37,12 +41,22 @@ public class EncryptedSecureLineReciver {
                         new BufferedOutputStream(socket.getOutputStream()));
                 efctp = new EFCTP(in,out);
                 //TODO handshake?
+                out.writeInt(1000);
+                out.flush();
+                System.out.println(in.readInt());
+                out.writeInt(1000);
+                out.flush();
 
                 //continue flag
                 boolean f = true;
+                //use EFCTP
                 while (f){
+                    logger.log(Level.INFO, "000000");
+                    out.writeInt(6);
+                    out.flush();
+                    logger.log(Level.INFO, "0000");
                     //TODO conflicts with inner io interactions?
-                    f=efctp.switcherReciver(in.readInt());
+                    f=efctp.switcherServer(in.readInt());
                 }
 
                 //Close
@@ -61,7 +75,7 @@ public class EncryptedSecureLineReciver {
 
     public static void main(String args[]) throws IOException {
         Enforcry.initSLcommands();
-        EncryptedSecureLineReciver server = new EncryptedSecureLineReciver(555);
+        EncryptedSecureLineServer server = new EncryptedSecureLineServer(555);
     }
 
 }
