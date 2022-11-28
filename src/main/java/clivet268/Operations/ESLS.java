@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.SecureLine.EncryptedSecureLineSender;
+import clivet268.SecureLine.EncryptedSecureLineClient;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -39,7 +39,7 @@ public class ESLS extends Operation {
             }
         }
         try {
-            EncryptedSecureLineSender client = new EncryptedSecureLineSender(ipad, e);
+            EncryptedSecureLineClient client = new EncryptedSecureLineClient(ipad, e);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.SecureLine.EncryptedSecureLineReciver;
+import clivet268.SecureLine.EncryptedSecureLineServer;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -36,7 +36,7 @@ public class ESLR extends Operation {
             }
         }
         try {
-            EncryptedSecureLineReciver server = new EncryptedSecureLineReciver(e);
+            EncryptedSecureLineServer server = new EncryptedSecureLineServer(e);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

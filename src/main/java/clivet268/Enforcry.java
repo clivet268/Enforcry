@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class Enforcry {
-
+    public static Logger logger = Logger.getLogger(Enforcry.class.getName());
+    //TODO make encryption more like SSL or something, a little more polised pls
     //TODO use a username instead of all this PID buulsheit
     public static HashMap<String,Operation> operations = new HashMap<>();
     public static HashMap<String,ExacutableCommand> SLcommands = new HashMap<>();

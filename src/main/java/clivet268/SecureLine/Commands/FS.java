@@ -7,6 +7,10 @@ import java.util.ArrayList;
 
 public class FS extends ExacutableCommand {
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> commandPrompts(){
         ArrayList<String> ps = new ArrayList<>(1);
