@@ -4,6 +4,7 @@ public class ST extends ExacutableCommand {
 
     @Override
     public void run() {
+        this.output.clear();
         output.add("Test".getBytes());
     }
     @Override

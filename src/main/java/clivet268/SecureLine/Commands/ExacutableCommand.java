@@ -45,6 +45,7 @@ public abstract class ExacutableCommand implements Runnable{
     /**
      * Runs the function stored inside and populates the output array if there are outputs
      */
+
     @Override
     public void run() {
         this.output.add("default".getBytes());

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class FS extends ExacutableCommand {
 
+    //TODO no good
     /**
-     *
-     * @return
+     * @return asks for the
      */
     @Override
     public ArrayList<String> commandPrompts(){
@@ -20,6 +20,7 @@ public class FS extends ExacutableCommand {
 
     @Override
     public void run() {
+        this.output.clear();
         try {
             this.output =  FS_SRC.get(this.input.get(0));
         } catch (IOException e) {

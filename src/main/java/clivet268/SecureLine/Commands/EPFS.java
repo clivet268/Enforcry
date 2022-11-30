@@ -18,6 +18,7 @@ public class EPFS extends ExacutableCommand {
 
     @Override
     public void run() {
+        this.output.clear();
         try {
             this.output = FS_SRC.get(this.input.get(0));
         } catch (IOException e) {

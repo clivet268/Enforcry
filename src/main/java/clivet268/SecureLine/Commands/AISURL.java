@@ -16,6 +16,7 @@ public class AISURL extends ExacutableCommand {
 
     @Override
     public void run() {
+        this.output.clear();
         try {
             this.output = AISURL_SRC.get(this.input.get(0));
         } catch (IOException e) {
