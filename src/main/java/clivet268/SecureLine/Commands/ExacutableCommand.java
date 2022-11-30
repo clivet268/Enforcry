@@ -12,17 +12,14 @@ public abstract class ExacutableCommand implements Runnable{
     ArrayList<byte[]> output = new ArrayList<>();
     //TODO setter getter?
     public ArrayList<String> input = new ArrayList<>();
+
     /**
      * 0 - none
      * 1 - text
-     */
-    private int tnt = 0;
-
-    /**
      * @return returns the output mode of this command (texting or not)
      */
     public int getTnt(){
-        return tnt;
+        return 0;
     }
 
     /**
