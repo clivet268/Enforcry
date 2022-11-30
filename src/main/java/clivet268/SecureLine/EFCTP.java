@@ -6,7 +6,6 @@ import clivet268.SecureLine.Commands.ExacutableCommand;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -25,6 +24,8 @@ public class EFCTP {
     private DataOutputStream o;
     private DataInputStream userin;
     ClientTextBox ctb;
+    public static final Object lock = new Object();
+
     private final Scanner scanner = new Scanner(System.in);
     //Pass through the data streams
     public EFCTP(DataInputStream ii, DataOutputStream oo ){
@@ -43,13 +44,10 @@ public class EFCTP {
     private ArrayList<String> inputedStrings;
 
     private ExacutableCommand es;
-    public int BTC = 16384;
-    private InputStream is;
-    private DataInputStream inn = new DataInputStream(is);
 
     //TODO command # spoofing prevent with prompt number? must be 0
     //TODO Specifc error on code 13, use try catch and on recive get stacktrace string and print out (maybe)
-    public boolean switcherServer(int ic) throws IOException {
+    public boolean switcherServer(int ic) throws IOException, InterruptedException {
         switch (ic){
             //TODO what is this?
             case(2): {
@@ -75,8 +73,7 @@ public class EFCTP {
             }
             case(7): {
                 logger.log(Level.INFO, "1");
-                String k = i.readUTF().toLowerCase();
-                System.out.println(k);
+                String k = "";
                 //Checking validity, re-ask if not a valid command
                 while (!Enforcry.SLcommands.containsKey(k)){
                     logger.log(Level.INFO, "102");
@@ -84,7 +81,6 @@ public class EFCTP {
                     o.flush();
                     logger.log(Level.INFO, "1932");
                     k = i.readUTF().toLowerCase();
-                    System.out.println(k);
                 }
                 es =  Enforcry.SLcommands.get(k);
                 logger.log(Level.INFO, "332");
@@ -115,8 +111,6 @@ public class EFCTP {
                     // security involved such as a changing value used to encrypt again
                     o.writeInt(16);
                     o.flush();
-                    System.out.println("Texting");
-                    o.writeUTF(scanner.nextLine());
                 }
                 else{
                     logger.log(Level.INFO, "w9fj9jwe");
@@ -149,22 +143,23 @@ public class EFCTP {
                 logger.log(Level.INFO, "232323");
                 break;
             }
-            case(14):{
-                o.writeInt(15);
-                o.flush();
-                System.out.println(i.readUTF());
-                break;
-            }
-            case(15):{
-                o.writeUTF(scanner.nextLine());
-                break;
-            }
             case(16):{
                 System.out.println("Texting");
-                o.writeUTF(scanner.nextLine());
+                TextListener t = new TextListener(i, o, scanner);
+                Thread tthread = new Thread(t,"Server");
+                tthread.start();
+                //TODO is this broken to need this?
+                //Kick the client into action
+                o.writeInt(14);
+                o.flush();
+                o.writeUTF("");
+                synchronized (lock){
+                    lock.wait();
+                }
                 break;
             }
         }
+        logger.log(Level.INFO, "ewnjowfuhofio");
         return true;
     }
 
@@ -174,7 +169,7 @@ public class EFCTP {
     // is negligable and might even be better/more efficient with byte[]s
 
     //Client needs to flush!!!
-    public boolean switcherClient(int ic) throws IOException {
+    public boolean switcherClient(int ic) throws IOException, InterruptedException {
         switch (ic){
             case(2): {
                 o.writeInt(3);
@@ -205,19 +200,21 @@ public class EFCTP {
                 o.writeUTF(scanner.nextLine());
                 break;
             }
-            case(14):{
-                o.writeInt(15);
-                o.flush();
-                System.out.println(i.readUTF());
-                break;
-            }
-            case(15):{
-                o.writeUTF(scanner.nextLine());
-                break;
-            }
             case(16):{
+                o.writeInt(16);
+                //TODO brokey? why need to do this
+                //Clear utf buffer
+                i.readUTF();
                 System.out.println("Texting");
-                o.writeUTF(scanner.nextLine());
+                TextListener t =new TextListener(i, o, scanner);
+                logger.log(Level.INFO, "q332fffqw");
+                Thread tthread = new Thread(t, "Client");
+                tthread.start();
+                logger.log(Level.INFO, "q332fffqw");
+                synchronized (lock){
+                    lock.wait();
+                }
+                logger.log(Level.INFO, "ewfew76543212345678");
                 break;
             }
             case(18):{

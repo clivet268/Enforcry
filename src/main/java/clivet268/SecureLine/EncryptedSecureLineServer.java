@@ -68,6 +68,8 @@ public class EncryptedSecureLineServer {
                 }
                 i.printStackTrace();
 
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }

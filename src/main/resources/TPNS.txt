@@ -13,7 +13,7 @@
 12 - sending command input
 13 - specific error
 14 - sending text
-15 - receiving text
+15 -
 16 - init text
 17 -
 18 - sending another packet
@@ -21,4 +21,5 @@
 20 - I am ready to go
 21 -
 22 - exit
+23 - exit text
 1000 - hello

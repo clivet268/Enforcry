@@ -77,7 +77,7 @@ public class EncryptedSecureLineClient {
                     logger.log(Level.INFO, "000");
                     //TODO conflicts with inner io interactions?
                     //TODO debug only
-                    int eewr = in.readInt();
+                    int eewr = 0;
                     while(eewr == 0 || eewr > 1000) {
                         eewr = in.readInt();
                     }
@@ -105,6 +105,8 @@ public class EncryptedSecureLineClient {
 
         } catch (IOException u) {
             System.out.println(u + "20");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
     }
