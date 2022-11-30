@@ -75,16 +75,15 @@ public class EFCTP {
             }
             case(7): {
                 logger.log(Level.INFO, "1");
-                String k = "";
+                String k = i.readUTF().toLowerCase();
                 System.out.println(k);
                 //Checking validity, re-ask if not a valid command
-                System.out.println(!Enforcry.SLcommands.containsKey(k));
                 while (!Enforcry.SLcommands.containsKey(k)){
                     logger.log(Level.INFO, "102");
                     o.writeInt(6);
                     o.flush();
                     logger.log(Level.INFO, "1932");
-                    k = i.readUTF();
+                    k = i.readUTF().toLowerCase();
                     System.out.println(k);
                 }
                 es =  Enforcry.SLcommands.get(k);

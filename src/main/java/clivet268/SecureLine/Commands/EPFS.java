@@ -25,9 +25,4 @@ public class EPFS extends ExacutableCommand {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public int outbytecode(){
-        return 2;
-    }
 }

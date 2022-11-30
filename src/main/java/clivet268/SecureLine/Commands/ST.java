@@ -7,8 +7,4 @@ public class ST extends ExacutableCommand {
         this.output.clear();
         output.add("Test".getBytes());
     }
-    @Override
-    public int outbytecode(){
-        return 1;
-    }
 }

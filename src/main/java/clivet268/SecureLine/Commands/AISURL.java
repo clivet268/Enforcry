@@ -26,8 +26,4 @@ public class AISURL extends ExacutableCommand {
         }
     }
 
-    @Override
-    public int outbytecode(){
-        return 2;
-    }
 }

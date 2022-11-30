@@ -17,11 +17,4 @@ public class MOGPIK extends ExacutableCommand {
         this.output.clear();
 
     }
-
-
-
-    @Override
-    public int outbytecode(){
-        return -1;
-    }
 }

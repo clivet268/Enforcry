@@ -9,9 +9,4 @@ public class CLOSE extends ExacutableCommand {
         this.output.add("CLOSEd".getBytes());
     }
 
-    @Override
-    public int outbytecode(){
-        return 1;
-    }
-
 }
