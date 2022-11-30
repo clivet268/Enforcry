@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.logging.Level;
 
@@ -63,13 +64,35 @@ public class EncryptedSecureLineClient {
             // probalby should be in a handshake!!!!
             logger.log(Level.INFO, "00");
             boolean f= true;
+            //Send the initial kick
+            //TODO  code 20 might need to be used in future
             out.writeInt(7);
             out.flush();
+
+            //Finished?
+            boolean ndone = true;
             //use EFCTP
-            while (f){
-                logger.log(Level.INFO, "000");
-                //TODO conflicts with inner io interactions?
-                f=efctp.switcherClient(in.readInt());
+            while(ndone) {
+                while (f) {
+                    logger.log(Level.INFO, "000");
+                    //TODO conflicts with inner io interactions?
+                    //TODO debug only
+                    int eewr = in.readInt();
+                    while(eewr == 0 || eewr > 1000) {
+                        eewr = in.readInt();
+                    }
+                    //debug only
+                    System.out.println(eewr);
+                    f = efctp.switcherClient(eewr);
+                }
+                System.out.println("not done?");
+                Scanner scanner1 = new Scanner(System.in);
+                try {
+                    ndone = scanner1.nextBoolean();
+                }
+                catch (InputMismatchException ignored){
+                    ndone = false;
+                }
             }
 
             try {
