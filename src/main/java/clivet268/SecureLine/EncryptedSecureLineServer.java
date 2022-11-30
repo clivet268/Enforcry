@@ -49,11 +49,9 @@ public class EncryptedSecureLineServer {
 
                 //continue flag
                 boolean f = true;
+                logger.log(Level.INFO, "000000");
                 //use EFCTP
                 while (f){
-                    logger.log(Level.INFO, "000000");
-                    out.writeInt(6);
-                    out.flush();
                     logger.log(Level.INFO, "0000");
                     //TODO conflicts with inner io interactions?
                     f=efctp.switcherServer(in.readInt());
@@ -69,6 +67,7 @@ public class EncryptedSecureLineServer {
                     server.close();
                 }
                 i.printStackTrace();
+
             }
         }
     }
