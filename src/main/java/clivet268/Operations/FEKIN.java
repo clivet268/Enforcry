@@ -1,6 +1,6 @@
 package clivet268.Operations;
 
-import clivet268.FileEncryption.EncrypterDecrypter;
+import clivet268.Encryption.EncrypterDecrypter;
 
 import java.io.File;
 import java.io.IOException;

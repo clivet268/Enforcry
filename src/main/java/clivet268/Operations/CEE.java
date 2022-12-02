@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-import static clivet268.FileEncryption.EncrypterDecrypter.gen2048;
+import static clivet268.Encryption.EncrypterDecrypter.gen2048;
 import static clivet268.Util.Univ.getRandString;
 
 public class CEE extends Operation{
