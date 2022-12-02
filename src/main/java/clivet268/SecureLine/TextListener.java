@@ -56,8 +56,7 @@ public class TextListener implements Runnable{
                 o.writeInt(14);
                 o.flush();
                 String ts = scanner.nextLine();
-                logger.log(Level.INFO, "ojpjohuoi8tu7r75");
-                logger.log(Level.INFO, "23423432234fff");
+                logger.log(Level.INFO, "u9843h43843th943th98");
                 o.writeUTF(ts);
             }
         } catch (IOException e) {
