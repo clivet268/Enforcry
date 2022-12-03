@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'clivet268'
+version '1.0.0'
 
 repositories {
     mavenCentral()
@@ -23,7 +23,11 @@ dependencies {
 
 
 }
-
+jar {
+    manifest {
+        attributes 'Main-Class': 'clivet268.Enforcry'
+    }
+}
 
 test {
     useJUnitPlatform()
