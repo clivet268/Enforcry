@@ -2,8 +2,6 @@ package clivet268.Operations;
 
 import clivet268.Enforcry;
 
-import java.util.ArrayList;
-
 public abstract class Operation implements Runnable{
     String name = this.getClass().getSimpleName();
     boolean exitflag = true;
@@ -13,7 +11,7 @@ public abstract class Operation implements Runnable{
     }
 
     public void init(){
-        System.out.println(name);
+        System.out.println("Initialized " + name.toLowerCase());
         Enforcry.operations.put(getName().toLowerCase(), this);
     }
 

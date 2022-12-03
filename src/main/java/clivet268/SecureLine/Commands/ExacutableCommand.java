@@ -36,6 +36,7 @@ public abstract class ExacutableCommand implements Runnable{
      * Populates the SLcommands array to be gotten by sender
      */
     public void init(){
+        System.out.println("Initialized " + name.toLowerCase());
         Enforcry.SLcommands.put(name.toLowerCase(), this);
     }
 

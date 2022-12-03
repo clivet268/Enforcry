@@ -1,17 +1,13 @@
 package clivet268;
 
-import clivet268.Operations.Operation;
-import clivet268.SecureLine.Commands.ExacutableCommand;
+import clivet268.Operations.*;
+import clivet268.SecureLine.Commands.*;
 import clivet268.Util.Univ;
-import org.reflections.Reflections;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class Enforcry {
@@ -40,32 +36,37 @@ public class Enforcry {
         System.exit(0);
     }
 
+    //TODO better way without reflections?
+    /**
+     * Initializes all operations in the operations folder that extend the abstract class Operation
+     */
     public static void initOperations(){
+        new CEE().init();
+        new DEFAULT().init();
+        new ESLR().init();
+        new ESLS().init();
+        new FDK().init();
+        new FDKIN().init();
+        new FEK().init();
+        new FEKIN().init();
+        new MPIK().init();
+        new O().init();
+        new X().init();
 
-        Reflections reflections = new Reflections("clivet268.Operations");
-        Set<Class<? extends Operation>> opstoinit = new HashSet<>(reflections.getSubTypesOf(Operation.class));
-        opstoinit.forEach((e) -> {
-            try {
-                e.getDeclaredConstructor().newInstance().init();
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                     InvocationTargetException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
         System.out.println("---\nOperations init complete\n---");
     }
-
+    /**
+     * Initializes all commands in the commands folder that extend the abstract class ExacutableCommand
+     */
     public static void initSLcommands(){
-        Reflections reflections = new Reflections("clivet268.SecureLine.Commands");
-        Set<Class<? extends ExacutableCommand>> opstoinit = new HashSet<>(reflections.getSubTypesOf(ExacutableCommand.class));
-        opstoinit.forEach((e) -> {
-            try {
-                e.getDeclaredConstructor().newInstance().init();
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                     InvocationTargetException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        new AISURL().init();
+        new CLOSE().init();
+        new EPFS().init();
+        new FS().init();
+        new MOGPIK().init();
+        new ST().init();
+        new TXT().init();
+        System.out.println("---\nOperations init complete\n---");
     }
 
 }
