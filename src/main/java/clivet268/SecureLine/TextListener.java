@@ -27,8 +27,12 @@ public class TextListener implements Runnable{
             int codein = i.readInt();
             logger.log(Level.INFO, "9iu0iouihji0oujhb");
             if (codein == 14) {
-                System.out.println(i.readUTF());
-                logger.log(Level.INFO, "9iyuvyuihi02233232o");
+                String sins = i.readUTF();
+                for(char ignored : (username + ":  ").toCharArray()){
+                    System.out.print("\b");
+                }
+                System.out.println(senderUsername + ": " + sins);
+                System.out.print(username + ": ");
             }
             if (codein == 23) {
                 logger.log(Level.INFO, "56ruhruoh");

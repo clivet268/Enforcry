@@ -21,8 +21,9 @@ public class EncryptedSecureLineServer {
     private EFCTP efctp;
 
     public EncryptedSecureLineServer(int timeout) throws IOException {
-        while(closeflag) {
-            try {
+
+        try {
+            while (closeflag) {
                 //Initialization
                 server = new ServerSocket(26817);
                 if (timeout > 0) {
@@ -47,32 +48,48 @@ public class EncryptedSecureLineServer {
                 out.writeInt(1000);
                 out.flush();
 
+                //use EFCTP until user or program exits
                 //continue flag
                 boolean f = true;
-                logger.log(Level.INFO, "000000");
-                //use EFCTP
-                while (f){
-                    logger.log(Level.INFO, "0000");
+                while (f) {
                     //TODO conflicts with inner io interactions?
-                    f=efctp.switcherServer(in.readInt());
+                    //Check for errent command code reads
+                    int eewr = 0;
+                    while (eewr == 0 || eewr > 1000) {
+                        //TODO error out? error code send?
+                        eewr = in.readInt();
+                        logger.log(eewr + " is");
+                    }
+                    f = efctp.switcherServer(eewr);
                 }
 
-                //Close
-                socket.close();
-                in.close();
-                out.close();
-            } catch (IOException i) {
-                if(i instanceof BindException){
-                    socket.close();
-                    server.close();
-                }
-                i.printStackTrace();
+                //Close when done
+                close();
 
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
+        } catch (IOException ignored) {
+            /*
+            if (i instanceof BindException) {
+                //TODO need to be closed?
+                //close();
+            }
+
+             */
+            //Debug only
+            //i.printStackTrace();
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    private static void close() throws IOException {
+        System.out.println("\n---Closing connection---\n");
+        socket.close();
+        in.close();
+        out.close();
+    }
+
 
     public static void main(String args[]) throws IOException {
         Enforcry.initSLcommands();

@@ -109,6 +109,9 @@ public class EFCTP {
                     // security involved such as a changing value used to encrypt again
                     o.writeInt(16);
                     o.flush();
+                } else if (es.closeFlag()) {
+                    o.writeInt(22);
+                    o.flush();
                 } else {
                     logger.log(Level.INFO, "w9fj9jwe");
                     //TODO else?
@@ -147,10 +150,9 @@ public class EFCTP {
                 //Kick the client into action
                 o.writeInt(14);
                 o.flush();
-                o.writeUTF("");
-                synchronized (lock) {
-                    lock.wait();
-                }
+            }
+            case (22) -> {
+                return false;
             }
         }
         logger.log(Level.INFO, "ewnjowfuhofio");

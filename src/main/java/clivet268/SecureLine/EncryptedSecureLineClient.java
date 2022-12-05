@@ -69,49 +69,58 @@ public class EncryptedSecureLineClient {
             out.writeInt(7);
             out.flush();
 
-            //Finished?
-            boolean ndone = true;
-            //use EFCTP
-            while(ndone) {
-                while (f) {
-                    logger.log(Level.INFO, "000");
-                    //TODO conflicts with inner io interactions?
-                    //TODO debug only
-                    int eewr = 0;
-                    while(eewr == 0 || eewr > 1000) {
-                        eewr = in.readInt();
+            //TODO handle continues like this?
+            //use EFCTP until user or program exits
+            //continue flag
+            boolean f= true;
+            while (f) {
+                //TODO conflicts with inner io interactions?
+                //Check for errent command code reads
+                int eewr = 0;
+                while (eewr == 0 || eewr > 1000) {
+                    //TODO error out? error code send?
+                    eewr = in.readInt();
+                    logger.log(eewr + " is");
+                }
+                int outcode = efctp.switcherClient(eewr);
+                if(outcode == 1){
+                    Scanner userChoice = new Scanner(System.in);
+                    System.out.println("Continue connection?");
+                    if(!(userChoice.hasNextBoolean() && userChoice.nextBoolean())){
+                        out.writeInt(22);
+                        f = false;
                     }
-                    //debug only
-                    System.out.println(eewr);
-                    f = efctp.switcherClient(eewr);
                 }
-                System.out.println("not done?");
-                Scanner scanner1 = new Scanner(System.in);
-                try {
-                    ndone = scanner1.nextBoolean();
-                }
-                catch (InputMismatchException ignored){
-                    ndone = false;
+                else if (outcode == 2){
+                    out.writeInt(22);
+                    out.flush();
+                    f = false;
                 }
             }
 
             try {
-                in.close();
-                out.close();
-                socket.close();
+                close();
             } catch (IOException i) {
-                System.out.println(i);
+                i.printStackTrace();
             }
 
         } catch (IOException u) {
-            System.out.println(u + "20");
+            u.printStackTrace();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-
+    /**
+     * Closes connection
+     */
+    private static void close() throws IOException {
+        System.out.println("\n---Closing connection---\n");
+        socket.close();
+        in.close();
+        out.close();
+    }
 
 
 
