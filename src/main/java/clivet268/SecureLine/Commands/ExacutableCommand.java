@@ -25,17 +25,26 @@ public abstract class ExacutableCommand implements Runnable{
     /**
      * @return returns the command prompts to be sent out to the sender,by default an empty arraylist
      */
-    public ArrayList<String> commandPrompts(){
-            ArrayList<String> ps = new ArrayList<>();
-        return  ps;
+    public ArrayList<String> commandPrompts() {
+        ArrayList<String> ps = new ArrayList<>();
+        return ps;
     }
-    boolean closeflag =true;
+
+    /**
+     * Used to control the closing of the connection after a command completes or when requested
+     *
+     * @return whether the connection should continue or close
+     */
+    public boolean closeFlag() {
+        return false;
+    }
 
     //TODO no longer SL, EFCTP
+
     /**
      * Populates the SLcommands array to be gotten by sender
      */
-    public void init(){
+    public void init() {
         System.out.println("Initialized " + name.toLowerCase());
         Enforcry.SLcommands.put(name.toLowerCase(), this);
     }

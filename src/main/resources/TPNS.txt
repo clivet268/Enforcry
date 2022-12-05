@@ -21,5 +21,10 @@
 20 - I am ready to go
 21 -
 22 - exit
-23 - exit text
+23 - text exit
+24 - lets do this
+25 - asking exit
+404 - send public key
+405 - whats your name
+406 - heres my name
 1000 - hello

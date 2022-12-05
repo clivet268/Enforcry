@@ -1,23 +1,20 @@
 package clivet268.SecureLine;
 
 import clivet268.Enforcry;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
-import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
 
 import static clivet268.Enforcry.logger;
 
 public class EncryptedSecureLineServer {
     private static Socket socket = null;
     private static ServerSocket server = null;
-    static DataInputStream in = null;
-    static DataOutputStream out = null;
+    private static DataInputStream in = null;
+    private static DataOutputStream out = null;
     private boolean closeflag = true;
-    //TODO key should be secret and exist
-    private String key = "";
     private EFCTP efctp;
 
     private static String cUnam = null;
@@ -47,8 +44,10 @@ public class EncryptedSecureLineServer {
                         new BufferedInputStream(socket.getInputStream()));
                 out = new DataOutputStream(
                         new BufferedOutputStream(socket.getOutputStream()));
-                efctp = new EFCTP(in,out);
-                //TODO handshake?
+                efctp = new EFCTP(in, out);
+
+                //TODO YUCK WTF IS THIS
+                //Handshake
                 out.writeInt(1000);
                 out.flush();
                 int handshake = in.readInt();

@@ -1,14 +1,12 @@
 package clivet268.SecureLine;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
-import java.util.logging.Level;
 
 import static clivet268.Enforcry.username;
 
-public class TextListener implements Runnable{
+//Flush everything since client also uses this
+public class TextListener implements Runnable {
 
     DataInputStream i;
     DataOutputStream o;
@@ -24,24 +22,20 @@ public class TextListener implements Runnable{
     }
 
     public void texter() throws IOException {
-        logger.log(Level.INFO, "tr4yht4h54h4h454h");
-        while (!kflag){
+        while (!kflag) {
             int codein = i.readInt();
-            logger.log(Level.INFO, "9iu0iouihji0oujhb");
             if (codein == 14) {
                 String sins = i.readUTF();
-                for(char ignored : (username + ":  ").toCharArray()){
+                for (char ignored : (username + ":  ").toCharArray()) {
                     System.out.print("\b");
                 }
                 System.out.println(senderUsername + ": " + sins);
                 System.out.print(username + ": ");
             }
             if (codein == 23) {
-                logger.log(Level.INFO, "56ruhruoh");
                 kflag = true;
             }
         }
-
     }
 
     @Override
@@ -49,13 +43,11 @@ public class TextListener implements Runnable{
         try{
             Thread rn = new Thread(()-> {
                 try {
-                    logger.log(Level.INFO, "inited87656457689");
                     texter();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException ignored) {
+
                 }
             });
-            logger.log(Level.INFO, "4r4r24444");
             rn.start();
             System.out.print(username + ": ");
             while (!kflag) {
@@ -65,6 +57,7 @@ public class TextListener implements Runnable{
         } catch (IOException ignored) {
         }
     }
+
     //Escape character for commands such as "/exit"
     public boolean interpretOut(String tso) throws IOException {
         if(tso.length() > 0) {
@@ -85,6 +78,7 @@ public class TextListener implements Runnable{
     }
 
     //TODO possible without busy waiting?
+
     /**
      * credit https://www.javaspecialists.eu/archive/Issue153-Timeout-on-Console-Input.html and
      * https://stackoverflow.com/questions/4983065/how-to-interrupt-java-util-scanner-nextline-call - author djna

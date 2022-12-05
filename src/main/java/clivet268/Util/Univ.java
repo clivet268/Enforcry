@@ -11,14 +11,14 @@ import java.util.Random;
 
 public class Univ {
 
-    public static final int BTC =  65536;
-    public static String enforcrybasepath = System.getProperty("user.home") + File.separator + "Enforcry/";
-    public static String enforcrytestpath = System.getProperty("user.home") + File.separator + "Enforcry/test/";
-    public static String enforcrysecretpath = System.getProperty("user.home") + File.separator + "Enforcry/-/";
-    public static String enforcrypartypath = enforcrysecretpath + File.separator + "sl"+ File.separator + "party_list";
-    public static String enforcryfoutpath = System.getProperty("user.home") + File.separator + "Enforcry/fout/";
+    public static final int BTC = 65536;
+    public static String enforcrybasepath = System.getProperty("user.home") + File.separator + "/";
+    public static String enforcrytestpath = System.getProperty("user.home") + File.separator + "/test/";
+    public static String enforcrysecretpath = System.getProperty("user.home") + File.separator + "/-/";
+    public static String enforcrypartypath = enforcrysecretpath + File.separator + "sl" + File.separator + "party_list";
+    public static String enforcryfoutpath = System.getProperty("user.home") + File.separator + "/fout/";
 
-    public Univ(){
+    public Univ() {
         createPaths();
     }
 

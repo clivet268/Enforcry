@@ -1,14 +1,13 @@
 package clivet268.SecureLine;
 
 import clivet268.Enforcry;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.logging.Level;
 
 import static clivet268.Enforcry.logger;
 
@@ -32,7 +31,7 @@ public class EncryptedSecureLineClient {
         try {
             //initialization
             socket = new Socket(address, 26817);
-            if(timeout > 0) {
+            if (timeout > 0) {
                 long t = timeout;
                 timeout = (int) Math.min(Integer.MAX_VALUE - 1, t * 1000);
                 socket.setSoTimeout(timeout);
@@ -45,16 +44,14 @@ public class EncryptedSecureLineClient {
             //Fail out
             else {
                 try {
-                    in.close();
-                    out.close();
-                    socket.close();
+                    close();
                 } catch (IOException i) {
                     System.out.println(i);
                 }
                 System.out.println("Connection failed");
                 System.exit(0);
             }
-            efctp = new EFCTP(in,out);
+            efctp = new EFCTP(in, out);
             System.out.println("Connected to " + socket.getRemoteSocketAddress());
 
             //Handshake
@@ -95,7 +92,7 @@ public class EncryptedSecureLineClient {
             //TODO handle continues like this?
             //use EFCTP until user or program exits
             //continue flag
-            boolean f= true;
+            boolean f = true;
             while (f) {
                 //TODO conflicts with inner io interactions?
                 //Check for errent command code reads
