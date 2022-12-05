@@ -27,6 +27,7 @@ public class EFCTP {
     public static final Object lock = new Object();
 
     private final Scanner scanner = new Scanner(System.in);
+    private static String senderUsername = null;
     //Pass through the data streams
     public EFCTP(DataInputStream ii, DataOutputStream oo ){
         //ClientTextBox clientTextBox){
@@ -146,9 +147,13 @@ public class EFCTP {
                 TextListener t = new TextListener(i, o, scanner);
                 Thread tthread = new Thread(t, "Server");
                 tthread.start();
-                //TODO is this broken to need this?
-                //Kick the client into action
-                o.writeInt(14);
+                tthread.join();
+                System.out.println("\n---Exiting Texting---\n");
+                o.writeInt(25);
+            }
+            case (20) -> {
+                senderUsername = EncryptedSecureLineServer.getcUnam();
+                o.writeInt(20);
                 o.flush();
             }
             case (22) -> {
@@ -226,7 +231,7 @@ public class EFCTP {
 
             //TODO needed? better way? right now the out just sends code 20 from the client class
             case (20) -> {
-                logger.log(Level.INFO, "0");
+                senderUsername = EncryptedSecureLineClient.getsUnam();
                 o.writeInt(7);
                 o.flush();
             }

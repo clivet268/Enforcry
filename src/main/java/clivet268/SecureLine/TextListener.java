@@ -6,19 +6,21 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-import static clivet268.Enforcry.logger;
+import static clivet268.Enforcry.username;
 
 public class TextListener implements Runnable{
 
     DataInputStream i;
     DataOutputStream o;
     Scanner scanner;
-    boolean kflag = false;
+    private static boolean kflag = false;
+    String senderUsername;
 
-    public TextListener(DataInputStream iin, DataOutputStream ion, Scanner sin) {
-        i=iin;
-        o=ion;
+    public TextListener(DataInputStream iin, DataOutputStream ion, Scanner sin, String su) {
+        i = iin;
+        o = ion;
         scanner = sin;
+        senderUsername = su;
     }
 
     public void texter() throws IOException {

@@ -17,7 +17,9 @@ public class Enforcry {
     public static HashMap<String,Operation> operations = new HashMap<>();
     public static HashMap<String,ExacutableCommand> SLcommands = new HashMap<>();
     public static String stk = "";
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+    public static String username = "Clivet268";
+
+    public static void main(String[] args) {
         initOperations();
         initSLcommands();
         Univ univ = new Univ();

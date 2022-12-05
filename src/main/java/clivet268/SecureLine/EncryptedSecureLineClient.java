@@ -13,12 +13,16 @@ import java.util.logging.Level;
 import static clivet268.Enforcry.logger;
 
 public class EncryptedSecureLineClient {
-    private Socket socket = null;
-    private DataInputStream in = null;
-    private DataOutputStream out = null;
-    private Scanner scanner = new Scanner(System.in);
-    //TODO key should be secret and exist
-    private String key = "";
+    private static Socket socket = null;
+    private static DataInputStream in = null;
+    private static DataOutputStream out = null;
+    private static String sUnam = null;
+
+    @Nullable
+    public static String getsUnam() {
+        System.out.println(sUnam);
+        return sUnam;
+    }
 
     private EFCTP efctp;
 
@@ -52,21 +56,40 @@ public class EncryptedSecureLineClient {
             }
             efctp = new EFCTP(in,out);
             System.out.println("Connected to " + socket.getRemoteSocketAddress());
-            //TODO handshake?
-            System.out.println(in.readInt());
+
+            //Handshake
+            int handshake = in.readInt();
+            if (!(handshake == 1000)) {
+                //TODO what to do if improper handshake
+                close();
+            }
             out.writeInt(1000);
             out.flush();
-            System.out.println(in.readInt());
+            handshake = in.readInt();
+            if (!(handshake == 1000)) {
+                close();
+            }
+            handshake = in.readInt();
+            if (handshake == 405) {
+                out.writeInt(406);
+                out.flush();
+                out.writeUTF(Enforcry.username);
+            } else {
+                close();
+            }
+            out.writeInt(405);
+            out.flush();
+            handshake = in.readInt();
+            if (handshake == 406) {
+                sUnam = in.readUTF();
+                System.out.println(sUnam);
+            } else {
+                close();
+            }
 
-            //continue flag
-            //TODO this means the convo is intialized by the client, is that good?
-            // better ping-pong needed for future levels of communitcation
-            // probalby should be in a handshake!!!!
-            logger.log(Level.INFO, "00");
-            boolean f= true;
+            //TODO server has burden of initialization, should it be this way?
             //Send the initial kick
-            //TODO  code 20 might need to be used in future
-            out.writeInt(7);
+            out.writeInt(20);
             out.flush();
 
             //TODO handle continues like this?

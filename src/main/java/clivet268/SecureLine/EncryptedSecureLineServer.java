@@ -20,6 +20,13 @@ public class EncryptedSecureLineServer {
     private String key = "";
     private EFCTP efctp;
 
+    private static String cUnam = null;
+
+    @Nullable
+    public static String getcUnam() {
+        return cUnam;
+    }
+
     public EncryptedSecureLineServer(int timeout) throws IOException {
 
         try {
@@ -44,9 +51,31 @@ public class EncryptedSecureLineServer {
                 //TODO handshake?
                 out.writeInt(1000);
                 out.flush();
-                System.out.println(in.readInt());
+                int handshake = in.readInt();
+                if (!(handshake == 1000)) {
+                    //TODO what to do if improper handshake
+                    close();
+                }
                 out.writeInt(1000);
                 out.flush();
+                out.writeInt(405);
+                out.flush();
+                handshake = in.readInt();
+                if (handshake == 406) {
+                    cUnam = in.readUTF();
+                } else {
+                    close();
+                }
+                handshake = in.readInt();
+                if (handshake == 405) {
+                    out.writeInt(406);
+                    out.flush();
+                    //TODO understand why this needs flushing?
+                    out.writeUTF(Enforcry.username);
+                    out.flush();
+                } else {
+                    close();
+                }
 
                 //use EFCTP until user or program exits
                 //continue flag
