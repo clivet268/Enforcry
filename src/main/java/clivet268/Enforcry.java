@@ -1,10 +1,12 @@
 package clivet268;
 
+import clivet268.Encryption.Asymmetric;
 import clivet268.Operations.*;
 import clivet268.SecureLine.Commands.*;
 import clivet268.Util.DebugOnlyLogger;
 import clivet268.Util.Univ;
 
+import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -22,8 +24,17 @@ public class Enforcry {
     public static HashMap<String, ExacutableCommand> SLcommands = new HashMap<>();
     public static String stk = "";
     public static String username = "Clivet268";
+    public static KeyPair sessionKey;
 
     public static void main(String[] args) {
+        //TODO can this cause vulernabilities?
+        //If error during keygen, kill
+        try {
+            sessionKey = Asymmetric.generateRSAKkeyPair();
+            System.out.println("Session Key generated");
+        } catch (Exception e) {
+            System.exit(696969);
+        }
         initOperations();
         initSLcommands();
         Univ univ = new Univ();
