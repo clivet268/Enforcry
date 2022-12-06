@@ -16,6 +16,12 @@ import java.util.logging.Logger;
 // - encrypt directory of source on drive and hav an unencriptor (also in builder)
 // - secure cores and memory to the tooth, lock down every permission you can, encrypt everything that makes sense or
 // cant be locked down
+//TODO port lockdown
+//TODO core lockdown
+//TODO make enforcry UNIQUE other than username, password needed and you cant mimic someone else with a key from it or something like that
+// username and password can be used to generate a unique algorithm, on intial contact this can be sent if they dont know eachother, and if
+// they do it can be verified
+// An encrypted file could be used as verifier
 public class Enforcry {
     //Debug only
     //public static DebugOnlyLogger logger = new DebugOnlyLogger(Logger.getLogger(Enforcry.class.getName()), false);

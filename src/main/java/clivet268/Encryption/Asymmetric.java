@@ -3,11 +3,14 @@ package clivet268.Encryption;
 import javax.crypto.Cipher;
 import javax.xml.bind.DatatypeConverter;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 // Class to create an asymmetric key
 
 /**
  * <a href="https://www.geeksforgeeks.org/asymmetric-encryption-cryptography-in-java/">source</a>
+ * Note: source used Public key to decrypt and Private to encrypt? I altered to use the opposite as I think that is right
  *
  * @author <a href="https://auth.geeksforgeeks.org/user/nimma_shravan_kumar_reddy">nimma_shravan_kumar_reddy</a>
  */
@@ -35,19 +38,14 @@ public class Asymmetric {
 
     // Encryption function which converts
     // the plainText into a cipherText
-    // using private Key.
-    public static byte[] do_RSAEncryption(
-            String plainText,
-            PrivateKey privateKey)
+    // using public Key.
+    public static byte[] do_RSAEncryption(byte[] bytesin, PublicKey publicKey)
             throws Exception {
-        Cipher cipher
-                = Cipher.getInstance(RSA);
+        Cipher cipher = Cipher.getInstance(RSA);
 
-        cipher.init(
-                Cipher.ENCRYPT_MODE, privateKey);
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
-        return cipher.doFinal(
-                plainText.getBytes());
+        return cipher.doFinal(bytesin);
     }
 
     // Decryption function which converts
