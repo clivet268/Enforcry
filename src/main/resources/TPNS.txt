@@ -24,7 +24,15 @@
 23 - text exit
 24 - lets do this
 25 - asking exit
+100 - boolean
+101 - int
+102 - String
+103 - byte[]
+402 - sending public key
+403 - public key hash verify
 404 - send public key
 405 - whats your name
 406 - heres my name
+
+
 1000 - hello
