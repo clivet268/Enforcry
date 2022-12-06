@@ -1,6 +1,8 @@
 package clivet268.SecureLine;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import static clivet268.Enforcry.username;
@@ -8,24 +10,24 @@ import static clivet268.Enforcry.username;
 //Flush everything since client also uses this
 public class TextListener implements Runnable {
 
-    DataInputStream i;
-    DataOutputStream o;
+    EFCDataInputStream i;
+    EFCDataOutputStream o;
     Scanner scanner;
     private static boolean kflag = false;
     String senderUsername;
 
-    public TextListener(DataInputStream iin, DataOutputStream ion, Scanner sin, String su) {
+    public TextListener(EFCDataInputStream iin, EFCDataOutputStream ion, Scanner sin, String su) {
         i = iin;
         o = ion;
         scanner = sin;
         senderUsername = su;
     }
 
-    public void texter() throws IOException {
+    public void texter() throws Exception {
         while (!kflag) {
-            int codein = i.readInt();
+            int codein = i.readIntE();
             if (codein == 14) {
-                String sins = i.readUTF();
+                String sins = i.readUTFE();
                 for (char ignored : (username + ":  ").toCharArray()) {
                     System.out.print("\b");
                 }
@@ -44,7 +46,7 @@ public class TextListener implements Runnable {
             Thread rn = new Thread(()-> {
                 try {
                     texter();
-                } catch (IOException ignored) {
+                } catch (Exception ignored) {
 
                 }
             });
@@ -54,22 +56,22 @@ public class TextListener implements Runnable {
                 String ts = call();
                 kflag = interpretOut(ts);
             }
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
     }
 
     //Escape character for commands such as "/exit"
-    public boolean interpretOut(String tso) throws IOException {
-        if(tso.length() > 0) {
+    public boolean interpretOut(String tso) throws Exception {
+        if (tso.length() > 0) {
             if (!(tso.toCharArray()[0] == '/')) {
-                o.writeInt(14);
+                o.writeIntE(14);
                 o.flush();
                 //TODO why does this string need to be flushed and not others?
-                o.writeUTF(tso);
+                o.writeUTFE(tso);
                 o.flush();
                 System.out.print(username + ": ");
             } else if (tso.equals("/exit")) {
-                o.writeInt(23);
+                o.writeIntE(23);
                 o.flush();
                 return true;
             }
