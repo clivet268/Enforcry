@@ -65,10 +65,12 @@ public class Enforcry {
      * Initializes all operations in the operations folder that extend the abstract class Operation
      */
     public static void initOperations(){
+        System.out.println("\n---Init Operations---\n");
+
         new CEE().init();
         new DEFAULT().init();
-        new ESLR().init();
         new ESLS().init();
+        new ESLC().init();
         new FDK().init();
         new FDKIN().init();
         new FEK().init();
@@ -77,20 +79,23 @@ public class Enforcry {
         new O().init();
         new X().init();
 
-        System.out.println("\n---Operations init complete---\n");
+        System.out.println("\n---Operations Init Complete---\n");
     }
 
     /**
      * Initializes all commands in the commands folder that extend the abstract class ExacutableCommand
      */
-    public static void initSLcommands(){
+    public static void initSLcommands() {
+        System.out.println("\n---Init Operations---\n");
+
         new AISURL().init();
         new CLOSE().init();
         new EPFS().init();
         new FS().init();
         new ST().init();
         new TXT().init();
-        System.out.println("\n---Commands init complete---\n");
+
+        System.out.println("\n---Commands Init Complete---\n");
     }
 
 }

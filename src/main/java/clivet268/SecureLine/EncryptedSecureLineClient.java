@@ -4,7 +4,6 @@ import clivet268.Encryption.Asymmetric;
 import clivet268.Enforcry;
 import org.jetbrains.annotations.Nullable;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -72,6 +71,7 @@ public class EncryptedSecureLineClient {
             rawout.writeInt(1000);
             rawout.flush();
             handshake = rawin.readInt();
+            logger.log("1");
             if (!(handshake == 1000)) {
                 close();
             }
@@ -80,6 +80,7 @@ public class EncryptedSecureLineClient {
             //logger.log(DatatypeConverter.printHexBinary(sessionKey.getPublic().getEncoded()));
             //Public key transfer
             handshake = rawin.readInt();
+            logger.log("12");
             if (!(handshake == 404)) {
                 close();
             }
@@ -91,48 +92,61 @@ public class EncryptedSecureLineClient {
             rawout.write(encodedPrivateKey);
             rawout.flush();
             rawout.writeInt(404);
+            logger.log("13");
             rawout.flush();
             handshake = rawin.readInt();
+            logger.log("14 + " + handshake);
             if (!(handshake == 402)) {
                 close();
             }
+            logger.log("9879y8tyd2r");
             int lenr = rawin.readInt();
+            logger.log("1214");
             byte[] cpkin = new byte[lenr];
             rawin.readFully(cpkin);
+            logger.log("2112121221122121");
             sPk = Asymmetric.byteArrayToPrivateKey(cpkin);
-            //Debug only
-            System.out.println(DatatypeConverter.printHexBinary(sPk.getEncoded()));
 
+            logger.log("114564");
 
             in = new EFCDataInputStream(rawin, sessionKey.getPrivate(), sPk);
+            logger.log("!311");
             out = new EFCDataOutputStream(rawout, sessionKey.getPrivate(), sPk);
+            logger.log("weff2323f32f2323");
             efctp = new EFCTP(in, out);
             //Public key encrypted and checked through encrypted in out
+            logger.log("wfeiut72");
 
             //Ports encrypted from here on
             //Communication Handshake continues
-            handshake = in.readIntE();
-            if (handshake == 405) {
-                out.writeIntE(406);
-                out.flush();
-                out.writeUTFE(Enforcry.username);
-            } else {
-                close();
-            }
             out.writeIntE(405);
+            logger.log("155");
             out.flush();
             handshake = in.readIntE();
+            logger.log("16");
             if (handshake == 406) {
                 sUnam = in.readUTFE();
-                System.out.println(sUnam);
+                //Debug only?
+                System.out.println(sUnam + " 0e");
             } else {
                 close();
             }
-            //TODO moreeEE handshake
+            handshake = in.readIntE();
+            logger.log("144");
+            if (handshake == 405) {
+                out.writeIntE(406);
+                logger.log("r2r2r33r2rrf");
+                out.flush();
+                out.writeUTFE(Enforcry.username);
+                logger.log("23r23");
+            } else {
+                close();
+            }
 
             //TODO server has burden of initialization, should it be this way?
             //Send the initial kick
             out.writeIntE(20);
+            logger.log("1");
             out.flush();
 
             //TODO handle continues like this?

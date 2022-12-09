@@ -4,7 +4,6 @@ import clivet268.Encryption.Asymmetric;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class EFCDataOutputStream {
 
 
     public final void writeUTFE(String str) throws Exception {
-        byte[] stringOut = Asymmetric.do_RSAEncryption(str.getBytes(str), publicKey);
+        byte[] stringOut = Asymmetric.do_RSAEncryption(str.getBytes(), publicKey);
         /*
         //TODO needed? already encrypted but the idea of this is small numbers in the hundreds could clash since are so small
         // investigate this, maybe not needed
@@ -59,7 +58,7 @@ public class EFCDataOutputStream {
     }
 
     public final void writeIntE(int intin) throws Exception {
-        byte[] stringOut = Asymmetric.do_RSAEncryption(BigInteger.valueOf(intin).toByteArray(), publicKey);
+        byte[] stringOut = Asymmetric.do_RSAEncryption((intin + "").getBytes(), publicKey);
         byte[] codeOut = Asymmetric.do_RSAEncryption((101 + ":" + stringOut.length).getBytes(), publicKey);
         din.writeInt(codeOut.length);
         logger.log(102 + ":" + stringOut.length);
@@ -68,7 +67,7 @@ public class EFCDataOutputStream {
         din.write(codeOut);
         logger.log(Arrays.toString(stringOut));
         din.write(stringOut);
-        flush();
+        //flush();
     }
 
     //TODO build into write int and normal writes (not UTF), neede

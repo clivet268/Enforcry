@@ -4,7 +4,6 @@ import clivet268.Encryption.Asymmetric;
 import clivet268.Enforcry;
 import org.jetbrains.annotations.Nullable;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -73,13 +72,12 @@ public class EncryptedSecureLineServer {
             byte[] cpkin = new byte[lenr];
             rawin.readFully(cpkin);
             cPk = Asymmetric.byteArrayToPrivateKey(cpkin);
-            //Debug only
-            System.out.println(DatatypeConverter.printHexBinary(cPk.getEncoded()));
             handshake = rawin.readInt();
             if (!(handshake == 404)) {
                 close();
             }
             rawout.writeInt(402);
+            logger.log("1212121221");
             rawout.flush();
             byte[] encodedPrivateKey = sessionKey.getPublic().getEncoded();
             rawout.writeInt(encodedPrivateKey.length);
@@ -92,19 +90,27 @@ public class EncryptedSecureLineServer {
             efctp = new EFCTP(in, out);
             //Public key encrypted and checked through encrypted in out
 
+            logger.log("135456");
             //Ports encrypted from here on
             //Communication Handshake continues
             handshake = in.readIntE();
+            logger.log("145");
             if (handshake == 405) {
                 out.writeIntE(406);
+                logger.log("90u897gytugbhj21e");
                 out.flush();
+                logger.log("pji9uhiygt");
                 out.writeUTFE(Enforcry.username);
+                logger.log("pjiouhygt21e");
             } else {
                 close();
             }
+            logger.log("9u897h8uinoijh897g8yft7ry");
             out.writeIntE(405);
             out.flush();
+            logger.log("1223112");
             handshake = in.readIntE();
+            logger.log("1756");
             if (handshake == 406) {
                 cUnam = in.readUTFE();
                 System.out.println(cUnam);
@@ -112,31 +118,12 @@ public class EncryptedSecureLineServer {
                 close();
             }
 
-            //TODO YUCK WTF IS THIS
-            //Handshake
-            out.writeIntE(405);
-            out.flush();
-            handshake = in.readIntE();
-            if (handshake == 406) {
-                cUnam = in.readUTFE();
-            } else {
-                close();
-            }
-            handshake = in.readIntE();
-            if (handshake == 405) {
-                out.writeIntE(406);
-                out.flush();
-                //TODO understand why this needs flushing?
-                out.writeUTFE(Enforcry.username);
-                out.flush();
-            } else {
-                close();
-            }
 
             //use EFCTP until user or program exits
             //continue flag
             boolean f = true;
             while (f) {
+                logger.log("rgtrg4");
                 //TODO conflicts with inner io interactions?
                 //Check for errent command code reads
                 int eewr = 0;
@@ -152,16 +139,7 @@ public class EncryptedSecureLineServer {
             close();
 
 
-        } catch (IOException ignored) {
-            /*
-            if (i instanceof BindException) {
-                //TODO need to be closed?
-                //close();
-            }
 
-             */
-            //Debug only
-            //i.printStackTrace();
             // TODO handle different exceptions differently
         } catch (Exception e) {
             throw new RuntimeException(e);
