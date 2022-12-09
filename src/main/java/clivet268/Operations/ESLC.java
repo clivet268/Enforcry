@@ -1,50 +1,49 @@
 package clivet268.Operations;
 
-import clivet268.SecureLine.EncryptedSecureLineServer;
+import clivet268.SecureLine.EncryptedSecureLineClient;
 
-import java.io.IOException;
 import java.util.Scanner;
 
-public class ESLR extends Operation {
+public class ESLC extends Operation {
     @Override
     public void run() {
+
         Scanner s = new Scanner(System.in);
+        System.out.println("Enter IP address");
+        String ipad = s.next();
         int e = -1;
         System.out.println("Enter timeout minutes(m), hours(h), days(d) or -1 for none");
         String se = s.next();
         switch (se) {
-            case ("m"):{
+            case ("m") -> {
                 System.out.println("Enter minutes");
                 e = s.nextInt() * 60;
                 System.out.println("TO " + (e / 60) + " minutes");
-                break;
             }
-            case ("h"):{
+            case ("h") -> {
                 System.out.println("Enter hours");
-                e = s.nextInt() * 3600;
-                System.out.println("TO " + (e / 3600) + " hours");
-                break;
+                e = s.nextInt() * 360;
+                System.out.println("TO " + (e / 360) + " hours");
             }
-            case ("d"):{
+            case ("d") -> {
                 System.out.println("Enter days");
                 e = s.nextInt() * 86400;
-                System.out.println("TO " + (e / 86400) + " days");
-                break;
+                System.out.println("TO " + (e / 360) + " days");
             }
-            default:{
+            default -> {
                 e = -1;
             }
         }
         try {
-            EncryptedSecureLineServer server = new EncryptedSecureLineServer(e);
-        } catch (IOException ex) {
+            EncryptedSecureLineClient client = new EncryptedSecureLineClient(ipad, e);
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
 
     }
 
     public static void main(String[] args) {
-        ESLR slr = new ESLR();
+        ESLC slr = new ESLC();
         slr.run();
     }
 
