@@ -29,7 +29,6 @@ public class Univ {
         new File(enforcryfoutpath).mkdirs();
         new File(enforcrytestpath).mkdirs();
         new File(enforcrysecretpath).mkdirs();
-        new File(enforcryfoutpath).mkdirs();
         new File(enforcrypartypath).mkdirs();
     }
     public static File filechooser(){

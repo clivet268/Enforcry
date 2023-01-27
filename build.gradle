@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'clivet268'
-version '1.0.1'
+version '1.0.2'
 
 repositories {
     mavenCentral()
@@ -20,6 +20,7 @@ dependencies {
     implementation 'org.javassist:javassist:3.29.0-GA'
     implementation "javax.xml.bind:jaxb-api:2.3.0"
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+    implementation 'com.simtechdata:WaifUPnP:1.0'
 
 
 }

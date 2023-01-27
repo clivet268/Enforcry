@@ -24,19 +24,32 @@ import java.util.logging.Logger;
 // An encrypted file could be used as verifier
 public class Enforcry {
     //Debug only
-    //public static DebugOnlyLogger logger = new DebugOnlyLogger(Logger.getLogger(Enforcry.class.getName()), false);
-    public static DebugOnlyLogger logger = new DebugOnlyLogger(Logger.getLogger(Enforcry.class.getName()), true);
+    public static DebugOnlyLogger logger = new DebugOnlyLogger(Logger.getLogger(Enforcry.class.getName()), false);
+
     public static HashMap<String, Operation> operations = new HashMap<>();
     public static HashMap<String, ExacutableCommand> SLcommands = new HashMap<>();
     public static String stk = "";
-    public static String username = "Clivet268";
-    public static KeyPair sessionKey;
+
+    public static String getUsername() {
+        return username;
+    }
+
+    //TODO get at login
+    private static String username = "Clivet268";
+    //TODO safter :(
+    public static KeyPair sessionKeyStore;
+    //TODO NOOO!! (temp)
+    private static String password;
+
+    public static int[] allowedPorts = {26817};
+
 
     public static void main(String[] args) {
         //TODO can this cause vulernabilities?
+        //TODO build kays and certificates into keystore
         //If error during keygen, kill
         try {
-            sessionKey = Asymmetric.generateRSAKkeyPair();
+            sessionKeyStore = Asymmetric.generateRSAKkeyPair();
             System.out.println("Session Key generated");
         } catch (Exception e) {
             System.exit(696969);

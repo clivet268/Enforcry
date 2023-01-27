@@ -6,9 +6,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Arrays;
 
-import static clivet268.Enforcry.logger;
+
 
 public class EFCDataInputStream {
     private static DataInputStream din = null;
@@ -47,16 +46,12 @@ public class EFCDataInputStream {
         int codelen = din.readInt();
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
-        logger.log(Arrays.toString(codine));
         String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
         int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
         int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
         byte[] bytesin = new byte[msgleng];
         System.out.println(type);
-        logger.log(type + ":" + msgleng);
-        logger.log(Arrays.toString((type + ":" + msgleng).getBytes()));
         din.readFully(bytesin);
-        logger.log(Arrays.toString(bytesin));
         return Asymmetric.do_RSADecryption(bytesin, privateKey);
     }
 
@@ -65,18 +60,13 @@ public class EFCDataInputStream {
         int codelen = din.readInt();
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
-        logger.log(Arrays.toString(codine));
         String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
         int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
         int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
         byte[] stringn = new byte[msgleng];
-        System.out.println(type);
-        logger.log(type + ":" + msgleng);
-        logger.log(Arrays.toString((type + ":" + msgleng).getBytes()));
+        //System.out.println(type);
         din.readFully(stringn);
-        String strout = new String(Asymmetric.do_RSADecryption(stringn, privateKey));
-        logger.log(Arrays.toString(stringn));
-        return strout;
+        return new String(Asymmetric.do_RSADecryption(stringn, privateKey));
         //TODO hash confirm?
     }
 
@@ -84,16 +74,12 @@ public class EFCDataInputStream {
         int codelen = din.readInt();
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
-        logger.log(Arrays.toString(codine));
         String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
         int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
         int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
         byte[] stringn = new byte[msgleng];
         System.out.println(type);
-        logger.log(type + ":" + msgleng);
-        logger.log(Arrays.toString((type + ":" + msgleng).getBytes()));
         din.readFully(stringn);
-        logger.log(Arrays.toString(stringn));
         String strout = new String(Asymmetric.do_RSADecryption(stringn, privateKey));
         return Integer.parseInt(strout);
 

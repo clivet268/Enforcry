@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static clivet268.Enforcry.logger;
 import static clivet268.Util.Univ.enforcrytestpath;
 import static clivet268.Util.Univ.getrandname;
 
@@ -39,7 +38,7 @@ public class EFCTP {
     //Getting outputs
     private int outNum = 0;
     @SuppressWarnings("unused")
-    private ArrayList<String> inputedStrings;
+    private ArrayList<String> inputedStrings = new ArrayList<>();
 
     private ExacutableCommand es;
 
@@ -69,6 +68,7 @@ public class EFCTP {
                 o.writeIntE(4);
                 o.flush();
             }
+            //Starts looking for command, then sends command prompt,
             case (7) -> {
                 String k = "";
                 //Checking validity, re-ask if not a valid command
@@ -77,7 +77,6 @@ public class EFCTP {
                     o.flush();
                     k = i.readUTFE().toLowerCase();
                 }
-                logger.log(":)");
                 es = Enforcry.SLcommands.get(k);
                 if (es.commandPrompts().size() > 0) {
                     o.writeIntE(8);
@@ -112,6 +111,7 @@ public class EFCTP {
                 int pnum = 0;
                 while (pnum < es.commandPrompts().size()) {
                     o.writeUTFE(es.commandPrompts().get(pnum));
+                    o.flush();
                     inputedStrings.add(i.readUTFE());
                     o.writeIntE(8);
                     o.flush();
@@ -136,13 +136,17 @@ public class EFCTP {
                 System.out.println("\n---Exiting Texting---\n");
                 o.writeIntE(25);
             }
+
             case (20) -> {
                 senderUsername = EncryptedSecureLineServer.getcUnam();
                 o.writeIntE(20);
                 o.flush();
             }
+            //Exit
             case (22) -> {
                 return false;
+            }
+            default -> {
             }
         }
         return true;
@@ -202,7 +206,7 @@ public class EFCTP {
                 System.out.println("File saved to " + rn);
                 return 1;
             }
-
+            //Get Server username
             //TODO needed? better way? right now the out just sends code 20 from the client class
             case (20) -> {
                 senderUsername = EncryptedSecureLineClient.getsUnam();
@@ -214,6 +218,8 @@ public class EFCTP {
             }
             case (25) -> {
                 return 1;
+            }
+            default -> {
             }
         }
 

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-import static clivet268.Enforcry.username;
+import static clivet268.Enforcry.getUsername;
 
 //Flush everything since client also uses this
 public class TextListener implements Runnable {
@@ -28,11 +28,11 @@ public class TextListener implements Runnable {
             int codein = i.readIntE();
             if (codein == 14) {
                 String sins = i.readUTFE();
-                for (char ignored : (username + ":  ").toCharArray()) {
+                for (char ignored : (getUsername() + ":  ").toCharArray()) {
                     System.out.print("\b");
                 }
                 System.out.println(senderUsername + ": " + sins);
-                System.out.print(username + ": ");
+                System.out.print(getUsername() + ": ");
             }
             if (codein == 23) {
                 kflag = true;
@@ -51,7 +51,7 @@ public class TextListener implements Runnable {
                 }
             });
             rn.start();
-            System.out.print(username + ": ");
+            System.out.print(getUsername() + ": ");
             while (!kflag) {
                 String ts = call();
                 kflag = interpretOut(ts);
@@ -69,7 +69,7 @@ public class TextListener implements Runnable {
                 //TODO why does this string need to be flushed and not others?
                 o.writeUTFE(tso);
                 o.flush();
-                System.out.print(username + ": ");
+                System.out.print(getUsername() + ": ");
             } else if (tso.equals("/exit")) {
                 o.writeIntE(23);
                 o.flush();
