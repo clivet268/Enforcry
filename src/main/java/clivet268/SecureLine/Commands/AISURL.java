@@ -1,6 +1,7 @@
 package clivet268.SecureLine.Commands;
 
 import clivet268.SecureLine.Command_Sources.AISURL_SRC;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public class AISURL extends ExecutableCommand {
 
     @Override
-    public ArrayList<String> commandPrompts(){
+    public ArrayList<String> commandPrompts() {
         ArrayList<String> ps = new ArrayList<>(1);
         ps.add("Enter url");
         return ps;
@@ -22,7 +23,7 @@ public class AISURL extends ExecutableCommand {
         } catch (IOException e) {
             String ee = e.getLocalizedMessage();
             System.out.println(ee);
-            this.output.add(ee.getBytes());
+            this.output.add(Pair.of(1, ee.getBytes()));
         }
     }
 
