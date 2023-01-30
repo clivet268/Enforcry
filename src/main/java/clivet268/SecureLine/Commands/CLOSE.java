@@ -1,8 +1,8 @@
 package clivet268.SecureLine.Commands;
 
-public class CLOSE extends ExacutableCommand {
+public class CLOSE extends ExecutableCommand {
     @Override
-    public boolean closeFlag(){
+    public boolean closeFlag() {
         return false;
     }
 }

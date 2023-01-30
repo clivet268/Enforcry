@@ -5,7 +5,7 @@ import clivet268.SecureLine.Command_Sources.AISURL_SRC;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AISURL extends ExacutableCommand {
+public class AISURL extends ExecutableCommand {
 
     @Override
     public ArrayList<String> commandPrompts(){
