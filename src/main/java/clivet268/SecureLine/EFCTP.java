@@ -1,7 +1,8 @@
 package clivet268.SecureLine;
 
 import clivet268.Enforcry;
-import clivet268.SecureLine.Commands.ExacutableCommand;
+import clivet268.SecureLine.Commands.ExecutableCommand;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.DataInputStream;
 import java.nio.file.Files;
@@ -40,7 +41,9 @@ public class EFCTP {
     @SuppressWarnings("unused")
     private ArrayList<String> inputedStrings = new ArrayList<>();
 
-    private ExacutableCommand es;
+
+    //TODO STATIC IS BAD! ALL THE ARRAYS ARE SAVED AND I DONT WANT TO CLEANEM EVERY TIME, THERE IS A BETTER WAY
+    private ExecutableCommand es;
 
     //TODO server side calls to /exit when texting lead to the program just ending somehow...
     //TODO command # spoofing prevent with prompt number? must be 0
@@ -56,14 +59,22 @@ public class EFCTP {
 
             //TODO variable buffer size?
             case (3) -> {
-                for (byte[] currentOut : es.getOutput()) {
-                    o.writeIntE(18);
-                    o.flush();
-                    //TODO biiig integer for biiiiiiiiiiiiig files :)
-                    o.writeIntE(currentOut.length);
-                    o.flush();
-                    o.writeE(currentOut);
-                    o.flush();
+                for (Pair<Integer, byte[]> currentout : es.getOutput()) {
+                    if (currentout.getLeft() == 1) {
+                        o.writeIntE(26);
+                        o.flush();
+                        o.writeUTFE(new String(currentout.getRight()));
+                        o.flush();
+                    }
+                    if (currentout.getLeft() == 2) {
+                        o.writeIntE(18);
+                        o.flush();
+                        //TODO biiig integer for biiiiiiiiiiiiig files :)
+                        o.writeIntE(currentout.getRight().length);
+                        o.flush();
+                        o.writeE(currentout.getRight());
+                        o.flush();
+                    }
                 }
                 o.writeIntE(4);
                 o.flush();
@@ -77,23 +88,36 @@ public class EFCTP {
                     o.flush();
                     k = i.readUTFE().toLowerCase();
                 }
+
                 es = Enforcry.SLcommands.get(k);
                 if (es.commandPrompts().size() > 0) {
-                    o.writeIntE(8);
-                    o.flush();
-                    break;
+                    int pnum = 0;
+                    while (pnum < es.commandPrompts().size()) {
+                        o.writeIntE(8);
+                        o.flush();
+                        o.writeUTFE(es.commandPrompts().get(pnum));
+                        o.flush();
+                        inputedStrings.add(i.readUTFE());
+                        //TODO general ack needed for EFCTP, and this issue is 12ing after getting 8 every time exemplifies that
+                        //Ignored
+                        pnum++;
+                    }
+                    es.input = inputedStrings;
+                    //Clear inputed trings array after handing it off to the command to be processed
+                    inputedStrings = new ArrayList<>();
+                    es.run();
+                    if (es.getOutput().size() > 0) {
+                        //Debug only
+                        //System.out.println(new String(es.getOutput().get(0)));
+                        o.writeIntE(2);
+                        o.flush();
+                    }
                 } else {
                     es.run();
                 }
-                if (es.getOutput().size() > 0) {
-                    //Debug only
-                    //System.out.println(new String(es.getOutput().get(0)) + " \n:debug only");
-                    o.writeIntE(2);
-                    o.flush();
-                }
                 //TODO uhhh wont this break if there are actual files to send? i elseifed it but still maybe?
                 //TODO just add a flag for now
-                else if (es.getTnt() == 1) {
+                if (es.getTnt() == 1) {
                     //TODO More formal text mode? GUI? this whole thing needs a GUI thats going to suck :(
                     //TODO currently there is ping-pong-packet, maybe a ping-pong-packet-check is in need?
                     // maybe even a ping-pong-packet-ding-dong? would be better suited if there were extra layers of
@@ -120,6 +144,8 @@ public class EFCTP {
                     pnum++;
                 }
                 es.input = inputedStrings;
+                //Clear inputed trings array after handing it off to the command to be processed
+                inputedStrings = new ArrayList<>();
                 es.run();
                 if (es.getOutput().size() > 0) {
                     //Debug only
@@ -160,7 +186,6 @@ public class EFCTP {
     // is negligable and might even be better/more efficient with byte[]s
 
     //Client needs to flush!!!
-    //0 - continue, 1 - ask, 2 - close
     public int switcherClient(int ic) throws Exception {
         switch (ic) {
             case (2) -> {
@@ -180,10 +205,9 @@ public class EFCTP {
 
 
             case (8) -> {
-                o.writeIntE(12);
-                o.flush();
                 System.out.println(i.readUTFE());
                 o.writeUTFE(scanner.nextLine());
+                o.flush();
             }
             case (16) -> {
                 //TODO how to exit texting mode (safely)
@@ -222,6 +246,9 @@ public class EFCTP {
             }
             case (25) -> {
                 return 1;
+            }
+            case (26) -> {
+                System.out.println(i.readUTFE());
             }
             default -> {
             }
