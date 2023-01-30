@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class EPFS extends ExecutableCommand {
 
     @Override
-    public ArrayList<String> commandPrompts(){
+    public ArrayList<String> commandPrompts() {
         ArrayList<String> ps = new ArrayList<>(1);
         ps.add("Who are you and who am I");
         ps.add("Path To File on Server In Enforcry Package");
@@ -20,7 +20,7 @@ public class EPFS extends ExecutableCommand {
     public void run() {
         this.output.clear();
         try {
-            this.output = FS_SRC.get(this.input.get(0));
+            this.output = FS_SRC.get(Integer.parseInt(this.input.get(0)), this.input.get(1));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
