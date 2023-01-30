@@ -12,12 +12,13 @@ import java.util.Random;
 
 public class Univ {
 
-    public static final int BTC = 65536;
-    public static String enforcrybasepath = System.getProperty("user.home") + File.separator + "/";
-    public static String enforcrytestpath = System.getProperty("user.home") + File.separator + "/test/";
-    public static String enforcrysecretpath = System.getProperty("user.home") + File.separator + "/-/";
-    public static String enforcrypartypath = enforcrysecretpath + File.separator + "sl" + File.separator + "party_list";
-    public static String enforcryfoutpath = System.getProperty("user.home") + File.separator + "/fout/";
+    public static ArrayList<String> ndaryDirs = new ArrayList<>();
+    public static String enforcrybasepath = File.separator + "Enforcry" + File.separator;
+    public static String ENFORCRYFILESPATH = enforcrybasepath + "Files" + File.separator;
+    public static String enforcrytestpath = enforcrybasepath + "test" + File.separator;
+    public static String enforcrysecretpath = enforcrybasepath + "-" + File.separator;
+    public static String enforcrypartypath = enforcrysecretpath + "sl" + File.separator + "party_list" + File.separator;
+    public static String enforcryfoutpath = enforcrybasepath + "fout" + File.separator;
 
     public Univ() {
         createPaths();
@@ -26,13 +27,16 @@ public class Univ {
     public static String normalStringSet = "abcedfghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789-_";
     public static char[] charset = normalStringSet.toCharArray();
     public static String upperStringSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static void createPaths(){
+
+    private static void createPaths() {
+        new File(ENFORCRYFILESPATH).mkdirs();
         new File(enforcryfoutpath).mkdirs();
         new File(enforcrytestpath).mkdirs();
         new File(enforcrysecretpath).mkdirs();
         new File(enforcrypartypath).mkdirs();
     }
-    public static File filechooser(){
+
+    public static File filechooser() {
         File file = null;
         JFrame myFrame = new JFrame("Frame Title");
         myFrame.setVisible(true);
