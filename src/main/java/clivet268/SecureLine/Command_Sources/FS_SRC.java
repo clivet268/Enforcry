@@ -15,23 +15,47 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 public class FS_SRC {
-    ArrayList<byte[]> output = new ArrayList<>();
-    public FS_SRC(String ...  url) throws IOException {
-        for (String a: url) {
-            try {
-                output.add(Files.readAllBytes(Path.of(a)));
-                System.out.println("File Gotten");
+
+    //TODO check for pemission level(in system and with a specific EFC access level test)
+
+    /**
+     * Gets the selected file from the EFC file root or the selected ndary root
+     *
+     * @param basebathbum the ndary root path for this transfer
+     * @param url         the url fromt that selected basee path
+     * @throws IOException
+     */
+    public static ArrayList<Pair<Integer, byte[]>> run(int basebathbum, String url) {
+        ArrayList<Pair<Integer, byte[]>> output = new ArrayList<>();
+        try {
+            String path = "";
+            if (basebathbum == 0) {
+                path = ENFORCRYFILESPATH + url;
+                System.out.println(path);
+            } else {
+                try {
+                    path = ndaryDirs.get(basebathbum);
+                } catch (Exception ignored) {
+                }
             }
-            catch (IOException e){
-                System.out.println("File Not Found");
+            if (!path.equals("")) {
+                output.add(Pair.of(2, Files.readAllBytes(Path.of(path))));
+                output.add(Pair.of(1, ("File " + url + " Gotten").getBytes()));
+                System.out.println("File " + url + " Gotten");
+            } else {
+                output.add(Pair.of(1, ("Base path num not valid").getBytes()));
+                System.out.println("Base path num not valid");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            output.add(Pair.of(1, ("File " + url + " Not Found").getBytes()));
+            System.out.println("File " + url + " Not Found");
         }
     }
 
 
-    public static ArrayList<byte[]> get(String url) throws IOException {
-        FS_SRC op = new FS_SRC(url);
-        return op.output;
+    public static ArrayList<Pair<Integer, byte[]>> get(int bbb, String url) throws IOException {
+        return run(bbb, url);
     }
 
 
