@@ -1,19 +1,19 @@
 package clivet268.SecureLine.Command_Sources;
 
-import org.jsoup.Connection;
-import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
-import org.jsoup.UnsupportedMimeTypeException;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Base64;
 
+import static clivet268.Util.Univ.ENFORCRYFILESPATH;
+import static clivet268.Util.Univ.ndaryDirs;
+
+//TODO need ot be static? not static? idk lmao
+
+//TODO int, string and byte predefined outputs (type defined here) so that more than just byte arrays can be send for easy
+// command info etc
 public class FS_SRC {
 
     //TODO check for pemission level(in system and with a specific EFC access level test)
@@ -51,6 +51,7 @@ public class FS_SRC {
             output.add(Pair.of(1, ("File " + url + " Not Found").getBytes()));
             System.out.println("File " + url + " Not Found");
         }
+        return output;
     }
 
 
@@ -58,6 +59,10 @@ public class FS_SRC {
         return run(bbb, url);
     }
 
-
+    public static void main(String[] args) throws IOException {
+        //test
+        run(12419, "picture.ico");
+        run(0, "picture.ico");
+    }
 
 }
