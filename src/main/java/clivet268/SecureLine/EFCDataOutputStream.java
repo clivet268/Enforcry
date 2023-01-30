@@ -19,7 +19,8 @@ public class EFCDataOutputStream {
         publicKey = pukin;
     }
 
-    public void writeE(byte b[]) throws Exception {
+    public void writeE(byte[] b) throws Exception {
+        //Ensure byte[] size of greater than 245 bytes for encryption purposes
         byte[] bytesout = Asymmetric.do_RSAEncryption(b, publicKey);
         byte[] codeOut = Asymmetric.do_RSAEncryption((103 + ":" + bytesout.length).getBytes(), publicKey);
         din.writeInt(codeOut.length);

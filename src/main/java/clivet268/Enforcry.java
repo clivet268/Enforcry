@@ -27,7 +27,7 @@ public class Enforcry {
     public static DebugOnlyLogger logger = new DebugOnlyLogger(Logger.getLogger(Enforcry.class.getName()), false);
 
     public static HashMap<String, Operation> operations = new HashMap<>();
-    public static HashMap<String, ExacutableCommand> SLcommands = new HashMap<>();
+    public static HashMap<String, ExecutableCommand> SLcommands = new HashMap<>();
     public static String stk = "";
 
     public static String getUsername() {

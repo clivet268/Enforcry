@@ -115,13 +115,15 @@ public class EFCTP {
                     inputedStrings.add(i.readUTFE());
                     o.writeIntE(8);
                     o.flush();
+                    //TODO general ack needed for EFCTP, and this issue is 12ing after getting 8 every time exemplifies that
+                    //Ignored
                     pnum++;
                 }
                 es.input = inputedStrings;
                 es.run();
                 if (es.getOutput().size() > 0) {
                     //Debug only
-                    System.out.println(new String(es.getOutput().get(0)));
+                    //System.out.println(new String(es.getOutput().get(0)));
                     o.writeIntE(2);
                     o.flush();
                 }
@@ -175,6 +177,8 @@ public class EFCTP {
                 String strin = scanner.nextLine();
                 o.writeUTFE(strin);
             }
+
+
             case (8) -> {
                 o.writeIntE(12);
                 o.flush();

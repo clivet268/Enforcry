@@ -5,8 +5,8 @@ import clivet268.SecureLine.Command_Sources.FS_SRC;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//TODO needed? might be nice to encrypt a file over non EFCTP but eh maybe redundant
-public class EPFS extends ExacutableCommand {
+//TODO password based encrypt file before sending
+public class EPFS extends ExecutableCommand {
 
     @Override
     public ArrayList<String> commandPrompts(){

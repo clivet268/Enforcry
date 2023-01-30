@@ -4,10 +4,14 @@ import clivet268.Enforcry;
 
 import java.util.ArrayList;
 
-public abstract class ExacutableCommand implements Runnable{
+public abstract class ExecutableCommand implements Runnable {
     String name = this.getClass().getSimpleName();
     /**
      * stores after being populated by {@link #run()}
+     * See EFCTCP server code number 3 to understand output code use
+     * 0 - none
+     * 1 - string
+     * 2 - byte[]
      */
     ArrayList<byte[]> output = new ArrayList<>();
     //TODO setter getter?

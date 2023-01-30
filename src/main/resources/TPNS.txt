@@ -8,7 +8,7 @@
 7 - ready to send command
 8 - send command input
 9 -
-10 -
+10 -ACK
 11 -
 12 - sending command input
 13 - specific error
@@ -24,6 +24,7 @@
 23 - text exit
 24 - lets do this
 25 - asking exit
+26 - sending info string
 100 - boolean
 101 - int
 102 - String

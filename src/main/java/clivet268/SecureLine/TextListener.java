@@ -82,9 +82,10 @@ public class TextListener implements Runnable {
     //TODO possible without busy waiting?
 
     /**
-     * credit https://www.javaspecialists.eu/archive/Issue153-Timeout-on-Console-Input.html and
+     * credit <a href="https://www.javaspecialists.eu/archive/Issue153-Timeout-on-Console-Input.html">...</a> and
      * https://stackoverflow.com/questions/4983065/how-to-interrupt-java-util-scanner-nextline-call - author djna
-     * https://stackoverflow.com/users/82511/djna
+     * <a href="https://stackoverflow.com/users/82511/djna">...</a>
+     *
      * @return
      * @throws IOException
      */

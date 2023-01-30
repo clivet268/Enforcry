@@ -5,7 +5,7 @@ import clivet268.SecureLine.Command_Sources.FS_SRC;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FS extends ExacutableCommand {
+public class FS extends ExecutableCommand {
 
     //TODO no good
     /**
