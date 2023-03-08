@@ -13,7 +13,7 @@ public class TextListener implements Runnable {
     EFCDataInputStream i;
     EFCDataOutputStream o;
     Scanner scanner;
-    private static boolean kflag;
+    private static boolean kflag = false;
     String senderUsername;
 
     public TextListener(EFCDataInputStream iin, EFCDataOutputStream ion, Scanner sin, String su) {
@@ -23,7 +23,7 @@ public class TextListener implements Runnable {
         senderUsername = su;
     }
 
-    public void texter() throws Exception {
+    public void texter(Thread tokill) throws Exception {
         while (!kflag) {
             int codein = i.readIntE();
             if (codein == 14) {
@@ -34,11 +34,12 @@ public class TextListener implements Runnable {
                 System.out.println(senderUsername + ": " + sins);
                 System.out.print(getUsername() + ": ");
             }
-            if ((codein == 7) || (codein == 33) || (codein == 34)) {
-                o.writeIntE(33);
+            if (codein == 35) {
+                tokill.interrupt();
                 kflag = true;
             }
         }
+        tokill.interrupt();
     }
 
     @Override
@@ -46,18 +47,17 @@ public class TextListener implements Runnable {
         try{
             Thread rn = new Thread(()-> {
                 try {
-                    texter();
+                    while (!kflag) {
+                        String ts = call();
+                        kflag = interpretOut(ts);
+                    }
                 } catch (Exception ignored) {
 
                 }
             });
             rn.start();
             System.out.print(getUsername() + ": ");
-            while (!kflag) {
-                String ts = call();
-                kflag = interpretOut(ts);
-            }
-            o.writeIntE(33);
+            texter(rn);
             rn.interrupt();
         } catch (Exception ignored) {
         }
@@ -68,11 +68,10 @@ public class TextListener implements Runnable {
         if (tso.length() > 0) {
             if (!(tso.toCharArray()[0] == '/')) {
                 o.writeIntE(14);
-                //TODO why does this string need to be flushed and not others?
                 o.writeUTFE(tso);
                 System.out.print(getUsername() + ": ");
             } else if (tso.equals("/exit")) {
-                o.writeIntE(33);
+                o.writeIntE(35);
                 return true;
             }
         }
@@ -80,7 +79,6 @@ public class TextListener implements Runnable {
     }
 
     //TODO possible without busy waiting?
-
     /**
      * credit <a href="https://www.javaspecialists.eu/archive/Issue153-Timeout-on-Console-Input.html">...</a> and
      * https://stackoverflow.com/questions/4983065/how-to-interrupt-java-util-scanner-nextline-call - author djna
@@ -98,7 +96,6 @@ public class TextListener implements Runnable {
                 // wait until we have data to complete a readLine()
                 while (!br.ready()) {
                     if (kflag) {
-                        o.writeIntE(33);
                         br.close();
                     }
                     Thread.sleep(100);

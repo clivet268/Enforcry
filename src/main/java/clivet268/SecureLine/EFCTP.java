@@ -54,7 +54,6 @@ public class EFCTP {
             //TODO what is this?
             case (2) -> {
                 o.writeIntE(1);
-                o.flush();
             }
 
             //TODO variable buffer size?
@@ -62,22 +61,16 @@ public class EFCTP {
                 for (Pair<Integer, byte[]> currentout : es.getOutput()) {
                     if (currentout.getLeft() == 1) {
                         o.writeIntE(26);
-                        o.flush();
                         o.writeUTFE(new String(currentout.getRight()));
-                        o.flush();
                     }
                     if (currentout.getLeft() == 2) {
                         o.writeIntE(18);
-                        o.flush();
                         //TODO biiig integer for biiiiiiiiiiiiig files :)
                         o.writeIntE(currentout.getRight().length);
-                        o.flush();
                         o.writeE(currentout.getRight());
-                        o.flush();
                     }
                 }
                 o.writeIntE(4);
-                o.flush();
             }
             //Starts looking for command, then sends command prompt,
             case (7) -> {
@@ -94,9 +87,7 @@ public class EFCTP {
                     int pnum = 0;
                     while (pnum < es.commandPrompts().size()) {
                         o.writeIntE(8);
-                        o.flush();
                         o.writeUTFE(es.commandPrompts().get(pnum));
-                        o.flush();
                         inputedStrings.add(i.readUTFE());
                         //TODO general ack needed for EFCTP, and this issue is 12ing after getting 8 every time exemplifies that
                         //Ignored
@@ -110,7 +101,6 @@ public class EFCTP {
                         //Debug only
                         //System.out.println(new String(es.getOutput().get(0)));
                         o.writeIntE(2);
-                        o.flush();
                     }
                 } else {
                     es.run();
@@ -123,10 +113,8 @@ public class EFCTP {
                     // maybe even a ping-pong-packet-ding-dong? would be better suited if there were extra layers of
                     // security involved such as a changing value used to encrypt again
                     o.writeIntE(16);
-                    o.flush();
                 } else if (es.closeFlag()) {
                     o.writeIntE(22);
-                    o.flush();
                 } else {
                     //TODO else?
                 }
@@ -135,10 +123,8 @@ public class EFCTP {
                 int pnum = 0;
                 while (pnum < es.commandPrompts().size()) {
                     o.writeUTFE(es.commandPrompts().get(pnum));
-                    o.flush();
                     inputedStrings.add(i.readUTFE());
                     o.writeIntE(8);
-                    o.flush();
                     //TODO general ack needed for EFCTP, and this issue is 12ing after getting 8 every time exemplifies that
                     //Ignored
                     pnum++;
@@ -151,7 +137,6 @@ public class EFCTP {
                     //Debug only
                     //System.out.println(new String(es.getOutput().get(0)));
                     o.writeIntE(2);
-                    o.flush();
                 }
             }
             case (16) -> {
@@ -162,13 +147,13 @@ public class EFCTP {
                 tthread.start();
                 tthread.join();
                 System.out.println("\n---Exiting Texting---\n");
+                scanner.reset();
                 o.writeIntE(33);
             }
 
             case (20) -> {
                 senderUsername = EncryptedSecureLineServer.getcUnam();
                 o.writeIntE(20);
-                o.flush();
             }
             //Exit
             case (22) -> {
@@ -194,24 +179,25 @@ public class EFCTP {
         switch (ic) {
             case (2) -> {
                 o.writeIntE(3);
-                o.flush();
             }
             case (4) -> {
                 //TODO uhhhh what to do here
                 o.writeIntE(7);
-                o.flush();
             }
             case (6) -> {
                 System.out.println("Enter Command:");
-                String strin = scanner.nextLine();
-                o.writeUTFE(strin);
+                if (scanner.hasNextLine()) {
+                    String strin = scanner.nextLine();
+                    o.writeUTFE(strin);
+                } else {
+                    o.writeIntE(7);
+                }
             }
 
 
             case (8) -> {
                 System.out.println(i.readUTFE());
                 o.writeUTFE(scanner.nextLine());
-                o.flush();
             }
             case (16) -> {
                 //TODO how to exit texting mode (safely)
@@ -222,8 +208,8 @@ public class EFCTP {
                 tthread.start();
                 tthread.join();
                 System.out.println("\n---Exiting Texting---\n");
+                scanner.reset();
                 o.writeIntE(33);
-
             }
             case (18) -> {
                 //TODO big integer/ handle huge files
@@ -244,7 +230,6 @@ public class EFCTP {
             case (20) -> {
                 senderUsername = EncryptedSecureLineClient.getsUnam();
                 o.writeIntE(7);
-                o.flush();
             }
             case (22) -> {
                 return 2;

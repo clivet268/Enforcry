@@ -75,10 +75,8 @@ public class EFCDataInputStream {
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
         String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
-        //int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
         int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
         byte[] stringn = new byte[msgleng];
-        //System.out.println(type);
         din.readFully(stringn);
         String strout = new String(Asymmetric.do_RSADecryption(stringn, privateKey));
         return Integer.parseInt(strout);

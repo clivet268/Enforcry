@@ -107,7 +107,6 @@ public class EncryptedSecureLineClient {
             //Ports encrypted from here on
             //Communication Handshake continues
             out.writeIntE(405);
-            out.flush();
             handshake = in.readIntE();
             if (handshake == 406) {
                 sUnam = in.readUTFE();
@@ -119,7 +118,6 @@ public class EncryptedSecureLineClient {
             handshake = in.readIntE();
             if (handshake == 405) {
                 out.writeIntE(406);
-                out.flush();
                 out.writeUTFE(getUsername());
             } else {
                 close();
@@ -128,7 +126,6 @@ public class EncryptedSecureLineClient {
             //TODO server has burden of initialization, should it be this way?
             //Send the initial kick
             out.writeIntE(20);
-            out.flush();
 
             //TODO handle continues like this?
             //use EFCTP until user or program exits

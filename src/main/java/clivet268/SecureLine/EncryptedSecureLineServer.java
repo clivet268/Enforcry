@@ -96,13 +96,11 @@ public class EncryptedSecureLineServer {
             handshake = in.readIntE();
             if (handshake == 405) {
                 out.writeIntE(406);
-                out.flush();
                 out.writeUTFE(getUsername());
             } else {
                 close();
             }
             out.writeIntE(405);
-            out.flush();
             handshake = in.readIntE();
             if (handshake == 406) {
                 cUnam = in.readUTFE();
