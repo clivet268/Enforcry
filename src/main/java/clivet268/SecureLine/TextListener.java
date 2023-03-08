@@ -13,7 +13,7 @@ public class TextListener implements Runnable {
     EFCDataInputStream i;
     EFCDataOutputStream o;
     Scanner scanner;
-    private static boolean kflag = false;
+    private static boolean kflag;
     String senderUsername;
 
     public TextListener(EFCDataInputStream iin, EFCDataOutputStream ion, Scanner sin, String su) {
@@ -34,7 +34,8 @@ public class TextListener implements Runnable {
                 System.out.println(senderUsername + ": " + sins);
                 System.out.print(getUsername() + ": ");
             }
-            if (codein == 23) {
+            if ((codein == 7) || (codein == 33) || (codein == 34)) {
+                o.writeIntE(33);
                 kflag = true;
             }
         }
@@ -56,6 +57,8 @@ public class TextListener implements Runnable {
                 String ts = call();
                 kflag = interpretOut(ts);
             }
+            o.writeIntE(33);
+            rn.interrupt();
         } catch (Exception ignored) {
         }
     }
@@ -65,14 +68,11 @@ public class TextListener implements Runnable {
         if (tso.length() > 0) {
             if (!(tso.toCharArray()[0] == '/')) {
                 o.writeIntE(14);
-                o.flush();
                 //TODO why does this string need to be flushed and not others?
                 o.writeUTFE(tso);
-                o.flush();
                 System.out.print(getUsername() + ": ");
             } else if (tso.equals("/exit")) {
-                o.writeIntE(23);
-                o.flush();
+                o.writeIntE(33);
                 return true;
             }
         }
@@ -97,7 +97,8 @@ public class TextListener implements Runnable {
             try {
                 // wait until we have data to complete a readLine()
                 while (!br.ready()) {
-                    if(kflag){
+                    if (kflag) {
+                        o.writeIntE(33);
                         br.close();
                     }
                     Thread.sleep(100);
@@ -105,6 +106,8 @@ public class TextListener implements Runnable {
                 input = br.readLine();
             } catch (InterruptedException e) {
                 return null;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         } while ("".equals(input));
         return input;

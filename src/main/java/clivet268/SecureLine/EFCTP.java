@@ -85,8 +85,8 @@ public class EFCTP {
                 //Checking validity, re-ask if not a valid command
                 while (!Enforcry.SLcommands.containsKey(k)) {
                     o.writeIntE(6);
-                    o.flush();
                     k = i.readUTFE().toLowerCase();
+                    System.out.println(senderUsername + " entered: " + k);
                 }
 
                 es = Enforcry.SLcommands.get(k);
@@ -162,7 +162,7 @@ public class EFCTP {
                 tthread.start();
                 tthread.join();
                 System.out.println("\n---Exiting Texting---\n");
-                o.writeIntE(25);
+                o.writeIntE(33);
             }
 
             case (20) -> {
@@ -173,6 +173,10 @@ public class EFCTP {
             //Exit
             case (22) -> {
                 return false;
+            }
+            //After texting completes command prompt returns and promputs user
+            case (33) -> {
+                o.writeIntE(34);
             }
             default -> {
             }
@@ -218,7 +222,8 @@ public class EFCTP {
                 tthread.start();
                 tthread.join();
                 System.out.println("\n---Exiting Texting---\n");
-                return 1;
+                o.writeIntE(33);
+
             }
             case (18) -> {
                 //TODO big integer/ handle huge files
@@ -249,6 +254,9 @@ public class EFCTP {
             }
             case (26) -> {
                 System.out.println(i.readUTFE());
+            }
+            case (33), (34) -> {
+                o.writeIntE(7);
             }
             default -> {
             }

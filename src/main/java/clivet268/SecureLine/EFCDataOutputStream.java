@@ -36,6 +36,7 @@ public class EFCDataOutputStream {
         din.writeInt(codeOut.length);
         din.write(codeOut);
         din.write(stringOut);
+        flush();
     }
 
     public final void writeIntE(int intin) throws Exception {
@@ -44,7 +45,7 @@ public class EFCDataOutputStream {
         din.writeInt(codeOut.length);
         din.write(codeOut);
         din.write(stringOut);
-        //flush();
+        flush();
     }
 
     //TODO build into write int and normal writes (not UTF), neede
