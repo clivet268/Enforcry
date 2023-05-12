@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -74,47 +75,97 @@ public class EncrypterDecrypter {
     }
 
 
+    //TODO secure key saving, no paintext in files, plaintext in command line is so-so but better
     public static void fek() throws IOException, NoSuchAlgorithmException {
         File file = Univ.filechooser();
-        Path of = Path.of(Univ.enforcrybasepath);
-        if(!Files.exists(of)) {
-            Files.createDirectory(of);
-        }
         String kii = gen2048();
-        assert file != null;
-        byte[] bytes = Files.readAllBytes(file.toPath());
-        String s = Base64.getEncoder().encodeToString(bytes);
-        String out = encrypt(s, kii);
 
-        byte[] decode = Base64.getDecoder().decode(out.getBytes());
-        Path pathout = Paths.get(Univ.enforcrybasepath + file.hashCode());
-        Files.write(pathout, decode);
-        System.out.println("Key saved, make sure you get all of it\n_\n\n");
-        Files.write(Path.of(Univ.enforcrybasepath + "." + file.hashCode() + "key"),kii.getBytes());
+        Path pathout = Paths.get(Univ.ENFORCRYFILESPATH + File.separator + Univ.getRandString(69));
+        Files.createDirectory(pathout);
+        recursefekc(file, kii, pathout.toString());
+
+        System.out.println("Key written, make sure you get all of it\n");
+        System.out.println(new String(kii.getBytes()));
     }
 
-    public static void fek(String kin) throws IOException, NoSuchAlgorithmException {
+    public static void fekl() throws IOException, NoSuchAlgorithmException {
         File file = Univ.filechooser();
-        Path of = Path.of(Univ.enforcrybasepath);
-        if(!Files.exists(of)) {
-            Files.createDirectory(of);
-        }
-        String kii = kin;
-        assert file != null;
-        byte[] bytes = Files.readAllBytes(file.toPath());
-        String s = Base64.getEncoder().encodeToString(bytes);
-        String out = encrypt(s, kii);
+        String kii = gen2048();
+        Path pathout = Paths.get(file.getParent() + File.separator + Univ.getRandString(69));
+        Files.createDirectory(pathout);
+        recursefekcl(file, kii, pathout.toString());
 
-        byte[] decode = Base64.getDecoder().decode(out.getBytes());
-        Path pathout = Paths.get(Univ.enforcrybasepath + file.hashCode());
-        Files.write(pathout, decode);
+        System.out.println("Key written, make sure you get all of it\n");
+        System.out.println(new String(kii.getBytes()));
     }
 
+
+    //TODO secure key storage would make using individual keys for files easier and accessing them on different inner file
+    // more convenient, should be optional as most things
+    public static void recursefekc(File file, String kii, String curpath) throws IOException {
+        if (file.isDirectory()) {
+            for (File infile : file.listFiles()) {
+                System.out.println(curpath);
+                Path pathout = Paths.get(curpath + File.separator + file.getName() + "_" + file.hashCode());
+                try {
+                    Files.createDirectory(pathout);
+                } catch (FileAlreadyExistsException ignored) {
+                }
+                recursefekc(infile, kii, pathout.toString());
+            }
+        } else {
+            try {
+                byte[] bytes = Files.readAllBytes(file.toPath());
+                String s = Base64.getEncoder().encodeToString(bytes);
+                String out = encrypt(s, kii);
+
+                byte[] decode = Base64.getDecoder().decode(out.getBytes());
+                Path pathout = Paths.get(curpath + File.separator + file.getName());
+                System.out.println(pathout);
+                Files.createFile(pathout);
+                Files.write(pathout, decode);
+                //Files.write(Path.of(Univ.enforcrybasepath + "." + file.hashCode() + "key"),kii.getBytes());
+            } catch (NullPointerException e) {
+                System.out.println("null file");
+            }
+        }
+    }
+
+    public static void recursefekcl(File file, String kii, String curpath) {
+        if (file.isDirectory()) {
+            for (File infile : file.listFiles()) {
+                recursefekcl(infile, kii, curpath + File.separator + file.getName() + "_" + file.hashCode());
+            }
+        } else {
+            try {
+                byte[] bytes = Files.readAllBytes(file.toPath());
+                String s = Base64.getEncoder().encodeToString(bytes);
+                String out = encrypt(s, kii);
+
+                byte[] decode = Base64.getDecoder().decode(out.getBytes());
+                Path pathout = Paths.get(curpath + file.getName());
+                Files.write(pathout, decode);
+            } catch (NullPointerException e) {
+                System.out.println("null file");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static void fek(String kii) throws IOException, NoSuchAlgorithmException {
+        File file = Univ.filechooser();
+
+        recursefekc(file, kii, Univ.enforcrybasepath);
+
+        System.out.println("Key written, make sure you get all of it\n");
+        System.out.println(new String(kii.getBytes()));
+    }
 
 
     public static void fek(File file) throws IOException, NoSuchAlgorithmException {
         Path of = Path.of(Univ.enforcrybasepath);
-        if(!Files.exists(of)) {
+        if (!Files.exists(of)) {
             Files.createDirectory(of);
         }
         String kii = gen2048();

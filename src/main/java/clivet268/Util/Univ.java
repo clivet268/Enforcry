@@ -16,9 +16,9 @@ public class Univ {
     public static String enforcrybasepath = File.separator + "Enforcry" + File.separator;
     public static String ENFORCRYFILESPATH = enforcrybasepath + "Files" + File.separator;
     public static String enforcrytestpath = enforcrybasepath + "test" + File.separator;
-    public static String enforcrysecretpath = enforcrybasepath + "-" + File.separator;
-    public static String enforcrypartypath = enforcrysecretpath + "sl" + File.separator + "party_list" + File.separator;
-    public static String enforcryfoutpath = enforcrybasepath + "fout" + File.separator;
+    public static String ENFORCRYSECRETPATH = enforcrybasepath + "-" + File.separator;
+    public static String ENFORCRYPARTYPATH = ENFORCRYSECRETPATH + "sl" + File.separator + "party_list" + File.separator;
+    public static String ENFORCRYFOUTPATH = enforcrybasepath + "fout" + File.separator;
 
     public Univ() {
         createPaths();
@@ -30,10 +30,10 @@ public class Univ {
 
     private static void createPaths() {
         new File(ENFORCRYFILESPATH).mkdirs();
-        new File(enforcryfoutpath).mkdirs();
+        new File(ENFORCRYFOUTPATH).mkdirs();
         new File(enforcrytestpath).mkdirs();
-        new File(enforcrysecretpath).mkdirs();
-        new File(enforcrypartypath).mkdirs();
+        new File(ENFORCRYSECRETPATH).mkdirs();
+        new File(ENFORCRYPARTYPATH).mkdirs();
     }
 
     public static File filechooser() {
@@ -43,21 +43,16 @@ public class Univ {
         myFrame.requestFocus();
 
         JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.setCurrentDirectory(new File(System.getProperty("user.home")));
         fc.updateUI();
-        int returnVal = fc.showOpenDialog(myFrame);
-        System.out.println(fc.isVisible());
+        fc.showOpenDialog(myFrame);
+        myFrame.requestFocus();
         if (!fc.isVisible()) {
             fc.setVisible(true);
             fc.requestFocus();
         }
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            // Retrieve the selected file
-            file = fc.getSelectedFile();
-        }
-        else{
-            System.out.println(returnVal);
-        }
+        file = fc.getSelectedFile();
         myFrame.setVisible(false);
         return file;
 
@@ -104,7 +99,7 @@ public class Univ {
     public static boolean genPI(String n, String s, String p, String k) throws IOException, NoSuchAlgorithmException {
         String hal = PIoutFormula(n,s,k);
 
-        Path tf2 = Path.of(enforcrypartypath+ File.separator + Univ.getrandname() + "." + p);
+        Path tf2 = Path.of(ENFORCRYPARTYPATH + File.separator + Univ.getrandname() + "." + p);
         Files.createFile(tf2);
         Files.write(tf2, hal.getBytes());
         return true;
@@ -113,7 +108,7 @@ public class Univ {
     public static boolean PImatch(String n, String s, String p, String k) throws IOException {
 
         List<Path> txtFiles = null;
-        txtFiles = Files.walk(Path.of(enforcrypartypath))
+        txtFiles = Files.walk(Path.of(ENFORCRYPARTYPATH))
                 //use to string here, otherwise checking for path segments
                 .filter(pp -> pp.toString().contains("." + p)).toList();
         boolean bag = false;
@@ -129,7 +124,7 @@ public class Univ {
     public static boolean PIKget(String n, String s, String p, String k) throws IOException {
 
         List<Path> txtFiles = null;
-        txtFiles = Files.walk(Path.of(enforcrypartypath))
+        txtFiles = Files.walk(Path.of(ENFORCRYPARTYPATH))
                 //use to string here, otherwise checking for path segments
                 .filter(pp -> pp.toString().contains("." + p)).toList();
         boolean bag = false;

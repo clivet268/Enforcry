@@ -6,6 +6,7 @@ import clivet268.SecureLine.Commands.*;
 import clivet268.Util.DebugOnlyLogger;
 import clivet268.Util.Univ;
 
+import java.io.IOException;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -44,7 +45,9 @@ public class Enforcry {
     public static int[] allowedPorts = {26817};
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Runtime.getRuntime().exec("cmd /c ipconfig /release");
+
         //TODO can this cause vulernabilities?
         //TODO build kays and certificates into keystore
         //If error during keygen, kill
@@ -69,6 +72,8 @@ public class Enforcry {
             }
         }
         System.out.println("Exiting");
+
+        Runtime.getRuntime().exec("cmd /c ipconfig /renew");
         System.exit(0);
     }
 
@@ -87,6 +92,7 @@ public class Enforcry {
         new FDK().init();
         new FDKIN().init();
         new FEK().init();
+        new FEKL().init();
         new FEKIN().init();
         new MPIK().init();
         new O().init();
