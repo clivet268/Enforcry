@@ -1,7 +1,6 @@
 package clivet268.Util;
 
 import java.util.MissingResourceException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DebugOnlyLogger {
@@ -34,6 +33,7 @@ public class DebugOnlyLogger {
         if (!of) {
             return;
         }
-        l.log(Level.INFO, msg);
+        System.out.println(msg);
+        ;
     }
 }

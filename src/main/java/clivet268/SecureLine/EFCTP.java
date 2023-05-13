@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static clivet268.Util.Univ.enforcrytestpath;
+import static clivet268.Util.Univ.ENFORCRYTESTPATH;
 import static clivet268.Util.Univ.getrandname;
 
 //ALWAYS FLUSH your non-UTF data
@@ -218,7 +218,7 @@ public class EFCTP {
                 //TODO read fully?
                 i.read(packet, 0, packetLength);
                 String rn = getrandname();
-                String fpath = enforcrytestpath + rn;
+                String fpath = ENFORCRYTESTPATH + rn;
                 Path of = Path.of(fpath);
                 Files.createFile(of);
                 Files.write(of, packet);

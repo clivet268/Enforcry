@@ -13,12 +13,12 @@ import java.util.Random;
 public class Univ {
 
     public static ArrayList<String> ndaryDirs = new ArrayList<>();
-    public static String enforcrybasepath = File.separator + "Enforcry" + File.separator;
-    public static String ENFORCRYFILESPATH = enforcrybasepath + "Files" + File.separator;
-    public static String enforcrytestpath = enforcrybasepath + "test" + File.separator;
-    public static String ENFORCRYSECRETPATH = enforcrybasepath + "-" + File.separator;
+    public static String ENFORCRYBASEPATH = File.separator + "Enforcry" + File.separator;
+    public static String ENFORCRYFILESPATH = ENFORCRYBASEPATH + "Files" + File.separator;
+    public static String ENFORCRYTESTPATH = ENFORCRYBASEPATH + "test" + File.separator;
+    public static String ENFORCRYSECRETPATH = ENFORCRYBASEPATH + "-" + File.separator;
     public static String ENFORCRYPARTYPATH = ENFORCRYSECRETPATH + "sl" + File.separator + "party_list" + File.separator;
-    public static String ENFORCRYFOUTPATH = enforcrybasepath + "fout" + File.separator;
+    public static String ENFORCRYFOUTPATH = ENFORCRYBASEPATH + "fout" + File.separator;
 
     public Univ() {
         createPaths();
@@ -31,7 +31,7 @@ public class Univ {
     private static void createPaths() {
         new File(ENFORCRYFILESPATH).mkdirs();
         new File(ENFORCRYFOUTPATH).mkdirs();
-        new File(enforcrytestpath).mkdirs();
+        new File(ENFORCRYTESTPATH).mkdirs();
         new File(ENFORCRYSECRETPATH).mkdirs();
         new File(ENFORCRYPARTYPATH).mkdirs();
     }

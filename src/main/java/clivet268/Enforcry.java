@@ -90,6 +90,8 @@ public class Enforcry {
         new ESLS().init();
         new ESLC().init();
         new FDK().init();
+        new FEKG().init();
+        new FDKL().init();
         new FDKIN().init();
         new FEK().init();
         new FEKL().init();

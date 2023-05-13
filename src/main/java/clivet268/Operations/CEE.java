@@ -23,7 +23,7 @@ public class CEE extends Operation{
             else{
                 //TODO place for file?
                 System.out.println("Key saved, make sure you get all of it ;)\n_\n\n");
-                Files.write(Path.of(Univ.enforcrybasepath + "." + getRandString() + "key"),gen2048().getBytes());
+                Files.write(Path.of(Univ.ENFORCRYBASEPATH + "." + getRandString() + "key"), gen2048().getBytes());
             }
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);

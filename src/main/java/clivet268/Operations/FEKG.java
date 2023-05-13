@@ -2,21 +2,17 @@ package clivet268.Operations;
 
 import clivet268.Encryption.EncrypterDecrypter;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-//TODO redundant?
-public class FEKIN extends Operation{
-
+public class FEKG extends Operation {
     @Override
     public void run() {
         try {
             Scanner s = new Scanner(System.in);
-            System.out.println("Enter Absolute path to file");
-            File fin = new File(s.next());
-            EncrypterDecrypter.fek(fin);
+            System.out.println("Enter key to use");
+            EncrypterDecrypter.fekg(s.next());
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -24,7 +20,7 @@ public class FEKIN extends Operation{
     }
 
     @Override
-    public String infoForOp(){
-        return "Encrypts a file given the absolute path to the file";
+    public String infoForOp() {
+        return "Encrypts a file from the file selection GUI";
     }
 }
