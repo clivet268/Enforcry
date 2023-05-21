@@ -1,6 +1,6 @@
-package clivet268;
+package clivet268.Enforcry;
 
-import clivet268.Encryption.Asymmetric;
+import clivet268.Enforcry.Encryption.Asymmetric;
 
 import java.io.File;
 import java.nio.file.Files;

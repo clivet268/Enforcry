@@ -1,16 +1,21 @@
-package clivet268;
+package clivet268.Enforcry;
 
-import clivet268.Encryption.Asymmetric;
-import clivet268.Operations.*;
-import clivet268.SecureLine.Commands.*;
-import clivet268.Util.DebugOnlyLogger;
-import clivet268.Util.Univ;
+import clivet268.Enforcry.Encryption.Asymmetric;
+import clivet268.Enforcry.Operations.*;
+import clivet268.Enforcry.SecureLine.Commands.*;
+import clivet268.Enforcry.Util.DebugOnlyLogger;
+import clivet268.Enforcry.Util.DriveKeyReader;
+import clivet268.Enforcry.Util.Univ;
 
 import java.io.IOException;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Logger;
+
+
+
 
 //TODO BIG -  implement encryption
 // - make a full builder to a file with jar, and batch file
@@ -23,6 +28,11 @@ import java.util.logging.Logger;
 // username and password can be used to generate a unique algorithm, on intial contact this can be sent if they dont know eachother, and if
 // they do it can be verified
 // An encrypted file could be used as verifier
+//TODO make gui where keys can be entered secretly
+//TODO NO PLAINTEXT KEYS BEYOND ENTRY
+//TODO limit character range ie usernames shouldn't contain ":" or null characters or anything beyond a set of acceptable characters
+
+//The objective of Enforcry is to create a secure, platform-independent, Java environment.
 public class Enforcry {
     //Debug only
     public static DebugOnlyLogger logger = new DebugOnlyLogger(Logger.getLogger(Enforcry.class.getName()), false);
@@ -36,17 +46,30 @@ public class Enforcry {
     }
 
     //TODO get at login
-    private static String username = "Clivet268";
+    private static String username = "";
     //TODO safter :(
     public static KeyPair sessionKeyStore;
     //TODO NOOO!! (temp)
     private static String password;
 
     public static int[] allowedPorts = {26817};
+    private static final Scanner s = new Scanner(System.in);
 
 
-    public static void main(String[] args) throws IOException {
-        Runtime.getRuntime().exec("cmd /c ipconfig /release");
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+
+        System.out.println("Login or create new user:");
+        if (s.nextLine().equalsIgnoreCase("Create new user")) {
+            System.out.println("Enter Username");
+            username = s.nextLine();
+        }
+        if (s.nextLine().equalsIgnoreCase("login")) {
+            System.out.println("Enter Username");
+            username = s.nextLine();
+            System.out.println("Enter Key Drive");
+            DriveKeyReader.decryptUserPath();
+        }
+
 
         //TODO can this cause vulernabilities?
         //TODO build kays and certificates into keystore
@@ -61,7 +84,6 @@ public class Enforcry {
         initSLcommands();
         Univ univ = new Univ();
         System.out.println(operations.size());
-        Scanner s = new Scanner(System.in);
         boolean b = true;
         while (b) {
             System.out.println("What would you like to do? (o for options)");
@@ -72,8 +94,6 @@ public class Enforcry {
             }
         }
         System.out.println("Exiting");
-
-        Runtime.getRuntime().exec("cmd /c ipconfig /renew");
         System.exit(0);
     }
 
