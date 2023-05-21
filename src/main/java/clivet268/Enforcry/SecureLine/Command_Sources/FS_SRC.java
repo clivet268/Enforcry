@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-import static clivet268.Enforcry.Util.Univ.ENFORCRYFILESPATH;
+import static clivet268.Enforcry.Util.Univ.USERFILESPATH;
 import static clivet268.Enforcry.Util.Univ.ndaryDirs;
 
 //TODO need ot be static? not static? idk lmao
@@ -30,7 +30,7 @@ public class FS_SRC {
         try {
             String path = "";
             if (basebathbum == 0) {
-                path = ENFORCRYFILESPATH + url;
+                path = USERFILESPATH + url;
                 System.out.println(path);
             } else {
                 try {

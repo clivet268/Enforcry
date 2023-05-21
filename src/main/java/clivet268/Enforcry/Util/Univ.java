@@ -18,7 +18,7 @@ public class Univ {
     public static String ENFORCRYBASEPATH = File.separator + "Enforcry" + File.separator;
     public static String USERBASEPATH = ENFORCRYBASEPATH + Enforcry.getUsername() + File.separator;
     public static String USERFILESPATH = USERBASEPATH + "Files" + File.separator;
-    public static String USERTESTPATH = USERBASEPATH + "test" + File.separator;
+    public static String ENFORCRYTESTPATH = ENFORCRYBASEPATH + "test" + File.separator;
     public static String USERSECRETPATH = USERBASEPATH + "-" + File.separator;
     public static String USERPARTYPATH = USERSECRETPATH + "sl" + File.separator + "party_list" + File.separator;
     public static String USERFOUTPATH = USERBASEPATH + "fout" + File.separator;
@@ -35,7 +35,7 @@ public class Univ {
         new File(ENFORCRYBASEPATH).mkdirs();
         new File(USERPARTYPATH).mkdirs();
         new File(USERFOUTPATH).mkdirs();
-        new File(USERTESTPATH).mkdirs();
+        new File(ENFORCRYTESTPATH).mkdirs();
         new File(USERFILESPATH).mkdirs();
         new File(USERSECRETPATH).mkdirs();
         new File(USERBASEPATH).mkdirs();
