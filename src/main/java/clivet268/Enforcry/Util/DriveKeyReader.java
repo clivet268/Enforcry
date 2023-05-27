@@ -18,26 +18,34 @@ public class DriveKeyReader {
     // the data overwrites stuff near the drive info and filesystem, etc. This also means redundancy should be sector AND offset secure
     // there are some things that can be done like counting until first byte but there may be other unforseen offset errors
 
-    public static String readkey() throws IOException, NoSuchAlgorithmException {
-        Scanner s = new Scanner(System.in);
-        File keyfile = Univ.filechooser();
-        System.out.println("Enter keyspots");
-        String r = s.nextLine();
-        String kii = "";
-        String string = new String(Files.readAllBytes(keyfile.toPath()));
-        while (r.length() > 0) {
-            int index = r.indexOf(' ');
-            int begindex = Integer.parseInt(r.substring(0, index)) * 512;
-            kii += string.substring(begindex, begindex + 512);
-            r = r.substring(index, r.length() - 1);
+    public static String readkey() {
+        try {
+            System.out.println("Please insert drive");
+            Scanner s = new Scanner(System.in);
+            File keyfile = Univ.filechooser();
+            System.out.println("Enter keyspots");
+            String r = s.nextLine();
+            String kii = "";
+            String string = new String(Files.readAllBytes(keyfile.toPath()));
+            while (r.length() > 0) {
+                int index = r.indexOf(' ');
+                int begindex = Integer.parseInt(r.substring(0, index)) * 512;
+                kii += string.substring(begindex, begindex + 512);
+                r = r.substring(index, r.length() - 1);
+            }
+            verifyKey(kii);
+            return kii;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        verifyKey(kii);
-        return kii;
+        //TODO ???
+        System.exit(0);
+        return null;
     }
 
     public static void decryptUserPath() throws IOException, NoSuchAlgorithmException {
         String kii = readkey();
-        EncrypterDecrypter.fdk(Univ.USERBASEPATH);
+        EncrypterDecrypter.fdk(new File(Univ.USERBASEPATH), kii);
     }
 
     public static void verifyDrive() throws FileNotFoundException {

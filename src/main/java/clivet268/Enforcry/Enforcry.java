@@ -8,6 +8,8 @@ import clivet268.Enforcry.Util.DriveKeyReader;
 import clivet268.Enforcry.Util.Univ;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -39,7 +41,6 @@ public class Enforcry {
 
     public static HashMap<String, Operation> operations = new HashMap<>();
     public static HashMap<String, ExecutableCommand> SLcommands = new HashMap<>();
-    public static String stk = "";
 
     public static String getUsername() {
         return username;
@@ -49,8 +50,6 @@ public class Enforcry {
     private static String username = "";
     //TODO safter :(
     public static KeyPair sessionKeyStore;
-    //TODO NOOO!! (temp)
-    private static String password;
 
     public static int[] allowedPorts = {26817};
     private static final Scanner s = new Scanner(System.in);
@@ -60,8 +59,11 @@ public class Enforcry {
 
         System.out.println("Login or create new user:");
         if (s.nextLine().equalsIgnoreCase("Create new user")) {
+            //System.out.println("WARNING, any file in the enforcry path with your username will be deleted UNRECOVERABLY");
+            //System.out.println("Enter c to contine");
             System.out.println("Enter Username");
             username = s.nextLine();
+            Files.createDirectory(Path.of(Univ.USERBASEPATH));
         }
         if (s.nextLine().equalsIgnoreCase("login")) {
             System.out.println("Enter Username");

@@ -1,5 +1,6 @@
 package clivet268.Enforcry.Util;
 
+import clivet268.Enforcry.Encryption.EncrypterDecrypter;
 import clivet268.Enforcry.Enforcry;
 
 import javax.swing.*;
@@ -22,6 +23,8 @@ public class Univ {
     public static String USERSECRETPATH = USERBASEPATH + "-" + File.separator;
     public static String USERPARTYPATH = USERSECRETPATH + "sl" + File.separator + "party_list" + File.separator;
     public static String USERFOUTPATH = USERBASEPATH + "fout" + File.separator;
+    //TODO DO WE WANT THIS?!
+    private static String ENCRYPTEDUSERBASEPATH = File.separator + "Enforcry" + File.separator + EncrypterDecrypter.encrypt(Enforcry.getUsername(), DriveKeyReader.readkey()) + File.separator;
 
     public Univ() {
         createPaths();
@@ -182,5 +185,28 @@ public class Univ {
 
     }
 
+    //TODO overkill?
+    /*
+    public static void purge(File f) throws IOException, NoSuchAlgorithmException {
+        if(f.getAbsolutePath().substring(2, ENCRYPTEDUSERBASEPATH.length()+1).equals(ENCRYPTEDUSERBASEPATH) || f.getAbsolutePath().substring(2,USERBASEPATH.length()+1).equals(Univ.USERBASEPATH)) {
+            if (f.isDirectory()) {
+                f.listFiles()
+            }
+            else {
+                long i = (int) f.length();
+                byte[] boo = new byte[(int) f.length()];
+                Arrays.fill(boo, (byte) 2);
+                Files.write(f.toPath(), )
+            }
+        }
+    }
+
+     */
+
+    public static void purge(File f) throws IOException, NoSuchAlgorithmException {
+        if (f.getAbsolutePath().substring(2, ENCRYPTEDUSERBASEPATH.length() + 1).equals(ENCRYPTEDUSERBASEPATH) || f.getAbsolutePath().substring(2, USERBASEPATH.length() + 1).equals(Univ.USERBASEPATH)) {
+            Files.delete(Path.of(f.getAbsolutePath()));
+        }
+    }
 }
 
