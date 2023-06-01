@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import static clivet268.Enforcry.Util.Univ.*;
 
 
 public class EFCDataInputStream {
@@ -57,7 +58,7 @@ public class EFCDataInputStream {
 
 
     public String readUTFE() throws Exception {
-        int codelen = din.readInt();
+        int codelen = readLength();
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
         String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
@@ -71,7 +72,7 @@ public class EFCDataInputStream {
     }
 
     public int readIntE() throws Exception {
-        int codelen = din.readInt();
+        int codelen = readLength();
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
         String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
@@ -82,6 +83,15 @@ public class EFCDataInputStream {
         return Integer.parseInt(strout);
 
         //TODO hash confirm?
+    }
+
+    public int readLength() throws Exception {
+        String length = din.readUTF();
+        try {
+            return Integer.parseInt(length.substring(LENGTHVERIFIER.length()));
+        } catch (NumberFormatException e) {
+            throw new InvalidLengthIndicatorException();
+        }
     }
 
     public void close() throws IOException {

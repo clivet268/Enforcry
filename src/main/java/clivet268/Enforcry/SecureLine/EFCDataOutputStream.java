@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import static clivet268.Enforcry.Util.Univ.LENGTHVERIFIER;
+
 
 public class EFCDataOutputStream {
     private static DataOutputStream din = null;
@@ -33,7 +35,7 @@ public class EFCDataOutputStream {
         byte[] stringOut = Asymmetric.do_RSAEncryption(str.getBytes(), publicKey);
 
         byte[] codeOut = Asymmetric.do_RSAEncryption((102 + ":" + stringOut.length).getBytes(), publicKey);
-        din.writeInt(codeOut.length);
+        writeLen(codeOut.length);
         din.write(codeOut);
         din.write(stringOut);
         flush();
@@ -42,9 +44,14 @@ public class EFCDataOutputStream {
     public final void writeIntE(int intin) throws Exception {
         byte[] stringOut = Asymmetric.do_RSAEncryption((intin + "").getBytes(), publicKey);
         byte[] codeOut = Asymmetric.do_RSAEncryption((101 + ":" + stringOut.length).getBytes(), publicKey);
-        din.writeInt(codeOut.length);
+        writeLen(codeOut.length);
         din.write(codeOut);
         din.write(stringOut);
+        flush();
+    }
+
+    public final void writeLen(int intin) throws Exception {
+        din.writeUTF(LENGTHVERIFIER + intin);
         flush();
     }
 

@@ -1,6 +1,5 @@
 package clivet268.Enforcry.Util;
 
-import clivet268.Enforcry.Encryption.EncrypterDecrypter;
 import clivet268.Enforcry.Enforcry;
 
 import javax.swing.*;
@@ -23,8 +22,7 @@ public class Univ {
     public static String USERSECRETPATH = USERBASEPATH + "-" + File.separator;
     public static String USERPARTYPATH = USERSECRETPATH + "sl" + File.separator + "party_list" + File.separator;
     public static String USERFOUTPATH = USERBASEPATH + "fout" + File.separator;
-    //TODO DO WE WANT THIS?!
-    private static String ENCRYPTEDUSERBASEPATH = File.separator + "Enforcry" + File.separator + EncrypterDecrypter.encrypt(Enforcry.getUsername(), DriveKeyReader.readkey()) + File.separator;
+    public static String LENGTHVERIFIER = "len:|=//\\\\";
 
     public Univ() {
         createPaths();
@@ -42,6 +40,8 @@ public class Univ {
         new File(USERFILESPATH).mkdirs();
         new File(USERSECRETPATH).mkdirs();
         new File(USERBASEPATH).mkdirs();
+        new File(USERAMOEPATH).mkdirs();
+        new File(USERTEMPPATH).mkdirs();
     }
 
     public static File filechooser() {
