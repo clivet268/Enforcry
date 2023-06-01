@@ -8,7 +8,7 @@
 7 - ready to send command
 8 - send command input
 9 -
-10 -ACK
+10 - ACK
 11 -
 12 - sending command input
 13 - specific error
@@ -25,10 +25,14 @@
 24 - lets do this
 25 - asking exit
 26 - sending info string
+27 -
+33 - return to prompt after texting
+34 - response to return to prompt after texting
 100 - boolean
 101 - int
 102 - String
 103 - byte[]
+104 - File
 402 - sending public key
 403 - public key hash verify
 404 - send public key

@@ -69,8 +69,7 @@ public class AISURL_SRC {
                 os.close();
                 output.add(Pair.of(2, name));
                 System.out.println("Decoded 64");
-            }
-            catch(IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getLocalizedMessage());
                 System.out.println("Skipping");
             } catch (IOException e) {
@@ -93,20 +92,6 @@ public class AISURL_SRC {
 
     public static void main(String[] args) throws IOException {
         AISURL_SRC test = new AISURL_SRC("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f804ff9a-ea34-4f02-8fdf-b17202d8c84b/dd237f0-77964a3c-d72a-4431-a8ef-fe360d069eb7.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2Y4MDRmZjlhLWVhMzQtNGYwMi04ZmRmLWIxNzIwMmQ4Yzg0YlwvZGQyMzdmMC03Nzk2NGEzYy1kNzJhLTQ0MzEtYThlZi1mZTM2MGQwNjllYjcucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Q6PFu4ohS8OWed-Y8iAoF3-FxQ1BmX9fvpk41YbFKLA");
-        test.output.forEach(outs -> {
-            try {
-                Random ran = new Random();
-                String nam = "";
-                String contents = "";
-                for (int i = 0; i < 20; i++) {
-                    nam += ran.nextInt(9);
-                }
-                System.out.println();
-                Files.write(Path.of(System.getProperty("user.dir") + File.separator + "test" + File.separator + nam), outs.getRight());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
 
     }
 

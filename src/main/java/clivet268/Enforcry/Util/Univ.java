@@ -18,6 +18,8 @@ public class Univ {
     public static String ENFORCRYBASEPATH = File.separator + "Enforcry" + File.separator;
     public static String USERBASEPATH = ENFORCRYBASEPATH + Enforcry.getUsername() + File.separator;
     public static String USERFILESPATH = USERBASEPATH + "Files" + File.separator;
+    public static String USERAMOEPATH = USERBASEPATH + "AMOE" + File.separator;
+    public static String USERTEMPPATH = USERBASEPATH + "temp" + File.separator;
     public static String ENFORCRYTESTPATH = ENFORCRYBASEPATH + "test" + File.separator;
     public static String USERSECRETPATH = USERBASEPATH + "-" + File.separator;
     public static String USERPARTYPATH = USERSECRETPATH + "sl" + File.separator + "party_list" + File.separator;

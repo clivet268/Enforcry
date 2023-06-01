@@ -9,9 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static clivet268.Enforcry.Util.Univ.ENFORCRYTESTPATH;
-import static clivet268.Enforcry.Util.Univ.getrandname;
-
 //ALWAYS FLUSH your non-UTF data
 public class EFCTP {
 
@@ -46,7 +43,8 @@ public class EFCTP {
 
     //TODO server side calls to /exit when texting lead to the program just ending somehow...
     //TODO command # spoofing prevent with prompt number? must be 0
-    //TODO Specifc error on code 13, use try catch and on recive get stacktrace string and print out (maybe)
+    //TODO Specifc error on code 13, use try catch and on receive get stacktrace string and print out (maybe)
+    //TODO make these numbers not just plain text numbers, check them similarly to lengths in EFC Data streams
     //Server depends
     public boolean switcherServer(int ic) throws Exception {
         switch (ic) {
@@ -102,7 +100,7 @@ public class EFCTP {
                 } else {
                     es.run();
                 }
-                //TODO uhhh wont this break if there are actual files to send? i elseifed it but still maybe?
+                //TODO uhhh won't this break if there are actual files to send? i elseifed it but still maybe?
                 //TODO just add a flag for now
                 if (es.getTnt() == 1) {
                     //TODO More formal text mode? GUI? this whole thing needs a GUI thats going to suck :(
@@ -144,6 +142,8 @@ public class EFCTP {
                 tthread.start();
                 tthread.join();
                 System.out.println("\n---Exiting Texting---\n");
+                // TODO ??
+                tthread.stop();
                 scanner.reset();
                 o.writeIntE(33);
             }
@@ -205,6 +205,8 @@ public class EFCTP {
                 tthread.start();
                 tthread.join();
                 System.out.println("\n---Exiting Texting---\n");
+                //TODO ??
+                tthread.stop();
                 scanner.reset();
                 o.writeIntE(33);
             }

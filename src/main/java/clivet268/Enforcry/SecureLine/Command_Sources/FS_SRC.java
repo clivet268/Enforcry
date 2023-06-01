@@ -1,6 +1,7 @@
 package clivet268.Enforcry.SecureLine.Command_Sources;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class FS_SRC {
         return run(bbb, url);
     }
 
+    @TestOnly
     public static void main(String[] args) throws IOException {
         //test
         run(12419, "picture.ico");
