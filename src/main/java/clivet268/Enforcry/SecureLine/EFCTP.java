@@ -5,8 +5,7 @@ import clivet268.Enforcry.SecureLine.Commands.ExecutableCommand;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.DataInputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -58,16 +57,14 @@ public class EFCTP {
 
             //TODO variable buffer size?
             case (3) -> {
-                for (Pair<Integer, byte[]> currentout : es.getOutput()) {
+                for (Pair<Integer, String> currentout : es.getOutput()) {
                     if (currentout.getLeft() == 1) {
                         o.writeIntE(26);
-                        o.writeUTFE(new String(currentout.getRight()));
+                        o.writeUTFE(currentout.getRight());
                     }
                     if (currentout.getLeft() == 2) {
                         o.writeIntE(18);
-                        //TODO biiig integer for biiiiiiiiiiiiig files :)
-                        o.writeIntE(currentout.getRight().length);
-                        o.writeE(currentout.getRight());
+                        o.writeFile(new File(currentout.getRight()));
                     }
                 }
                 o.writeIntE(4);
@@ -212,17 +209,7 @@ public class EFCTP {
                 o.writeIntE(33);
             }
             case (18) -> {
-                //TODO big integer/ handle huge files
-                int packetLength = i.readIntE();
-                byte[] packet = new byte[packetLength];
-                //TODO read fully?
-                i.read(packet, 0, packetLength);
-                String rn = getrandname();
-                String fpath = ENFORCRYTESTPATH + rn;
-                Path of = Path.of(fpath);
-                Files.createFile(of);
-                Files.write(of, packet);
-                System.out.println("File saved to " + rn);
+                System.out.println("File saved to " + i.readFile());
                 return 1;
             }
             //Get Server username

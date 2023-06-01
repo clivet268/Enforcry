@@ -3,7 +3,12 @@ package clivet268.Enforcry.SecureLine;
 import clivet268.Enforcry.Encryption.Asymmetric;
 
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -54,6 +59,31 @@ public class EFCDataInputStream {
         System.out.println(type);
         din.readFully(bytesin);
         return Asymmetric.do_RSADecryption(bytesin, privateKey);
+    }
+
+    public String readFile() throws Exception {
+        String filename = readUTFE();
+        filename = USERFILESPATH + filename + getrandname();
+        Path of1 = Path.of(filename + ".temp");
+        OutputStream os = Files.newOutputStream(of1, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+
+        int codelen = readLength();
+        while (codelen != -999) {
+            byte[] codine = new byte[codelen];
+            din.readFully(codine, 0, codelen);
+            String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
+            //int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
+            int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
+            byte[] bytesin = new byte[msgleng];
+            din.readFully(bytesin);
+            os.write(Asymmetric.do_RSADecryption(bytesin, privateKey));
+
+            codelen = readLength();
+        }
+        os.close();
+        File f = new File(of1.toString());
+        f.renameTo(new File(filename));
+        return f.getPath();
     }
 
 

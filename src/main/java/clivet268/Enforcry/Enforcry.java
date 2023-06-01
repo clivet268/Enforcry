@@ -4,21 +4,14 @@ import clivet268.Enforcry.Encryption.Asymmetric;
 import clivet268.Enforcry.Operations.*;
 import clivet268.Enforcry.SecureLine.Commands.*;
 import clivet268.Enforcry.Util.DebugOnlyLogger;
-import clivet268.Enforcry.Util.DriveKeyReader;
 import clivet268.Enforcry.Util.Univ;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Logger;
-
-
-
-
 //TODO BIG -  implement encryption
 // - make a full builder to a file with jar, and batch file
 // - encrypt directory of source on drive and hav an unencriptor (also in builder)
@@ -47,30 +40,15 @@ public class Enforcry {
     }
 
     //TODO get at login
-    private static String username = "";
+    private static String username = "clivet268test";
     //TODO safter :(
     public static KeyPair sessionKeyStore;
 
     public static int[] allowedPorts = {26817};
-    private static final Scanner s = new Scanner(System.in);
+    public static final Scanner s = new Scanner(System.in);
 
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
-
-        System.out.println("Login or create new user:");
-        if (s.nextLine().equalsIgnoreCase("Create new user")) {
-            //System.out.println("WARNING, any file in the enforcry path with your username will be deleted UNRECOVERABLY");
-            //System.out.println("Enter c to contine");
-            System.out.println("Enter Username");
-            username = s.nextLine();
-            Files.createDirectory(Path.of(Univ.USERBASEPATH));
-        }
-        if (s.nextLine().equalsIgnoreCase("login")) {
-            System.out.println("Enter Username");
-            username = s.nextLine();
-            System.out.println("Enter Key Drive");
-            DriveKeyReader.decryptUserPath();
-        }
 
 
         //TODO can this cause vulernabilities?

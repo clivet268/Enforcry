@@ -8,7 +8,6 @@ public class ST extends ExecutableCommand {
     @Override
     public void run() {
         this.output.clear();
-        output.add(Pair.of(1, "Test".getBytes()));
-        output.add(Pair.of(2, "Test".getBytes()));
+        output.add(Pair.of(1, "Test"));
     }
 }

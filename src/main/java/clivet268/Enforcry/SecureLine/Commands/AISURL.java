@@ -23,7 +23,7 @@ public class AISURL extends ExecutableCommand {
         } catch (IOException e) {
             String ee = e.getLocalizedMessage();
             System.out.println(ee);
-            this.output.add(Pair.of(1, ee.getBytes()));
+            this.output.add(Pair.of(1, ee));
         }
     }
 

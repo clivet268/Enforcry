@@ -39,6 +39,7 @@ public class Asymmetric {
     // Encryption function which converts
     // the plainText into a cipherText
     // using public Key.
+    //TODO handle big files ie upwards of 10gb which would be unruly to hold in memory
     public static byte[] do_RSAEncryption(byte[] bytesin, PublicKey publicKey)
             throws Exception {
         Cipher cipher = Cipher.getInstance(RSA);

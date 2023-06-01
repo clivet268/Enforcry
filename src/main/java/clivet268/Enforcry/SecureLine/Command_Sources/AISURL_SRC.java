@@ -9,16 +9,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Random;
+
+import static clivet268.Enforcry.Util.Univ.USERFILESPATH;
+import static clivet268.Enforcry.Util.Univ.getRandString;
 
 public class AISURL_SRC {
-    ArrayList<Pair<Integer, byte[]>> output = new ArrayList<>();
+
+    //TODO make file creation and filling method to reduce repetition
+    ArrayList<Pair<Integer, String>> output = new ArrayList<>();
+
     public AISURL_SRC(String url) throws IOException {
         try {
             Document doc = Jsoup.connect(url).ignoreContentType(true).cookie("Accept-Language", "en-US;q=0.7,en;q=0.3").userAgent("EFCMozilla/5.0").get();
@@ -29,7 +35,13 @@ public class AISURL_SRC {
                 if (!trydecodeb64(imageUrl)) {
                     try {
                         Connection.Response resultImageResponse = Jsoup.connect(imageUrl).ignoreContentType(true).execute();
-                        output.add(Pair.of(2, resultImageResponse.bodyAsBytes()));
+                        String name = USERFILESPATH + getRandString(10);
+                        Path of = Path.of(name);
+                        Files.createFile(of);
+                        OutputStream os = Files.newOutputStream(of, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                        os.write(resultImageResponse.bodyAsBytes());
+                        os.close();
+                        output.add(Pair.of(2, name));
                     } catch (IllegalArgumentException ex) {
                         //System.out.println(ex);
                         System.out.println("Malformed, skipping " + imageUrl);
@@ -49,12 +61,20 @@ public class AISURL_SRC {
         if(str.startsWith("data")) {
             str = str.trim().replaceFirst("data[:]image[/]([a-z])+;base64,", "");
             try {
-                output.add(Pair.of(2, Base64.getDecoder().decode(str)));
+                String name = USERFILESPATH + getRandString(10);
+                Path of = Path.of(name);
+                Files.createFile(of);
+                OutputStream os = Files.newOutputStream(of, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                os.write(Base64.getDecoder().decode(str));
+                os.close();
+                output.add(Pair.of(2, name));
                 System.out.println("Decoded 64");
             }
             catch(IllegalArgumentException e){
                 System.out.println(e.getLocalizedMessage());
                 System.out.println("Skipping");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             return true;
@@ -63,7 +83,7 @@ public class AISURL_SRC {
     }
 
 
-    public static ArrayList<Pair<Integer, byte[]>> get(String url) throws IOException {
+    public static ArrayList<Pair<Integer, String>> get(String url) throws IOException {
         AISURL_SRC op = new AISURL_SRC(url);
         System.out.println("Images Gotten");
         return op.output;
