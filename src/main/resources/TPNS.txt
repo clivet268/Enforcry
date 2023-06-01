@@ -38,6 +38,6 @@
 404 - send public key
 405 - whats your name
 406 - heres my name
-
-
+998 -AMOER is sending
+999 - AMOE record is about to be sent
 1000 - hello

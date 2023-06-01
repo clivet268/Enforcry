@@ -14,7 +14,7 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 //TODO BIG -  implement encryption
 // - make a full builder to a file with jar, and batch file
-// - encrypt directory of source on drive and hav an unencriptor (also in builder)
+// - encrypt directory of source on drive and have an unencrypter (also in builder)
 // - secure cores and memory to the tooth, lock down every permission you can, encrypt everything that makes sense or
 // cant be locked down
 //TODO port lockdown
@@ -41,7 +41,9 @@ public class Enforcry {
 
     //TODO get at login
     private static String username = "clivet268test";
+
     //TODO safter :(
+    //TODO refresh periodically and form on a per connection basis
     public static KeyPair sessionKeyStore;
 
     public static int[] allowedPorts = {26817};
@@ -62,7 +64,7 @@ public class Enforcry {
         }
         initOperations();
         initSLcommands();
-        Univ univ = new Univ();
+        Univ.init();
         System.out.println(operations.size());
         boolean b = true;
         while (b) {
@@ -76,8 +78,6 @@ public class Enforcry {
         System.out.println("Exiting");
         System.exit(0);
     }
-
-    //TODO better way without reflections?
 
     /**
      * Initializes all operations in the operations folder that extend the abstract class Operation

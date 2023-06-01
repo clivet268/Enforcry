@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
+//TODO needed? yes accessing outside directories in a controlled method is necessary, needs to be polished and used better
 public class NDARY extends Operation {
     @Override
     public void run() {

@@ -72,7 +72,7 @@ public class Asymmetric {
     }
 
      */
-    public static PublicKey byteArrayToPrivateKey(byte[] bin) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PublicKey byteArrayToKey(byte[] bin) throws NoSuchAlgorithmException, InvalidKeySpecException {
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(bin);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePublic(keySpec);

@@ -4,12 +4,7 @@ import clivet268.Enforcry.Enforcry;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Univ {
@@ -19,6 +14,7 @@ public class Univ {
     public static String USERBASEPATH = ENFORCRYBASEPATH + Enforcry.getUsername() + File.separator;
     public static String USERFILESPATH = USERBASEPATH + "Files" + File.separator;
     public static String USERAMOEPATH = USERBASEPATH + "AMOE" + File.separator;
+    public static String USERAMOEPUTIL = USERAMOEPATH + "util" + File.separator;
     public static String USERTEMPPATH = USERBASEPATH + "temp" + File.separator;
     public static String ENFORCRYTESTPATH = ENFORCRYBASEPATH + "test" + File.separator;
     public static String USERSECRETPATH = USERBASEPATH + "-" + File.separator;
@@ -26,8 +22,10 @@ public class Univ {
     public static String USERFOUTPATH = USERBASEPATH + "fout" + File.separator;
     public static String LENGTHVERIFIER = "len:|=//\\\\";
 
-    public Univ() {
+    public static void init() {
+        System.out.println("\n---Init System Paths---\n");
         createPaths();
+        System.out.println("\n---System Paths Init Complete---\n");
     }
 
     public static String normalStringSet = "abcedfghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789-_";
@@ -94,116 +92,5 @@ public class Univ {
         }
         return nam;
     }
-
-    public static byte[] zchecker(byte[] bytes){
-        int i  = 0;
-        while (bytes[i] == 0){
-            i++;
-            if (i >= bytes.length){
-                return new byte[0];
-            }
-        }
-        return bytes;
-    }
-
-    public static boolean genPI(String n, String s, String p, String k) throws IOException, NoSuchAlgorithmException {
-        String hal = PIoutFormula(n,s,k);
-
-        Path tf2 = Path.of(USERPARTYPATH + File.separator + Univ.getrandname() + "." + p);
-        Files.createFile(tf2);
-        Files.write(tf2, hal.getBytes());
-        return true;
-    }
-
-    public static boolean PImatch(String n, String s, String p, String k) throws IOException {
-
-        List<Path> txtFiles = null;
-        txtFiles = Files.walk(Path.of(USERPARTYPATH))
-                //use to string here, otherwise checking for path segments
-                .filter(pp -> pp.toString().contains("." + p)).toList();
-        boolean bag = false;
-        for(Path sse : txtFiles){
-            String fc = Files.readAllLines(sse).get(0);
-            if (PIinTF(n,s,k,fc)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean PIKget(String n, String s, String p, String k) throws IOException {
-
-        List<Path> txtFiles = null;
-        txtFiles = Files.walk(Path.of(USERPARTYPATH))
-                //use to string here, otherwise checking for path segments
-                .filter(pp -> pp.toString().contains("." + p)).toList();
-        boolean bag = false;
-        for(Path sse : txtFiles){
-            String fc = Files.readAllLines(sse).get(0);
-            if (PIinTF(n,s,k,fc)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean PIinTF(String n, String s, String k, String fc){
-        String check = "";
-        char[] chrses = fc.toCharArray();
-        char[] cherr = n.toCharArray();
-        char[] cher = s.toCharArray();
-        for (int i = 0; i < chrses.length; i++) {
-            check += ((char)(chrses[i] - cher[i%cher.length] - cherr[i%cherr.length]));
-        }
-        System.out.println(check);
-        return check.equals(k);
-    }
-
-    public static String PIoutFormula(String n, String s, String k){
-        String out = "";
-        char[] cherr = n.toCharArray();
-        char[] cher = s.toCharArray();
-        //char[] chr = p.toCharArray();
-        char[] cr = k.toCharArray();
-        for (int i = 0; i < cr.length; i++) {
-            out += ((char)(cr[i] +1)); //cher[i%cher.length]/2 + cherr[i%cherr.length]/2));
-        }
-        System.out.println("out");
-        return out;
-    }
-
-    public static void incrext(String toblink) throws InterruptedException {
-        int i = 0;
-        for (; i < toblink.length(); i++) {
-            System.out.print(toblink.charAt(i));
-            //TODO :(((
-            Thread.sleep(100);
-        }
-        for (; i > 0; i--) {
-            System.out.print("\b");
-            //TODO :(((
-            Thread.sleep(100);
-        }
-
-    }
-
-    //TODO overkill?
-    /*
-    public static void purge(File f) throws IOException, NoSuchAlgorithmException {
-        if(f.getAbsolutePath().substring(2, ENCRYPTEDUSERBASEPATH.length()+1).equals(ENCRYPTEDUSERBASEPATH) || f.getAbsolutePath().substring(2,USERBASEPATH.length()+1).equals(Univ.USERBASEPATH)) {
-            if (f.isDirectory()) {
-                f.listFiles()
-            }
-            else {
-                long i = (int) f.length();
-                byte[] boo = new byte[(int) f.length()];
-                Arrays.fill(boo, (byte) 2);
-                Files.write(f.toPath(), )
-            }
-        }
-    }
-
-     */
-
 }
 

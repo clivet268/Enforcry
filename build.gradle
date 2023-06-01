@@ -9,17 +9,18 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation 'org.jetbrains:annotations:20.1.0'
-    implementation 'org.jetbrains:annotations:20.1.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    implementation 'org.jsoup:jsoup:1.15.2'
-    implementation 'org.reflections:reflections:0.9.5-RC2'
-    implementation 'org.apache.commons:commons-lang3:3.6'
-    implementation 'org.apache.commons:commons-text:1.9'
-    implementation 'org.javassist:javassist:3.29.0-GA'
-    implementation "javax.xml.bind:jaxb-api:2.3.0"
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+    implementation 'org.json:json:20230227'
+    implementation 'org.jetbrains:annotations:24.0.1'
+    implementation 'org.jetbrains:annotations:24.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    implementation 'org.jsoup:jsoup:1.15.4'
+    implementation 'org.reflections:reflections:0.10.2'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-text:1.10.0'
+    implementation 'org.javassist:javassist:3.29.2-GA'
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
     implementation 'com.simtechdata:WaifUPnP:1.0'
 
 
