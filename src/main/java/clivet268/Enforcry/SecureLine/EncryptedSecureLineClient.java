@@ -1,27 +1,13 @@
 package clivet268.Enforcry.SecureLine;
 
-import clivet268.Enforcry.Encryption.Asymmetric;
-import clivet268.Enforcry.Enforcry;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.security.PublicKey;
 import java.util.Scanner;
 
 import static clivet268.Enforcry.Enforcry.getUsername;
-import static clivet268.Enforcry.Enforcry.sessionKeyStore;
 
-public class EncryptedSecureLineClient {
-    private static Socket socket = null;
-    private static EFCDataInputStream in = null;
-    private static EFCDataOutputStream out = null;
-    private static DataInputStream rawin = null;
-    private static DataOutputStream rawout = null;
+public class EncryptedSecureLineClient extends ClientConnection {
     private static String sUnam = null;
-    private static PublicKey sPk = null;
 
     @Nullable
     public static String getsUnam() {
@@ -29,94 +15,27 @@ public class EncryptedSecureLineClient {
         return sUnam;
     }
 
-    private EFCTP efctp;
-
     //TODO C -> C?
     //TODO S -> S?
-    public EncryptedSecureLineClient(String address, int timeout) throws IOException {
+    @Override
+    public void postConnect() {
+
+        //Ports encrypted from here on
+        //Communication Handshake continues
+        EFCTP efctp = new EFCTP(in, out);
         try {
-            //initialization
-            socket = new Socket(address, 26817);
-            if (timeout > 0) {
-                long t = timeout;
-                timeout = (int) Math.min(Integer.MAX_VALUE - 1, t * 1000);
-                socket.setSoTimeout(timeout);
-            }
-            //Check for socket existence
-            if (!(socket == null)) {
-                rawin = new DataInputStream(socket.getInputStream());
-                rawout = new DataOutputStream(socket.getOutputStream());
-            }
-
-
-            //Fail out
-            else {
-                try {
-                    close();
-                } catch (IOException i) {
-                    System.out.println(i);
-                }
-                System.out.println("Connection failed");
-                System.exit(0);
-            }
-            System.out.println("Connected to " + socket.getRemoteSocketAddress());
-
-            //TODO prevent man in the middle attacks, public key is sent unencrypted, can be used to impersonate
-            //Handshake
-            int handshake = rawin.readInt();
-            if (!(handshake == 1000)) {
-                //TODO what to do if improper handshake
-                close();
-            }
-            rawout.writeInt(1000);
-            rawout.flush();
-            handshake = rawin.readInt();
-            if (!(handshake == 1000)) {
-                close();
-            }
-
-            //Debug only
-            //logger.log(DatatypeConverter.printHexBinary(sessionKey.getPublic().getEncoded()));
-            //Public key transfer
-            handshake = rawin.readInt();
-            if (!(handshake == 404)) {
-                close();
-            }
-            rawout.writeInt(402);
-            rawout.flush();
-            byte[] encodedPrivateKey = sessionKeyStore.getPublic().getEncoded();
-            rawout.writeInt(encodedPrivateKey.length);
-            rawout.flush();
-            rawout.write(encodedPrivateKey);
-            rawout.flush();
-            rawout.writeInt(404);
-            rawout.flush();
-            handshake = rawin.readInt();
-            if (!(handshake == 402)) {
-                close();
-            }
-            int lenr = rawin.readInt();
-            byte[] cpkin = new byte[lenr];
-            rawin.readFully(cpkin);
-            sPk = Asymmetric.byteArrayToPrivateKey(cpkin);
-            in = new EFCDataInputStream(rawin, sessionKeyStore.getPrivate(), sPk);
-            out = new EFCDataOutputStream(rawout, sessionKeyStore.getPrivate(), sPk);
-            efctp = new EFCTP(in, out);
-            //Public key encrypted and checked through encrypted in out
-
-            //Ports encrypted from here on
-            //Communication Handshake continues
             out.writeIntE(405);
-            handshake = in.readIntE();
-            if (handshake == 406) {
+
+            int code = in.readIntE();
+            if (code == 406) {
                 sUnam = in.readUTFE();
                 //Debug only?
                 System.out.println(sUnam + " 0e");
             } else {
                 close();
             }
-            handshake = in.readIntE();
-            if (handshake == 405) {
+            code = in.readIntE();
+            if (code == 405) {
                 out.writeIntE(406);
                 out.writeUTFE(getUsername());
             } else {
@@ -140,49 +59,21 @@ public class EncryptedSecureLineClient {
                     eewr = in.readIntE();
                 }
                 int outcode = efctp.switcherClient(eewr);
-                if(outcode == 1){
+                if (outcode == 1) {
                     Scanner userChoice = new Scanner(System.in);
                     System.out.println("Continue connection?");
-                    if(!(userChoice.hasNextBoolean() && userChoice.nextBoolean())){
+                    if (!(userChoice.hasNextBoolean() && userChoice.nextBoolean())) {
                         out.writeIntE(22);
                         f = false;
                     }
-                }
-                else if (outcode == 2){
+                } else if (outcode == 2) {
                     out.writeIntE(22);
                     f = false;
                 }
             }
-
-            try {
-                close();
-            } catch (IOException i) {
-                i.printStackTrace();
-            }
-
-        } catch (IOException u) {
-            u.printStackTrace();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-    }
-
-    /**
-     * Closes connection
-     */
-    private static void close() throws IOException {
-        System.out.println("\n---Closing connection---\n");
-        socket.close();
-        in.close();
-        out.close();
-    }
-
-
-
-    public static void main(String args[]) throws IOException {
-        Enforcry.initSLcommands();
-        EncryptedSecureLineClient client = new EncryptedSecureLineClient("127.0.0.1", 100);
     }
 
 }

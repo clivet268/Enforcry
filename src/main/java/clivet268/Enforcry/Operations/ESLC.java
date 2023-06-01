@@ -35,7 +35,8 @@ public class ESLC extends Operation {
             }
         }
         try {
-            EncryptedSecureLineClient client = new EncryptedSecureLineClient(ipad, e);
+            EncryptedSecureLineClient client = new EncryptedSecureLineClient();
+            client.connect(ipad, 26817, e);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

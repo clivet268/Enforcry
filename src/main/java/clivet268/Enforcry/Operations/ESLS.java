@@ -3,9 +3,12 @@ package clivet268.Enforcry.Operations;
 import clivet268.Enforcry.SecureLine.EncryptedSecureLineServer;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Scanner;
 
 public class ESLS extends Operation {
+    //TODO use new simpler time setting method found in AMOE
     @Override
     public void run() {
         Scanner s = new Scanner(System.in);
@@ -36,8 +39,9 @@ public class ESLS extends Operation {
             }
         }
         try {
-            EncryptedSecureLineServer server = new EncryptedSecureLineServer(e);
-        } catch (IOException ex) {
+            EncryptedSecureLineServer server = new EncryptedSecureLineServer();
+            server.connect(26817, 100);
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
             throw new RuntimeException(ex);
         }
 
