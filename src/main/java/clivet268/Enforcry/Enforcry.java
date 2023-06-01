@@ -46,7 +46,7 @@ public class Enforcry {
     //TODO refresh periodically and form on a per connection basis
     public static KeyPair sessionKeyStore;
 
-    public static int[] allowedPorts = {26817};
+    public static int[] allowedPorts = {26817, 28770};
     public static final Scanner s = new Scanner(System.in);
 
 
@@ -96,7 +96,8 @@ public class Enforcry {
         new FEK().init();
         new FEKL().init();
         new FEKIN().init();
-        new MPIK().init();
+        new AMOE().init();
+        new AMOER().init();
         new O().init();
         new X().init();
 
