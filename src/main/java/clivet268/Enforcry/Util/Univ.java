@@ -203,10 +203,5 @@ public class Univ {
 
      */
 
-    public static void purge(File f) throws IOException, NoSuchAlgorithmException {
-        if (f.getAbsolutePath().substring(2, ENCRYPTEDUSERBASEPATH.length() + 1).equals(ENCRYPTEDUSERBASEPATH) || f.getAbsolutePath().substring(2, USERBASEPATH.length() + 1).equals(Univ.USERBASEPATH)) {
-            Files.delete(Path.of(f.getAbsolutePath()));
-        }
-    }
 }
 
