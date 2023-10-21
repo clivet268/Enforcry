@@ -1,7 +1,8 @@
 package clivet268.Enforcry.SecureLine;
 
-import clivet268.Enforcry.Encryption.Asymmetric;
+import clivet268.Enforcry.Encryption.EncrypterDecrypter;
 
+import javax.crypto.SecretKey;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -9,56 +10,36 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 
 import static clivet268.Enforcry.Util.Univ.*;
 
-
+//TODO asym key to transfer sym key ASAP
 public class EFCDataInputStream {
     private static DataInputStream din = null;
-    private static PrivateKey privateKey = null;
-    private static PublicKey publicKey = null;
+    private static SecretKey symmetric = null;
 
     /**
-     * @param in    passthrough for the socket's data input stream
-     * @param pkin  the private key should be the key of the current user (ex. on client should be client's private key)
-     * @param pukin the public key should be the key of the communicating user (ex. on client should be server's private key)
+     * @param in passthrough for the socket's data input stream
      */
-    public EFCDataInputStream(DataInputStream in, PrivateKey pkin, PublicKey pukin) {
+    public EFCDataInputStream(DataInputStream in, SecretKey sSk) {
         din = in;
-        privateKey = pkin;
-        publicKey = pukin;
-    }
-/*
-    public final void readFullyE(byte b[]) throws IOException {
-        readFullyE(b, 0, b.length);
+        symmetric = sSk;
+
     }
 
-    public final void readFullyE(byte b[], int off, int len) throws IOException {
-        Objects.checkFromIndexSize(off, len, b.length);
-        int n = 0;
-        while (n < len) {
-            int count = din.read(b, off + n, len - n);
-            if (count < 0)
-                throw new EOFException();
-            n += count;
-        }
-    }
+    //TODO readfullyE make it if needed
 
- */
-
-    public byte[] read(byte b[], int off, int len) throws Exception {
+    public byte[] read(byte[] b, int off, int len) throws Exception {
         int codelen = din.readInt();
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
-        String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
+        String ininfo = new String(EncrypterDecrypter.do_AESDecryption(codine, symmetric));
         int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
         int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
         byte[] bytesin = new byte[msgleng];
         System.out.println(type);
         din.readFully(bytesin);
-        return Asymmetric.do_RSADecryption(bytesin, privateKey);
+        return EncrypterDecrypter.do_AESDecryption(bytesin, symmetric);
     }
 
     public String readFile() throws Exception {
@@ -71,12 +52,12 @@ public class EFCDataInputStream {
         while (codelen != -999) {
             byte[] codine = new byte[codelen];
             din.readFully(codine, 0, codelen);
-            String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
+            String ininfo = new String(EncrypterDecrypter.do_AESDecryption(codine, symmetric));
             //int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
             int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
             byte[] bytesin = new byte[msgleng];
             din.readFully(bytesin);
-            os.write(Asymmetric.do_RSADecryption(bytesin, privateKey));
+            os.write(EncrypterDecrypter.do_AESDecryption(bytesin, symmetric));
 
             codelen = readLength();
         }
@@ -87,29 +68,43 @@ public class EFCDataInputStream {
     }
 
 
+    //TODO clunky
     public String readUTFE() throws Exception {
+        String cummulative = "";
         int codelen = readLength();
         byte[] codine = new byte[codelen];
-        din.readFully(codine, 0, codelen);
-        String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
+        din.readFully(codine);
+        String ininfo = new String(EncrypterDecrypter.do_AESDecryption(codine, symmetric));
         int type = Integer.parseInt(ininfo.substring(0, ininfo.indexOf(":")));
         int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
-        byte[] stringn = new byte[msgleng];
-        //System.out.println(type);
-        din.readFully(stringn);
-        return new String(Asymmetric.do_RSADecryption(stringn, privateKey));
+        System.out.println(msgleng);
+        System.out.println();
+        while (msgleng > 0) {
+            byte[] stringn;
+            if (msgleng > 245) {
+                stringn = new byte[245];
+                msgleng -= 245;
+            } else {
+                stringn = new byte[msgleng];
+            }
+            //System.out.println(type);
+            din.readFully(stringn);
+            System.out.println(new String(stringn));
+            cummulative += new String(EncrypterDecrypter.do_AESDecryption(stringn, symmetric));
+        }
         //TODO hash confirm?
+        return cummulative;
     }
 
     public int readIntE() throws Exception {
         int codelen = readLength();
         byte[] codine = new byte[codelen];
         din.readFully(codine, 0, codelen);
-        String ininfo = new String(Asymmetric.do_RSADecryption(codine, privateKey));
+        String ininfo = new String(EncrypterDecrypter.do_AESDecryption(codine, symmetric));
         int msgleng = Integer.parseInt(ininfo.substring(ininfo.indexOf(":") + 1));
         byte[] stringn = new byte[msgleng];
         din.readFully(stringn);
-        String strout = new String(Asymmetric.do_RSADecryption(stringn, privateKey));
+        String strout = new String(EncrypterDecrypter.do_AESDecryption(stringn, symmetric));
         return Integer.parseInt(strout);
 
         //TODO hash confirm?

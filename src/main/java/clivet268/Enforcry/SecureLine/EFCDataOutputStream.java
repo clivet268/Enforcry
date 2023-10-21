@@ -1,35 +1,33 @@
 package clivet268.Enforcry.SecureLine;
 
-import clivet268.Enforcry.Encryption.Asymmetric;
 
+import clivet268.Enforcry.Encryption.EncrypterDecrypter;
+
+import javax.crypto.SecretKey;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 
 import static clivet268.Enforcry.Util.Univ.LENGTHVERIFIER;
 
-
+//TODO USE AES
 public class EFCDataOutputStream {
-    private static DataOutputStream din = null;
-    private static PrivateKey privateKey = null;
-    private static PublicKey publicKey = null;
+    private static DataOutputStream dout = null;
+    private static SecretKey symmetric = null;
 
-    public EFCDataOutputStream(DataOutputStream out, PrivateKey pkin, PublicKey pukin) {
-        din = out;
-        privateKey = pkin;
-        publicKey = pukin;
+    public EFCDataOutputStream(DataOutputStream in, SecretKey s) {
+        dout = in;
+        symmetric = s;
+
     }
 
     public void writeE(byte[] b) throws Exception {
-        //Ensure byte[] size of greater than 245 bytes for encryption purposes
-        byte[] bytesout = Asymmetric.do_RSAEncryption(b, publicKey);
-        byte[] codeOut = Asymmetric.do_RSAEncryption((103 + ":" + bytesout.length).getBytes(), publicKey);
+        byte[] bytesout = EncrypterDecrypter.do_AESDecryption(b, symmetric);
+        byte[] codeOut = EncrypterDecrypter.do_AESDecryption((103 + ":" + bytesout.length).getBytes(), symmetric);
         writeLen(codeOut.length);
-        din.write(codeOut);
-        din.write(bytesout, 0, bytesout.length);
+        dout.write(codeOut);
+        dout.write(bytesout, 0, bytesout.length);
     }
 
     //TODO optimize buffer size
@@ -40,48 +38,62 @@ public class EFCDataOutputStream {
         byte[] buffer = new byte[30000];
         int read = 0;
         while ((read = fis.read(buffer)) > 0) {
-            byte[] bytesout = Asymmetric.do_RSAEncryption(buffer, publicKey);
-            byte[] codeOut = Asymmetric.do_RSAEncryption((104 + ":" + bytesout.length).getBytes(), publicKey);
+            byte[] bytesout = EncrypterDecrypter.do_AESDecryption(buffer, symmetric);
+            byte[] codeOut = EncrypterDecrypter.do_AESDecryption((104 + ":" + bytesout.length).getBytes(), symmetric);
             writeLen(codeOut.length);
-            din.write(codeOut);
-            din.write(bytesout, 0, bytesout.length);
+            dout.write(codeOut);
+            dout.write(bytesout, 0, bytesout.length);
         }
         writeLen(-999);
     }
 
 
+    //TODO very clunky
     public final void writeUTFE(String str) throws Exception {
-        byte[] stringOut = Asymmetric.do_RSAEncryption(str.getBytes(), publicKey);
+        System.out.println(str.getBytes().length);
 
-        byte[] codeOut = Asymmetric.do_RSAEncryption((102 + ":" + stringOut.length).getBytes(), publicKey);
+        byte[] codeOut = EncrypterDecrypter.do_AESDecryption((102 + ":" + str.length()).getBytes(), symmetric);
         writeLen(codeOut.length);
-        din.write(codeOut);
-        din.write(stringOut);
+        dout.write(codeOut);
+
+        while (str.length() > 0) {
+            byte[] stringOut;
+            if (str.length() > 245) {
+                String tw = str.substring(0, 245);
+                stringOut = EncrypterDecrypter.do_AESDecryption(tw.getBytes(), symmetric);
+                str = str.substring(245);
+            } else {
+                System.out.println(str.length());
+                stringOut = EncrypterDecrypter.do_AESDecryption(str.getBytes(), symmetric);
+                str = "";
+            }
+            dout.write(stringOut);
+        }
         flush();
     }
 
     public final void writeIntE(int intin) throws Exception {
-        byte[] stringOut = Asymmetric.do_RSAEncryption((intin + "").getBytes(), publicKey);
-        byte[] codeOut = Asymmetric.do_RSAEncryption((101 + ":" + stringOut.length).getBytes(), publicKey);
+        byte[] stringOut = EncrypterDecrypter.do_AESDecryption((intin + "").getBytes(), symmetric);
+        byte[] codeOut = EncrypterDecrypter.do_AESDecryption((101 + ":" + stringOut.length).getBytes(), symmetric);
         writeLen(codeOut.length);
-        din.write(codeOut);
-        din.write(stringOut);
+        dout.write(codeOut);
+        dout.write(stringOut);
         flush();
     }
 
     public final void writeLen(int intin) throws Exception {
-        din.writeUTF(LENGTHVERIFIER + intin);
+        dout.writeUTF(LENGTHVERIFIER + intin);
         flush();
     }
 
     //TODO build into write int and normal writes (not UTF), neede
     public void flush() throws IOException {
-        din.flush();
+        dout.flush();
     }
 
 
     public void close() throws IOException {
-        din.close();
+        dout.close();
     }
 
 

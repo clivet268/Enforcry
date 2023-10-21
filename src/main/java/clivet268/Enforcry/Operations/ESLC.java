@@ -1,44 +1,41 @@
 package clivet268.Enforcry.Operations;
 
-import clivet268.Enforcry.SecureLine.EncryptedSecureLineClient;
-
-import java.util.Scanner;
+import clivet268.Enforcry.SecureLine.ClientConnection;
 
 public class ESLC extends Operation {
     @Override
     public void run() {
-
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter IP address");
-        String ipad = s.next();
-        int e = -1;
-        System.out.println("Enter timeout minutes(m), hours(h), days(d) or -1 for none");
-        String se = s.next();
-        switch (se) {
-            case ("m") -> {
-                System.out.println("Enter minutes");
-                e = s.nextInt() * 60;
-                System.out.println("TO " + (e / 60) + " minutes");
-            }
-            case ("h") -> {
-                System.out.println("Enter hours");
-                e = s.nextInt() * 360;
-                System.out.println("TO " + (e / 360) + " hours");
-            }
-            case ("d") -> {
-                System.out.println("Enter days");
-                e = s.nextInt() * 86400;
-                System.out.println("TO " + (e / 360) + " days");
-            }
-            default -> {
-                e = -1;
-            }
+        //TODO test only
+        for (String e : params) {
+            System.out.println(e);
         }
-        try {
-            EncryptedSecureLineClient client = new EncryptedSecureLineClient();
-            client.connect(ipad, 26817, e);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        if (params.length < 2) {
+            tooFewParams();
+        } else {
+            int e = Integer.MAX_VALUE;
+            if (params.length >= 4) {
+                String ts = params[3];
+                if (ts.contains("m")) {
+                    e = Integer.parseInt(ts.substring(ts.indexOf('m'), ts.indexOf(' '))) * 60;
+                    ts = ts.substring(ts.indexOf(' '));
+                }
+                if (ts.contains("h")) {
+                    e += Integer.parseInt(ts.substring(ts.indexOf('h'), ts.indexOf(' '))) * 3600;
+                    ts = ts.substring(ts.indexOf(' '));
+                }
+                if (ts.contains("d")) {
+                    e += Integer.parseInt(ts.substring(ts.indexOf('d'), ts.indexOf(' '))) * 86400;
+                    //ts = ts.substring(ts.indexOf(' '));
+                }
+            }
+            String ipad = params[1];
+            int pnum = params.length == 2 ? 26817 : (Integer.parseInt(params[2]) == 0 ? 26817 : Integer.parseInt(params[2]));
+            try {
+                ClientConnection client = new ClientConnection();
+                client.connect(ipad, pnum, e);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     }

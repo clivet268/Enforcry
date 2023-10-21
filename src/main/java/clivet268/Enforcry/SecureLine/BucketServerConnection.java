@@ -1,56 +1,45 @@
 package clivet268.Enforcry.SecureLine;
 
-import clivet268.Enforcry.Encryption.Asymmetric;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
-public class BucketServerConnection extends ServerConnection {
-
-    //TODO accept and transfer keys properly and in order
-    @Override
-    public void connect(int portnum, int timeout) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        server = new ServerSocket(portnum);
-        System.out.println("Server started");
-        System.out.println("Waiting for a client ...");
-        //Accept the client
-        while (true) {
-            socket = server.accept();
-            new EchoThread(socket).start();
+//TODO there noeeds to be a way that this can be interacted with while it runs in the background, a queue of all
+// AMOE and AMOERs running that cna be exited with a command individually or enemas maybe even a GUI if we want this to
+// run in the foreground. an infinite while loop is... unprofessional.
+public class BucketServerConnection {
+    public void bucketConnect(int portnum, ServerConnection sin) {
+        Socket socket;
+        ServerSocket server;
+        try {
+            System.out.println("Server started");
+            System.out.println("Waiting for a client ...");
+            server = new ServerSocket(portnum);
+            while (true) {
+                try {
+                    socket = server.accept();
+                    new EchoThread(socket, sin).start();
+                } catch (IOException e) {
+                    System.out.println("I/O error: " + e);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-
     public class EchoThread extends Thread {
-        protected Socket socket;
+        ServerConnection sc;
 
-        public EchoThread(Socket clientSocket) {
-            this.socket = clientSocket;
+        public EchoThread(Socket clientSocket, ServerConnection sin) {
+            sc = sin;
+            sc.predef(clientSocket);
         }
 
         public void run() {
             //Initialization
             try {
-                handshake();
-                System.out.println("Client accepted");
-                //Check for socket existence
-                DataInputStream rawin = new DataInputStream(socket.getInputStream());
-                DataOutputStream rawout = new DataOutputStream(socket.getOutputStream());
-                System.out.println("Connected to " + socket.getRemoteSocketAddress());
-
-
-                int lenr = rawin.readInt();
-                byte[] cpkin = new byte[lenr];
-                rawin.readFully(cpkin);
-                cPk = Asymmetric.byteArrayToKey(cpkin);
-                in = new EFCDataInputStream(rawin, sessionKeyStore.getPrivate(), cPk);
-                out = new EFCDataOutputStream(rawout, sessionKeyStore.getPrivate(), cPk);
-                postConnect();
+                sc.predefConnect();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
