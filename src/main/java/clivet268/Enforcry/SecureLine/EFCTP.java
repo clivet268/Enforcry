@@ -13,8 +13,8 @@ import java.util.Scanner;
 public class EFCTP {
 
     //Universal variables
-    private EFCDataInputStream i;
-    private EFCDataOutputStream o;
+    private final EFCDataInputStream i;
+    private final EFCDataOutputStream o;
     private DataInputStream userin;
     ClientTextBox ctb;
 
@@ -33,7 +33,7 @@ public class EFCTP {
     //Receiving variables
 
     //Getting outputs
-    private int outNum = 0;
+    private final int outNum = 0;
     @SuppressWarnings("unused")
     private ArrayList<String> inputedStrings = new ArrayList<>();
 
@@ -54,6 +54,7 @@ public class EFCTP {
             }
 
             //TODO variable buffer size?
+            //TODO is this pair needed?
             case (3) -> {
                 for (Pair<Integer, String> currentout : es.getOutput()) {
                     if (currentout.getLeft() == 1) {
@@ -149,7 +150,7 @@ public class EFCTP {
             }
 
             case (20) -> {
-                senderUsername = EncryptedSecureLineServer.getcUnam();
+                senderUsername = ServerConnection.getcUnam();
                 o.writeIntE(20);
             }
             //Exit
@@ -217,7 +218,7 @@ public class EFCTP {
             //Get Server username
             //TODO needed? better way? right now the out just sends code 20 from the client class
             case (20) -> {
-                senderUsername = EncryptedSecureLineClient.getsUnam();
+                senderUsername = ClientConnection.getsUnam();
                 o.writeIntE(7);
             }
             case (22) -> {
@@ -238,5 +239,5 @@ public class EFCTP {
 
         return 0;
     }
-
 }
+

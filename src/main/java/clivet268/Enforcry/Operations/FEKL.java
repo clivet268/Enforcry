@@ -2,16 +2,13 @@ package clivet268.Enforcry.Operations;
 
 import clivet268.Enforcry.Encryption.EncrypterDecrypter;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
 public class FEKL extends Operation {
     @Override
     public void run() {
         System.out.println("Warning, this does not necessarily change files within within Enforcry's home dir");
         try {
             EncrypterDecrypter.fekl();
-        } catch (IOException | NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         System.out.println("File Encrypted");

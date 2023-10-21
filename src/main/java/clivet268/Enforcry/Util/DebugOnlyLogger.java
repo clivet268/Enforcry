@@ -34,6 +34,5 @@ public class DebugOnlyLogger {
             return;
         }
         System.out.println(msg);
-        ;
     }
 }

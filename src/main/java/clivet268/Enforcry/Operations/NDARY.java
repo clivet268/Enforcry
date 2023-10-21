@@ -13,9 +13,10 @@ public class NDARY extends Operation {
         Scanner s = new Scanner(System.in);
         System.out.println("Enter directory you would like to add as ndary source");
         String ndary = s.nextLine();
-        if (!Files.exists(Path.of(ndary))) {
+        Path of = Path.of(ndary);
+        if (!Files.exists(of)) {
             System.out.println("Dir not found");
-        } else if (Files.isReadable(Path.of(ndary))) {
+        } else if (Files.isReadable(of)) {
             System.out.println("Dir not readable");
         } else {
 

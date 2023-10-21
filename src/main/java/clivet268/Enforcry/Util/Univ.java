@@ -22,6 +22,8 @@ public class Univ {
     public static String USERFOUTPATH = USERBASEPATH + "fout" + File.separator;
     public static String LENGTHVERIFIER = "len:|=//\\\\";
 
+    public static final int PORT_AMOE = 28770;
+
     public static void init() {
         System.out.println("\n---Init System Paths---\n");
         createPaths();
