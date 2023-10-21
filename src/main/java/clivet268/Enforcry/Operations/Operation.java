@@ -2,15 +2,20 @@ package clivet268.Enforcry.Operations;
 
 import clivet268.Enforcry.Enforcry;
 
-public abstract class Operation implements Runnable{
+public abstract class Operation implements Runnable {
     String name = this.getClass().getSimpleName();
     boolean exitflag = true;
+    String[] params = {};
+
+    public void tooFewParams() {
+        System.out.println("Too few params");
+    }
 
     public String getName() {
         return name;
     }
 
-    public void init(){
+    public void init() {
         System.out.println("Initialized " + name.toLowerCase());
         Enforcry.operations.put(getName().toLowerCase(), this);
     }
@@ -19,7 +24,7 @@ public abstract class Operation implements Runnable{
         return exitflag;
     }
 
-    public String infoForOp(){
+    public String infoForOp() {
         return "Base operation class";
     }
 
@@ -27,5 +32,10 @@ public abstract class Operation implements Runnable{
     @Override
     public void run() {
 
+    }
+
+    public void run(String inop) {
+        params = inop.split(" ");
+        run();
     }
 }

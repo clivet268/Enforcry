@@ -1,13 +1,11 @@
 package clivet268.Enforcry;
 
-import clivet268.Enforcry.Encryption.Asymmetric;
 import clivet268.Enforcry.Operations.*;
 import clivet268.Enforcry.SecureLine.Commands.*;
 import clivet268.Enforcry.Util.DebugOnlyLogger;
 import clivet268.Enforcry.Util.Univ;
 
 import java.io.IOException;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -40,11 +38,11 @@ public class Enforcry {
     }
 
     //TODO get at login
-    private static String username = "clivet268test";
+    private static final String username = "clivet268test";
 
     //TODO safter :(
     //TODO refresh periodically and form on a per connection basis
-    public static KeyPair sessionKeyStore;
+    // public static KeyPair sessionKeyStore;
 
     public static int[] allowedPorts = {26817, 28770};
     public static final Scanner s = new Scanner(System.in);
@@ -57,8 +55,8 @@ public class Enforcry {
         //TODO build kays and certificates into keystore
         //If error during keygen, kill
         try {
-            sessionKeyStore = Asymmetric.generateRSAKkeyPair();
-            System.out.println("Session Key generated");
+            //sessionKeyStore = Asymmetric.generateRSAKkeyPair();
+            //System.out.println("Session Key generated");
         } catch (Exception e) {
             System.exit(696969);
         }
@@ -69,9 +67,15 @@ public class Enforcry {
         boolean b = true;
         while (b) {
             System.out.println("What would you like to do? (o for options)");
-            Operation temp = operations.get(s.next().toLowerCase());
+            String inop = s.nextLine();
+            Operation temp;
+            if (!(inop.indexOf(' ') == -1)) {
+                temp = operations.get(inop.substring(0, inop.indexOf(' ')).toLowerCase());
+            } else {
+                temp = operations.get(inop);
+            }
             if (temp != null) {
-                temp.run();
+                temp.run(inop);
                 b = temp.getExitflag();
             }
         }
