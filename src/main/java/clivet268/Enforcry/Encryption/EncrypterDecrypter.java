@@ -4,6 +4,7 @@ import clivet268.Enforcry.Util.Univ;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
@@ -12,55 +13,129 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
+import static clivet268.Enforcry.Encryption.ChaCha20Poly1305.genChaCha20;
 import static clivet268.Enforcry.Enforcry.logger;
 
+/**
+ * <a href="https://www.geeksforgeeks.org/asymmetric-encryption-cryptography-in-java/">source</a>
+ * Note: source used Public key to decrypt and Private to encrypt? I altered to use the opposite as I think that is right
+ *
+ * @author <a href="https://auth.geeksforgeeks.org/user/nimma_shravan_kumar_reddy">nimma_shravan_kumar_reddy</a>
+ */
 public class EncrypterDecrypter {
 
-    private static SecretKeySpec secretKey;
-    private static byte[] key;
+    private static final String AES = "AES";
+    private static final String AESDEFAULT = "AES/ECB/PKCS5PADDING";
+    private static final String RSA = "RSA";
 
-    public static void setKey(final String myKey) {
-        MessageDigest sha = null;
+    //TODO handle exceptions VERY carefully
+    // Generating public and private keys
+    // using RSA algorithm.
+    public static KeyPair generateRSAKkeyPair() {
         try {
-            key = myKey.getBytes(StandardCharsets.UTF_8);
-            sha = MessageDigest.getInstance("SHA-1");
-            key = sha.digest(key);
-            key = Arrays.copyOf(key, 16);
-            secretKey = new SecretKeySpec(key, "AES");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            SecureRandom secureRandom = new SecureRandom();
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(RSA);
+            keyPairGenerator.initialize(4096, secureRandom);
+
+            return keyPairGenerator.generateKeyPair();
+        } catch (Exception ignored) {
+            return null;
         }
     }
 
-
-    public static String encrypt(final String strToEncrypt, final String secret) {
+    /**
+     * Encryption function which converts
+     * the plainText into a cipherText
+     * using public Key.
+     */
+    public static byte[] do_RSAEncryption(byte[] bytesin, PublicKey key) {
         try {
-            setKey(secret);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            return Base64.getEncoder()
-                    .encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
-        } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e);
+            Cipher cipher = Cipher.getInstance(RSA);
+
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+
+            return cipher.doFinal(bytesin);
+        } catch (Exception ignored) {
+            return null;
         }
-        return null;
     }
 
-    public static String gen2048() throws NoSuchAlgorithmException {
-        String beegkee = "";
-        for (int i = 0; i < 8; i++) {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            keyGenerator.init(256);
-            beegkee += Base64.getEncoder().encodeToString(keyGenerator.generateKey().getEncoded());
+    /**
+     * Decryption function which converts
+     * the ciphertext back to the
+     * original plaintext using private key.
+     */
+    //TODO no null case
+    public static byte[] do_RSADecryption(byte[] bytesout, PrivateKey key) {
+        try {
+            Cipher cipher = Cipher.getInstance(RSA);
+
+            cipher.init(Cipher.DECRYPT_MODE, key);
+
+            return cipher.doFinal(bytesout);
+        } catch (Exception ignored) {
+            return null;
         }
-        return beegkee;
     }
 
+    public static byte[] do_AESEncryption(byte[] bytesin, SecretKey publicKey) {
+        try {
+            Cipher cipher = Cipher.getInstance(AESDEFAULT);
+
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+            return cipher.doFinal(bytesin);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+
+    // Decryption function which converts
+    // the ciphertext back to the
+    // original plaintext using key.
+    public static byte[] do_AESDecryption(byte[] bytesout, Key key) {
+        try {
+            Cipher cipher = Cipher.getInstance(AES);
+
+            cipher.init(Cipher.DECRYPT_MODE, key);
+
+            return cipher.doFinal(bytesout);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+
+    //TODO string to private key, aka password
+
+    public static PublicKey byteArrayToKey(byte[] bin) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        //TODO test only
+        System.out.println(new String(bin));
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(bin);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return keyFactory.generatePublic(keySpec);
+    }
+
+    public static SecretKey stringToSecretKey(final String myKey) {
+        return new SecretKeySpec(myKey.getBytes(StandardCharsets.UTF_8), "AES");
+    }
+
+    //TODO make
+    /*
+    public static PublicKey stringToPublicKey(final String myKey) {
+        return new SecretKeySpec(myKey.getBytes(StandardCharsets.UTF_8), "AES");
+    }
+
+     */
+
+
+    //TODO make it AES and RSA specific
     public static String genX(int x) throws NoSuchAlgorithmException {
         String beegkee = "";
         for (int i = 0; i < x; i++) {
@@ -73,10 +148,9 @@ public class EncrypterDecrypter {
 
     public static String decrypt(final String strToDecrypt, final String secret) {
         try {
-            setKey(secret);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
             //TODO CBC mode or just more full padding if this padding isnt sufficient
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            cipher.init(Cipher.DECRYPT_MODE, stringToSecretKey(secret));
             return new String(cipher.doFinal(Base64.getDecoder()
                     .decode(strToDecrypt)));
         } catch (Exception e) {
@@ -87,40 +161,44 @@ public class EncrypterDecrypter {
     }
 
 
-    public static void fek(File file) throws IOException, NoSuchAlgorithmException {
-        String kii = gen2048();
-
+    public static void fek(File file) throws Exception {
+        SecretKey kii = genChaCha20();
         Path pathout = Paths.get(Univ.USERFILESPATH + File.separator + Univ.getRandString(9) + "_=_" + Univ.getRandString(6));
         Files.createDirectory(pathout);
         recursefekc(file, kii, pathout.toString());
 
         System.out.println("Key written, make sure you get all of it\n");
-        System.out.println(new String(kii.getBytes()));
+        System.out.println(kii.toString());
     }
 
 
+    //TODO be very careful throwing exceptions
     //TODO secure key saving, no paintext in files, plaintext in command line is so-so but better
-    public static void fek() throws IOException, NoSuchAlgorithmException {
+    public static void fek() {
         File file = Univ.filechooser();
-        fek(file);
+        try {
+            fek(file);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void fekl() throws IOException, NoSuchAlgorithmException {
+    public static void fekl() throws Exception {
         File file = Univ.filechooser();
-        String kii = gen2048();
+        SecretKey kii = genChaCha20();
         Path pathout = Paths.get(file.getParent() + File.separator + Univ.getRandString(9) + "_=_" + Univ.getRandString(6));
         Files.createDirectory(pathout);
         recursefekc(file, kii, pathout.toString());
 
         System.out.println("Key written, make sure you get all of it\n");
-        System.out.println(new String(kii.getBytes()));
+        System.out.println(new String(kii.toString().getBytes()));
     }
 
 
     //TODO secure key storage would make using individual keys for files easier and accessing them on different inner file
     // more convenient, should be optional as most things
     // TODO obfuscate file names? overkill?
-    public static void recursefekc(File file, String kii, String curpath) throws IOException {
+    public static void recursefekc(File file, SecretKey kii, String curpath) throws IOException {
 
         try {
             if (file.isDirectory()) {
@@ -135,8 +213,7 @@ public class EncrypterDecrypter {
                 }
             } else {
                 byte[] bytes = Files.readAllBytes(file.toPath());
-                String s = Base64.getEncoder().encodeToString(bytes);
-                String out = encrypt(s, kii);
+                String out = new String(do_AESEncryption(bytes, kii));
 
                 byte[] decode = Base64.getDecoder().decode(out.getBytes());
                 Path pathout = Paths.get(curpath + File.separator + file.getName() + "_=_" + file.hashCode());
@@ -151,13 +228,13 @@ public class EncrypterDecrypter {
         }
     }
 
-    public static void fekg(String kii) throws IOException, NoSuchAlgorithmException {
+    public static void fekg(SecretKey kii) throws IOException, NoSuchAlgorithmException {
         File file = Univ.filechooser();
 
         recursefekc(file, kii, Univ.ENFORCRYBASEPATH);
 
         System.out.println("Key written, make sure you get all of it\n");
-        System.out.println(new String(kii.getBytes()));
+        System.out.println(kii.toString());
     }
 
     //Decryption
@@ -226,4 +303,20 @@ public class EncrypterDecrypter {
     }
 
 
+    public static String genNonce(String strin) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (Exception ignored) {
+
+        }
+        byte[] encodedhash = digest.digest(strin.getBytes(StandardCharsets.UTF_8));
+        return new String(encodedhash);
+    }
+
+    public static void main(String[] args) throws Exception {
+        String s = genChaCha20().toString();
+        System.out.println(s);
+
+    }
 }
